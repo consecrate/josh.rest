@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from "astro:content";
+import { getCourseStructure } from "../../lib/courses";
+import Course from "../../layouts/Course.astro";
+
+export async function getStaticPaths() {
+  const lessons = await getCollection("courses");
+  return lessons
+    .filter((l) => !l.data.comingSoon)
+    .map((lesson) => ({
+      params: { slug: lesson.id },
+      props: { lesson },
+    }));
+}
+
+type Props = {
+  lesson: Awaited<ReturnType<typeof getCollection<"courses">>>[number];
+};
+
+const { lesson } = Astro.props;
+const sections = await getCourseStructure();
+const { Content } = await render(lesson);
+
+// Extract course title from slug
+const courseSlug = lesson.id.split("/")[0];
+const courseTitle = courseSlug
+  .split("-")
+  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+  .join(" ");
+
+// Find next lesson
+const allLessons = sections
+  .filter((s) => !s.comingSoon)
+  .flatMap((s) => s.lessons);
+const currentIndex = allLessons.findIndex((l) => l.id === lesson.id);
+const nextLesson =
+  currentIndex >= 0 && currentIndex < allLessons.length - 1
+    ? allLessons[currentIndex + 1]
+    : null;
+---
+
+<Course
+  title={lesson.data.title}
+  description={lesson.data.description}
+  courseTitle={courseTitle}
+  sections={sections}
+  currentSlug={lesson.id}
+  nextLesson={nextLesson}
+>
+  <Content />
+</Course>

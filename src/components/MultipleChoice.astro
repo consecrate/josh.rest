@@ -1,0 +1,395 @@
+---
+interface Props {
+  question: string;
+  options: string[];
+  correct: number;
+  explanation?: string;
+}
+
+const { question, options, correct, explanation } = Astro.props;
+const id = `mc-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div
+  class="multiple-choice"
+  data-correct={correct}
+  data-id={id}
+  data-explanation={explanation}
+>
+  <fieldset>
+    <legend class="question">
+      <span set:html={question} />
+    </legend>
+
+    <div class="options">
+      {
+        options.map((option, index) => (
+          <label class="option" data-index={index}>
+            <span class="radio" />
+            <input type="radio" name={id} value={index} />
+            <span class="option-text" set:html={option} />
+            <span class="status-icon" />
+          </label>
+        ))
+      }
+    </div>
+
+    <div class="buttons">
+      <button type="button" class="check-btn" disabled>Check</button>
+      <button type="button" class="reset-btn">Reset</button>
+    </div>
+
+    <div class="explanation-section hidden">
+      <div class="explanation-header">EXPLANATION</div>
+      <div class="explanation-content"></div>
+    </div>
+  </fieldset>
+</div>
+
+<style>
+  .multiple-choice {
+    background: var(--surface);
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    padding: var(--space-lg);
+    margin: var(--space-xl) 0;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .multiple-choice.result-correct {
+    background: rgba(74, 222, 128, 0.08);
+  }
+
+  .multiple-choice.result-incorrect {
+    background: rgba(248, 113, 113, 0.08);
+  }
+
+  fieldset {
+    border: none;
+  }
+
+  .latex-display {
+    margin-bottom: var(--space-md);
+    text-align: center;
+    overflow-x: auto;
+  }
+
+  .question {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--heading);
+    margin-bottom: var(--space-lg);
+    line-height: 1.5;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border-radius: 4px;
+  }
+
+  .option.selected {
+  }
+
+  .option.correct {
+    background: rgba(74, 222, 128, 0.08);
+    border-left-color: var(--correct);
+  }
+
+  .option.incorrect {
+    background: rgba(248, 113, 113, 0.12);
+    border-left-color: var(--incorrect);
+  }
+
+  .option.locked {
+    cursor: default;
+  }
+
+  .radio {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--muted);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .option.selected .radio {
+    border-color: var(--text);
+  }
+
+  .option.selected .radio::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: var(--text);
+    border-radius: 50%;
+  }
+
+  .option.correct .radio {
+    border-color: var(--correct);
+  }
+
+  .option.correct .radio::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: var(--correct);
+    border-radius: 50%;
+  }
+
+  .option.incorrect .radio {
+    border-color: var(--incorrect);
+  }
+
+  .option.incorrect .radio::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: var(--incorrect);
+    border-radius: 50%;
+  }
+
+  .option input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .option-text {
+    flex: 1;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .option.correct .option-text,
+  .option.incorrect .option-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .status-icon {
+    display: none;
+  }
+
+  .feedback {
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+
+  .option.correct .feedback {
+    color: var(--correct);
+  }
+
+  .option.incorrect .feedback {
+    color: var(--incorrect);
+  }
+
+  .buttons {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .check-btn {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    background: var(--accent, #e97a1e);
+    color: #fff;
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  .check-btn:hover:not(:disabled) {
+    opacity: 0.85;
+  }
+
+  .check-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .reset-btn {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+
+  .reset-btn:hover {
+    color: var(--text);
+  }
+
+  .explanation-section {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--muted, rgba(255, 255, 255, 0.1));
+  }
+
+  .explanation-section.hidden {
+    display: none;
+  }
+
+  .explanation-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-bottom: var(--space-md);
+  }
+
+  .explanation-content {
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .explanation-content :global(.katex-display) {
+    margin: var(--space-md) 0;
+  }
+</style>
+
+<script>
+  function initMultipleChoice(container: HTMLElement) {
+    const correctIndex = parseInt(container.dataset.correct || "0", 10);
+    const explanation = container.dataset.explanation || "";
+    const options = container.querySelectorAll<HTMLLabelElement>(".option");
+    const checkBtn = container.querySelector<HTMLButtonElement>(".check-btn");
+    const resetBtn = container.querySelector<HTMLButtonElement>(".reset-btn");
+
+    let selectedIndex: number | null = null;
+    let submitted = false;
+
+    function reset() {
+      submitted = false;
+      selectedIndex = null;
+      container.classList.remove("result-correct", "result-incorrect");
+      options.forEach((opt) => {
+        opt.classList.remove("selected", "correct", "incorrect", "locked");
+        const input = opt.querySelector("input") as HTMLInputElement;
+        if (input) input.checked = false;
+      });
+      if (checkBtn) checkBtn.disabled = true;
+
+      // Hide explanation section
+      const explanationSection = container.querySelector(
+        ".explanation-section",
+      );
+      explanationSection?.classList.add("hidden");
+    }
+
+    options.forEach((option, index) => {
+      option.addEventListener("click", (e) => {
+        if (submitted) return;
+        e.preventDefault();
+
+        selectedIndex = index;
+        const input = option.querySelector("input") as HTMLInputElement;
+        if (input) input.checked = true;
+
+        options.forEach((opt, i) => {
+          opt.classList.toggle("selected", i === index);
+        });
+
+        if (checkBtn) checkBtn.disabled = false;
+      });
+    });
+
+    checkBtn?.addEventListener("click", () => {
+      if (submitted || selectedIndex === null) return;
+
+      submitted = true;
+      const isCorrect = selectedIndex === correctIndex;
+
+      container.classList.add(
+        isCorrect ? "result-correct" : "result-incorrect",
+      );
+
+      options.forEach((opt) => opt.classList.add("locked"));
+
+      options.forEach((opt, i) => {
+        opt.classList.remove("selected");
+        if (i === correctIndex) {
+          opt.classList.add("correct");
+        } else if (i === selectedIndex) {
+          opt.classList.add("incorrect");
+        }
+      });
+
+      // Show explanation section
+      if (explanation) {
+        const explanationSection = container.querySelector(
+          ".explanation-section",
+        );
+        const explanationContent = container.querySelector(
+          ".explanation-content",
+        );
+        if (explanationSection && explanationContent) {
+          explanationContent.innerHTML = explanation;
+          explanationSection.classList.remove("hidden");
+
+          // Re-render math in explanation
+          import("katex/contrib/auto-render").then(
+            ({ default: renderMathInElement }) => {
+              renderMathInElement(explanationContent as HTMLElement, {
+                delimiters: [
+                  { left: "$$", right: "$$", display: true },
+                  { left: "$", right: "$", display: false },
+                ],
+                throwOnError: false,
+              });
+            },
+          );
+        }
+      }
+
+      // Dispatch custom event for AdaptiveQuiz to listen to
+      container.dispatchEvent(
+        new CustomEvent("mc:answered", {
+          bubbles: true,
+          detail: { isCorrect },
+        }),
+      );
+    });
+
+    resetBtn?.addEventListener("click", reset);
+  }
+
+  function init() {
+    document
+      .querySelectorAll<HTMLElement>(".multiple-choice")
+      .forEach(initMultipleChoice);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+</script>

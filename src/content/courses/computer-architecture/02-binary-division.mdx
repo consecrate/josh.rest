@@ -1,0 +1,365 @@
+---
+title: "Binary Division"
+description: "Binary Division Basics"
+order: 2
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+
+Remember how to perform long division?
+
+$$
+\begin{array}{r}
+3 \\
+\hline
+2 \overline{) 7} \\
+\underline{6} \\
+1
+\end{array}
+$$
+
+We ask: how many times does $2$ fit into $7$? That's $3$ times. We write $3$ above, subtract $2 \times 3 = 6$ from $7$, and get a remainder of $1$.
+
+This is the exact same algorithm we use for binary division. Here's $7 \div 2$ in binary:
+
+$$
+\begin{array}{r}
+0011 \\
+\hline
+0010 \overline{) 0111} \\
+\underline{0110} \\
+0001
+\end{array}
+$$
+
+The quotient is $0011$ (which is $3$) and the remainder is $0001$ (which is $1$). Let's break this down.
+
+### Long Division in Binary
+
+Binary long division follows the same logic as decimal, but it's actually _easier_—because each digit of the quotient is either $0$ or $1$. No guessing required!
+
+Here's the process for $0111 \div 0010$:
+
+1. Start from the left of the dividend ($0111$).
+2. At each step, ask: does the divisor ($0010$) fit into the current working value?
+   - If yes → write $1$ in the quotient, subtract.
+   - If no → write $0$ in the quotient, bring down the next bit.
+3. Repeat until you've processed all bits.
+
+Let's trace through carefully:
+
+- Working value: $\boxed{0}$ (just the leftmost bit). Does $0010$ fit? No. Quotient: $0$.
+- Bring down next bit. Working value: $\boxed{01}$. Does $0010$ fit? No. Quotient: $00$.
+- Bring down next bit. Working value: $\boxed{011}$. Does $0010$ fit? Yes! Quotient: $001$. Subtract: $011 - 010 = 001$.
+- Bring down next bit. Working value: $\boxed{0011}$. Does $0010$ fit? Yes! Quotient: $0011$. Subtract: $0011 - 0010 = 0001$.
+
+Result: quotient $= 0011$, remainder $= 0001$.
+
+Here's another example: $1100 \div 0011$ ($12 \div 3$).
+
+$$
+\begin{array}{r}
+0100 \\
+\hline
+0011 \overline{) 1100} \\
+\underline{1100} \\
+0000
+\end{array}
+$$
+
+The quotient is $0100$ (which is $4$) and the remainder is $0000$. This makes sense: $12 \div 3 = 4$ exactly.
+
+<AdaptiveQuiz
+  generator="binary-division-quotient"
+  baseSeed={42}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+### Understanding Remainder
+
+In any division, we have this relationship:
+
+$$
+\text{Dividend} = \text{Quotient} \times \text{Divisor} + \text{Remainder}
+$$
+
+For $7 \div 2$: we have $7 = 3 \times 2 + 1$. The remainder is $1$.
+
+In binary, the same relationship holds. For $0111 \div 0010$:
+
+$$
+0111 = 0011 \times 0010 + 0001
+$$
+
+The remainder is always _less than_ the divisor. If the remainder were greater than or equal to the divisor, we could fit one more quotient—so it can't be!
+
+### How Computers Actually Do It
+
+Computers don't "look" at numbers like we do. They use the **restoring division algorithm**—a systematic process that can be implemented in hardware.
+
+The setup:
+- **Dividend** starts in an 8-bit "remainder" register
+- **Divisor** starts in the _left half_ of an 8-bit register (shifted left by 4)
+- **Quotient** starts at $0$
+
+For $4$-bit division, we need $5$ iterations. Here's the recipe:
+
+1. **Subtract**: Remainder = Remainder − Divisor
+2. **Check the sign** (look at the MSB—most significant bit):
+   - If MSB is $1$ (negative): we subtracted too much! **Restore** by adding Divisor back. Shift Quotient left, set $Q_0 = 0$.
+   - If MSB is $0$ (non-negative): the subtraction was valid. Shift Quotient left, set $Q_0 = 1$.
+3. **Shift Divisor right** by $1$ bit.
+
+Let's trace through $0111 \div 0010$ ($7 \div 2$).
+
+**Initial setup:**
+- Quotient = $0000$
+- Divisor = $0010\ 0000$ (divisor $0010$ shifted left into upper half)
+- Remainder = $0000\ 0111$ (dividend in lower half)
+
+**Iteration 1:**
+- Subtract: $0000\ 0111 - 0010\ 0000 = 1110\ 0111$ (negative! MSB is $1$)
+- Restore remainder, shift Q left, $Q_0 = 0$. Quotient → $0000$
+- Shift Divisor right: $0010\ 0000 \rightarrow 0001\ 0000$
+
+**Iteration 2:**
+- Subtract: $0000\ 0111 - 0001\ 0000 = 1111\ 0111$ (negative!)
+- Restore, Q → $0000$
+- Shift Divisor right: $0001\ 0000 \rightarrow 0000\ 1000$
+
+**Iteration 3:**
+- Subtract: $0000\ 0111 - 0000\ 1000 = 1111\ 1111$ (negative!)
+- Restore, Q → $0000$
+- Shift Divisor right: $0000\ 1000 \rightarrow 0000\ 0100$
+
+**Iteration 4:**
+- Subtract: $0000\ 0111 - 0000\ 0100 = 0000\ 0011$ (non-negative! MSB is $0$)
+- Keep result! Remainder → $0000\ 0011$. Shift Q left, $Q_0 = 1$. Quotient → $0001$
+- Shift Divisor right: $0000\ 0100 \rightarrow 0000\ 0010$
+
+**Iteration 5:**
+- Subtract: $0000\ 0011 - 0000\ 0010 = 0000\ 0001$ (non-negative!)
+- Keep result! Remainder → $0000\ 0001$. Shift Q left, $Q_0 = 1$. Quotient → $0011$
+- Shift Divisor right: $0000\ 0010 \rightarrow 0000\ 0001$
+
+**Final result:** Quotient = $0011$ (3), Remainder = $0001$ (1). ✓
+
+### Wait... What's Going On?
+
+Why does this algorithm work? Let's build intuition step by step.
+
+**Why start with Divisor shifted left?**
+
+In long division, we start by seeing if the divisor fits into the _leftmost_ portion of the dividend. By placing the divisor in the left half, we're essentially aligning it with the top of the dividend. Each right-shift moves it one position "down," just like how we progressively consider more bits of the dividend.
+
+**Why subtract and check the MSB?**
+
+Binary subtraction uses two's complement. If the result is negative, the MSB becomes $1$. This tells us: "the divisor was too big for the current working value."
+
+When we see a negative result, we "restore" the remainder by adding the divisor back—hence "restoring division."
+
+**Why shift the Quotient left and set $Q_0$?**
+
+Each iteration determines one bit of the quotient, from left to right:
+- $Q_0 = 1$ means "the divisor fits here"
+- $Q_0 = 0$ means "it doesn't fit"
+
+By shifting left each time, we're building the quotient bit-by-bit, just like writing each digit of the answer in long division.
+
+**Why $n+1$ iterations for $n$-bit numbers?**
+
+For 4-bit numbers, we need 5 iterations because the divisor starts in the upper half and must shift down 5 positions to check all possible alignments with the 4-bit dividend.
+
+### The Iteration Table
+
+Here's $0111 \div 0010$ organized as a table:
+
+<table class="div-table">
+  <thead>
+    <tr>
+      <th>Iteration</th>
+      <th>Step</th>
+      <th>Quotient</th>
+      <th>Divisor</th>
+      <th>Remainder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td class="step">Initial values</td>
+      <td>0000</td>
+      <td>0010 0000</td>
+      <td>0000 0111</td>
+    </tr>
+    <tr>
+      <td rowspan="3">1</td>
+      <td class="step">1: Rem = Rem − Div</td>
+      <td>0000</td>
+      <td>0010 0000</td>
+      <td class="changed"><span class="circled">1</span>110 0111</td>
+    </tr>
+    <tr>
+      <td class="step">2b: Rem < 0 ⇒ +Div, sll Q, Q0 = 0</td>
+      <td class="changed">0000</td>
+      <td>0010 0000</td>
+      <td class="changed">0000 0111</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift Div right</td>
+      <td>0000</td>
+      <td class="changed">0001 0000</td>
+      <td>0000 0111</td>
+    </tr>
+    <tr>
+      <td rowspan="3">2</td>
+      <td class="step">1: Rem = Rem − Div</td>
+      <td>0000</td>
+      <td>0001 0000</td>
+      <td class="changed"><span class="circled">1</span>111 0111</td>
+    </tr>
+    <tr>
+      <td class="step">2b: Rem < 0 ⇒ +Div, sll Q, Q0 = 0</td>
+      <td class="changed">0000</td>
+      <td>0001 0000</td>
+      <td class="changed">0000 0111</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift Div right</td>
+      <td>0000</td>
+      <td class="changed">0000 1000</td>
+      <td>0000 0111</td>
+    </tr>
+    <tr>
+      <td rowspan="3">3</td>
+      <td class="step">1: Rem = Rem − Div</td>
+      <td>0000</td>
+      <td>0000 1000</td>
+      <td class="changed"><span class="circled">1</span>111 1111</td>
+    </tr>
+    <tr>
+      <td class="step">2b: Rem < 0 ⇒ +Div, sll Q, Q0 = 0</td>
+      <td class="changed">0000</td>
+      <td>0000 1000</td>
+      <td class="changed">0000 0111</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift Div right</td>
+      <td>0000</td>
+      <td class="changed">0000 0100</td>
+      <td>0000 0111</td>
+    </tr>
+    <tr>
+      <td rowspan="3">4</td>
+      <td class="step">1: Rem = Rem − Div</td>
+      <td>0000</td>
+      <td>0000 0100</td>
+      <td class="changed"><span class="circled-zero">0</span>000 0011</td>
+    </tr>
+    <tr>
+      <td class="step">2a: Rem ≥ 0 ⇒ sll Q, Q0 = 1</td>
+      <td class="changed">0001</td>
+      <td>0000 0100</td>
+      <td>0000 0011</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift Div right</td>
+      <td>0001</td>
+      <td class="changed">0000 0010</td>
+      <td>0000 0011</td>
+    </tr>
+    <tr>
+      <td rowspan="3">5</td>
+      <td class="step">1: Rem = Rem − Div</td>
+      <td>0001</td>
+      <td>0000 0010</td>
+      <td class="changed"><span class="circled-zero">0</span>000 0001</td>
+    </tr>
+    <tr>
+      <td class="step">2a: Rem ≥ 0 ⇒ sll Q, Q0 = 1</td>
+      <td class="changed">0011</td>
+      <td>0000 0010</td>
+      <td>0000 0001</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift Div right</td>
+      <td>0011</td>
+      <td class="changed">0000 0001</td>
+      <td>0000 0001</td>
+    </tr>
+  </tbody>
+</table>
+
+<style>{`
+.div-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  font-family: monospace;
+  font-size: 0.7rem;
+  margin: 1.5rem 0;
+}
+.div-table th,
+.div-table td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.div-table th {
+  background: #00a8cc;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  font-weight: 600;
+}
+.div-table th:nth-child(2) {
+  text-align: left;
+}
+.div-table td {
+  border: 1px solid #333;
+  padding: 0.2rem 0.4rem;
+  text-align: center;
+}
+.div-table .step {
+  text-align: left;
+}
+.div-table .changed {
+  color: #00a8cc;
+}
+.div-table .circled {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  line-height: 1.2em;
+  border: 2px solid #00a8cc;
+  border-radius: 50%;
+  color: #00a8cc;
+  text-align: center;
+}
+.div-table .circled-zero {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  line-height: 1.2em;
+  border: 2px solid #4caf50;
+  border-radius: 50%;
+  color: #4caf50;
+  text-align: center;
+}
+`}</style>
+
+Notice the pattern:
+- <span style="color: #00a8cc;">Blue circled 1</span> = negative result (MSB = 1) → restore and write 0
+- <span style="color: #4caf50;">Green circled 0</span> = non-negative result (MSB = 0) → keep and write 1
+
+The quotient builds from $0000 \rightarrow 0001 \rightarrow 0011$ as we find each valid subtraction.
+
+Now practice tracing through the algorithm yourself:
+
+<AdaptiveQuiz
+  generator="binary-division-table"
+  baseSeed={456}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>

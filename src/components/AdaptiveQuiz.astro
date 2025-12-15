@@ -1,0 +1,127 @@
+---
+import MultipleChoice from "./MultipleChoice.astro";
+import { getGenerator } from "../lib/generators";
+
+interface Props {
+  generator: string;
+  baseSeed: number;
+  initialCount?: number;
+  appendCount?: number;
+  maxQuestions?: number;
+}
+
+const {
+  generator: generatorType,
+  baseSeed,
+  initialCount = 2,
+  appendCount = 2,
+  maxQuestions = 10,
+} = Astro.props;
+
+// Generate all problems at build time
+const generator = getGenerator(generatorType);
+const problems = Array.from({ length: maxQuestions }, (_, i) =>
+  generator.generate(baseSeed + i),
+);
+---
+
+<div
+  class="adaptive-quiz"
+  data-initial-count={initialCount}
+  data-append-count={appendCount}
+>
+  <div class="quiz-questions">
+    {
+      problems.map((problem, i) => (
+        <div
+          class:list={["quiz-question-wrapper", { hidden: i >= initialCount }]}
+          data-index={i}
+        >
+          <MultipleChoice
+            question={problem.question}
+            options={problem.options}
+            correct={problem.correctIndex}
+            explanation={problem.explanation}
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .adaptive-quiz {
+    margin: var(--space-xl) 0;
+  }
+
+  .quiz-questions {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quiz-question-wrapper.hidden {
+    display: none;
+  }
+
+  .quiz-question-wrapper :global(.multiple-choice) {
+    margin-top: 0;
+  }
+</style>
+
+<script>
+  import renderMathInElement from "katex/contrib/auto-render";
+
+  function initAdaptiveQuiz(container: HTMLElement) {
+    const appendCount = parseInt(container.dataset.appendCount!, 10);
+
+    const allWrappers = Array.from(
+      container.querySelectorAll<HTMLElement>(".quiz-question-wrapper"),
+    );
+
+    function revealAfter(wrongWrapper: HTMLElement) {
+      const hiddenWrappers = allWrappers.filter((w) =>
+        w.classList.contains("hidden"),
+      );
+      const toReveal = hiddenWrappers.slice(0, appendCount);
+      if (toReveal.length === 0) return;
+
+      // Insert right after the wrong question
+      let insertAfter = wrongWrapper;
+      for (const wrapper of toReveal) {
+        wrapper.classList.remove("hidden");
+        insertAfter.after(wrapper);
+        insertAfter = wrapper;
+        // Re-render math for newly revealed elements
+        renderMathInElement(wrapper, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false },
+          ],
+          throwOnError: false,
+        });
+      }
+    }
+
+    // Listen for answer events from MultipleChoice components
+    container.addEventListener("mc:answered", ((e: CustomEvent) => {
+      if (!e.detail.isCorrect) {
+        const wrongWrapper = (e.target as HTMLElement).closest(
+          ".quiz-question-wrapper",
+        ) as HTMLElement;
+        if (wrongWrapper) revealAfter(wrongWrapper);
+      }
+    }) as EventListener);
+  }
+
+  function init() {
+    document
+      .querySelectorAll<HTMLElement>(".adaptive-quiz")
+      .forEach(initAdaptiveQuiz);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+</script>

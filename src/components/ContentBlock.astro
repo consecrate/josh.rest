@@ -1,0 +1,49 @@
+---
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<section class="content-block">
+    <header class="block-header">
+        <h3 class="block-title">{title}</h3>
+    </header>
+    <div class="block-content">
+        <slot />
+    </div>
+</section>
+
+<style>
+    .content-block {
+        border: 1px solid var(--surface);
+        border-radius: 4px;
+        margin: var(--space-xl) 0;
+        background: var(--bg);
+    }
+
+    .block-header {
+        padding: var(--space-md) 0;
+        border-bottom: 1px solid var(--surface);
+    }
+
+    .block-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0;
+    }
+
+    .block-content {
+        padding: var(--space-lg) 0;
+    }
+
+    .block-content :global(p:last-child),
+    .block-content :global(ul:last-child),
+    .block-content :global(ol:last-child) {
+        margin-bottom: 0;
+    }
+</style>

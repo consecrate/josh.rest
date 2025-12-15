@@ -1,0 +1,84 @@
+---
+title: "Understanding Derivatives"
+description: "A gentle introduction to derivatives and the power rule in calculus."
+date: "2024-12-15"
+---
+
+import ContentBlock from '../../components/ContentBlock.astro';
+
+# Understanding Derivatives
+
+The derivative is one of the most powerful ideas in mathematics. At its core, a derivative tells us the **rate of change** — how fast something is changing at any given moment.
+
+## What is a Derivative?
+
+If you have a function $f(x)$, its derivative $f'(x)$ tells you the slope of the function at any point $x$. The formal definition uses limits:
+
+$$
+f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h}
+$$
+
+But in practice, we use **differentiation rules** to find derivatives quickly.
+
+<ContentBlock title="The Power Rule">
+One of the most fundamental rules in calculus is the **power rule**:
+
+$$
+\frac{d}{dx}[x^n] = nx^{n-1}
+$$
+
+In plain English: bring the exponent down as a coefficient, then reduce the exponent by one.
+
+</ContentBlock>
+
+<ContentBlock title="Example">
+Let's find the derivative of $f(x) = x^3$:
+
+1. Start with $x^3$
+2. Bring the 3 down: $3x^3$
+3. Reduce the exponent: $3x^2$
+
+So the derivative of $x^3$ is $\boxed{3x^2}$.
+
+</ContentBlock>
+
+## More Examples
+
+Here are some common derivatives to know:
+
+| Function | Derivative |
+|----------|------------|
+| $x^2$ | $2x$ |
+| $x^4$ | $4x^3$ |
+| $\sqrt{x} = x^{1/2}$ | $\frac{1}{2}x^{-1/2} = \frac{1}{2\sqrt{x}}$ |
+| $\frac{1}{x} = x^{-1}$ | $-x^{-2} = -\frac{1}{x^2}$ |
+
+## The Chain Rule
+
+When you have a composite function like $f(g(x))$, you need the **chain rule**:
+
+$$
+\frac{d}{dx}[f(g(x))] = f'(g(x)) \cdot g'(x)
+$$
+
+<ContentBlock title="Chain Rule Example">
+Find the derivative of $(x^2 + 1)^3$:
+
+Let $u = x^2 + 1$, so we have $u^3$.
+
+Using the chain rule:
+$$
+\frac{d}{dx}[(x^2 + 1)^3] = 3(x^2 + 1)^2 \cdot 2x = 6x(x^2 + 1)^2
+$$
+
+</ContentBlock>
+
+## Applications
+
+Derivatives appear everywhere:
+
+- **Physics**: Velocity is the derivative of position, acceleration is the derivative of velocity
+- **Economics**: Marginal cost is the derivative of total cost
+- **Machine Learning**: Gradient descent uses derivatives to minimize loss functions
+
+The integral $\int_0^1 x^2 \, dx = \frac{1}{3}$ is the "reverse" of differentiation — but that's a topic for another post!

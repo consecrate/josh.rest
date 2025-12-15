@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+
+// Get the first available lesson and redirect to it
+const lessons = await getCollection('courses');
+const sortedLessons = lessons
+  .filter(l => !l.data.comingSoon)
+  .sort((a, b) => a.data.order - b.data.order);
+
+if (sortedLessons.length > 0) {
+  return Astro.redirect(`/courses/${sortedLessons[0].id}`);
+}
+---
+
+<!-- Fallback if no lessons available -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Courses — josh.rest</title>
+  </head>
+  <body>
+    <h1>No courses available yet</h1>
+    <a href="/">← Back home</a>
+  </body>
+</html>

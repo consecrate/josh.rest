@@ -1,0 +1,264 @@
+---
+import type { CourseSection } from "../lib/courses";
+
+interface Props {
+  sections: CourseSection[];
+  currentSlug?: string;
+}
+
+const { sections, currentSlug } = Astro.props;
+
+// Track lesson number across sections for continuous numbering
+let lessonNumber = 0;
+---
+
+<nav class="course-sidebar" id="course-sidebar">
+  <div class="sidebar-edge">
+    <button
+      class="sidebar-toggle"
+      id="sidebar-toggle"
+      title="Toggle Course Sidebar"
+    >
+      <svg
+        class="toggle-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="sidebar-content">
+    {
+      sections.map((section) => (
+        <div class="section">
+          <h3
+            class:list={[
+              "section-title",
+              { "coming-soon": section.comingSoon },
+            ]}
+          >
+            {section.title}
+          </h3>
+          <ol class="lesson-list">
+            {section.lessons.map((lesson) => {
+              lessonNumber++;
+              const displayNumber = section.comingSoon
+                ? lessonNumber -
+                  sections.find((s) => !s.comingSoon)!.lessons.length
+                : lessonNumber;
+              const isActive = lesson.id === currentSlug;
+              const href = `/courses/${lesson.id}`;
+              const isDisabled = lesson.data.comingSoon;
+
+              return (
+                <li
+                  class:list={[
+                    "lesson",
+                    { active: isActive, disabled: isDisabled },
+                  ]}
+                >
+                  <span class:list={["lesson-number", { active: isActive }]}>
+                    {displayNumber}
+                  </span>
+                  {isDisabled ? (
+                    <span class="lesson-link disabled">
+                      {lesson.data.title}
+                    </span>
+                  ) : (
+                    <a
+                      href={href}
+                      class:list={["lesson-link", { active: isActive }]}
+                    >
+                      {lesson.data.title}
+                    </a>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ))
+    }
+  </div>
+</nav>
+
+<script>
+  const sidebar = document.getElementById("course-sidebar");
+  const toggle = document.getElementById("sidebar-toggle");
+
+  toggle?.addEventListener("click", () => {
+    sidebar?.classList.toggle("collapsed");
+  });
+</script>
+
+<style>
+  .course-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    background: #1b1912;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    transition: width 0.2s ease;
+  }
+
+  .course-sidebar.collapsed {
+    width: 0;
+    border-right: none;
+  }
+
+  .course-sidebar.collapsed .sidebar-content {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .course-sidebar.collapsed .sidebar-toggle {
+    left: 12px;
+  }
+
+  .course-sidebar.collapsed .toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .sidebar-content {
+    padding: var(--space-md) 0;
+    overflow-y: auto;
+    height: 100%;
+    transition: opacity 0.15s ease;
+  }
+
+  .sidebar-edge {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 24px;
+    height: 100%;
+    z-index: 10;
+  }
+
+  .sidebar-toggle {
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    background: #1b1912;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 10;
+  }
+
+  .sidebar-edge:hover .sidebar-toggle,
+  .course-sidebar.collapsed .sidebar-toggle {
+    opacity: 1;
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .toggle-icon {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.2s ease;
+  }
+
+  .section {
+    margin-bottom: var(--space-lg);
+  }
+
+  .section-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: var(--space-sm);
+    padding: 0 var(--space-lg);
+  }
+
+  .section-title.coming-soon {
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  .lesson-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .lesson {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px var(--space-lg);
+  }
+
+  .lesson-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    border: 1px solid rgba(136, 136, 136, 0.4);
+    color: var(--muted);
+  }
+
+  .lesson-number.active {
+    background-color: #f97316;
+    border-color: #f97316;
+    color: white;
+  }
+
+  .lesson.disabled .lesson-number {
+    border-color: rgba(136, 136, 136, 0.25);
+    color: rgba(136, 136, 136, 0.4);
+  }
+
+  .lesson-link {
+    font-size: 1rem;
+    color: var(--text);
+    text-decoration: none;
+    line-height: 1.4;
+  }
+
+  .lesson:hover:not(.disabled) .lesson-link {
+    color: #fb923c;
+  }
+
+  .lesson-link.active {
+    color: #f97316;
+    font-weight: 500;
+  }
+
+  .lesson-link.disabled {
+    color: rgba(136, 136, 136, 0.4);
+    cursor: not-allowed;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .course-sidebar {
+      display: none;
+    }
+  }
+</style>

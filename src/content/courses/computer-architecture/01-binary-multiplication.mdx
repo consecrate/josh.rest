@@ -1,0 +1,325 @@
+---
+title: "Binary Multiplication"
+description: "Binary Multiplication Basics"
+order: 1
+comingSoon: false
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+
+Remember how to perform long multiplication?
+
+$$
+\begin{array}{r}
+  23 \\
+\times 32 \\
+\hline
+  46 \\
++ 69\phantom{0} \\
+\hline
+  736
+\end{array}
+$$
+
+This is the exact same algorithm we will use to multiply binary numbers. Here's how we would multiply $2 \times 3$.
+
+$$
+\begin{array}{r}
+0010 \\
+\times \quad 0011 \\
+\hline
+0010 \\
+0010\phantom{0} \\
+0000\phantom{00} \\
+0000\phantom{000} \\
+\hline
+00000110
+\end{array}
+$$
+
+All we have to do is convert decimals into their binary representation, then multiply as usual, keeping in mind that $0$ multiplied by anything gives $0$, and we only get a $1$ when it's $1 \times 1$.
+
+<AdaptiveQuiz
+  generator="binary-multiplication-no-carry"
+  baseSeed={42}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+Here's $3 \times 3$ in binary.
+
+$$
+\begin{array}{r}
+0011 \\
+\times \quad 0011 \\
+\hline
+0011 \\
+0011\phantom{0} \\
+0000\phantom{00} \\
+0000\phantom{000} \\
+\hline
+00001001
+\end{array}
+$$
+
+In binary, we must remember that $1 + 1 = 0$ carry $1$.
+
+$$
+\begin{array}{r}
+0011 \\
+\times \quad 0011 \\
+\hline
+00\underline{1}1 \\
+00\underline{1}\underline{1}\phantom{0} \\
+0000\phantom{00} \\
+0000\phantom{000} \\
+\hline
+0000\underline{100}1
+\end{array}
+$$
+
+Here we have $1 + 1 = 0$ carry $1$. Then $0 + 1 + 0$ plus the carried $1$ gives $0$ carry $1$. Then $0 + 0 + 0 + 0$ plus the carried $1$ gives $1$.
+
+<AdaptiveQuiz
+  generator="binary-multiplication-with-carry"
+  baseSeed={123}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+### How Computers Actually Do It
+
+The algorithm that computers use _mimics_ this method. Say we want to multiply $0010 \times 0011$. We call $0011$ the "multiplier" and $0010$ the "multiplicand". The result is called the "product."
+
+Since we are dealing with $4$-bit numbers, each multiplication operation takes $4$ iterations.
+
+Here's the general recipe:
+
+1. The product is set to $0$.
+2. Check the least significant bit (LSB)—the rightmost bit—of the multiplier.
+3. If it is a $1$, add the multiplicand to the product. If it is a $0$, nothing gets added.
+4. Shift the multiplicand $1$ bit to the left.
+5. Shift the multiplier $1$ bit to the right.
+
+Let's trace $0010 \times 0011$ with this recipe.
+
+Iteration #0
+
+- Product is set to $0$.
+
+Iteration #1:
+
+- LSB of multiplier is $1$ ($001\boxed{1}$).
+- Product = Product + Multiplicand = $0000 \ 0000 + 0000 \ 0010$ = $0000\ 0010$
+- Shift left Multiplicand: $0000\ 0010 \rightarrow 0000\ 0100$
+- Shift right Multiplier: $0011 \rightarrow 0001$
+
+Iteration #2:
+
+- LSB of multiplier is $1$ ($000\boxed{1}$)
+- Product = Product + Multiplicand = $0000\ 0010 + 0000 \ 0100$ = $0000\ 0110$
+- Shift left Multiplicand: $0000 \ 0100 \rightarrow 0000 \ 1000$
+- Shift right Multiplier: $0001 \rightarrow 0000$
+
+Iteration #3:
+
+- LSB of multiplier is $0$ ($000\boxed{0}$). No operation.
+- Shift left Multiplicand: $0000 \ 1000 \rightarrow 0001 \ 0000$
+- Shift right Multiplier: $0000 \rightarrow 0000$
+
+Iteration #4:
+
+- LSB of multiplier is $0$ ($000\boxed{0}$). No operation.
+- Shift left Multiplicand: $0001 \ 0000 \rightarrow 0010 \ 0000$
+- Shift right Multiplier: $0000 \rightarrow 0000$
+
+### Wait... What's Going On?
+
+Here's the general recipe again, with the intuition behind each step:
+
+1. The product is set to $0$. We start from scratch.
+2. Check the least significant bit (LSB)—the rightmost bit—of the multiplier.
+3. If it is a $1$, add the multiplicand to the product. If it is a $0$, nothing gets added.
+
+Why does this adding make sense? Here's $0010 \times 0011$ again.
+
+$$
+\begin{array}{r}
+0010 \\
+\times \quad 00\underline{1}\underline{1} \\
+\hline
+\underline{0010} \\
+\underline{0010}\phantom{0} \\
+0000\phantom{00} \\
+0000\phantom{000} \\
+\hline
+00000110
+\end{array}
+$$
+
+Notice that every time the LSB of the multiplier is a $1$, we write down the multiplicand ($0010$). This contributes the multiplicand—shifted by the current iteration amount—to the product. That's why we add. On paper, when the LSB is $0$, we just write down a row of $0$s, which contributes nothing to the product. That's why we skip the addition.
+
+4. Shift the multiplicand $1$ bit to the left.
+
+We shift because if we were doing it on paper, in the first iteration we add $0010$, but by the second iteration we are adding $00100$ instead of $0010$—which is just $0010$ shifted left by $1$.
+
+5. Shift the multiplier $1$ bit to the right.
+
+We shift the multiplier to the right by $1$ so that in the next iteration we can check the new LSB to see if it's a $1$ or $0$.
+
+Normally, we organize our iterations into a table. Here's $0010 \times 0011$.
+
+<table class="mult-table">
+  <thead>
+    <tr>
+      <th>Iteration</th>
+      <th>Step</th>
+      <th>Multiplier</th>
+      <th>Multiplicand</th>
+      <th>Product</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td class="step">Initial values</td>
+      <td>001<span class="circled">1</span></td>
+      <td>0000 0010</td>
+      <td>0000 0000</td>
+    </tr>
+    <tr>
+      <td rowspan="3">1</td>
+      <td class="step">1a: 1 ⇒ Prod = Prod + Mcand</td>
+      <td>0011</td>
+      <td>0000 0010</td>
+      <td class="changed">0000 0010</td>
+    </tr>
+    <tr>
+      <td class="step">2: Shift left Multiplicand</td>
+      <td>0011</td>
+      <td class="changed">0000 0100</td>
+      <td>0000 0010</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift right Multiplier</td>
+      <td>000<span class="circled">1</span></td>
+      <td>0000 0100</td>
+      <td>0000 0010</td>
+    </tr>
+    <tr>
+      <td rowspan="3">2</td>
+      <td class="step">1a: 1 ⇒ Prod = Prod + Mcand</td>
+      <td>0001</td>
+      <td>0000 0100</td>
+      <td class="changed">0000 0110</td>
+    </tr>
+    <tr>
+      <td class="step">2: Shift left Multiplicand</td>
+      <td>0001</td>
+      <td class="changed">0000 1000</td>
+      <td>0000 0110</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift right Multiplier</td>
+      <td>000<span class="circled">0</span></td>
+      <td>0000 1000</td>
+      <td>0000 0110</td>
+    </tr>
+    <tr>
+      <td rowspan="3">3</td>
+      <td class="step">1: 0 ⇒ No operation</td>
+      <td>0000</td>
+      <td>0000 1000</td>
+      <td>0000 0110</td>
+    </tr>
+    <tr>
+      <td class="step">2: Shift left Multiplicand</td>
+      <td>0000</td>
+      <td class="changed">0001 0000</td>
+      <td>0000 0110</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift right Multiplier</td>
+      <td>000<span class="circled">0</span></td>
+      <td>0001 0000</td>
+      <td>0000 0110</td>
+    </tr>
+    <tr>
+      <td rowspan="3">4</td>
+      <td class="step">1: 0 ⇒ No operation</td>
+      <td>0000</td>
+      <td>0001 0000</td>
+      <td>0000 0110</td>
+    </tr>
+    <tr>
+      <td class="step">2: Shift left Multiplicand</td>
+      <td>0000</td>
+      <td class="changed">0010 0000</td>
+      <td>0000 0110</td>
+    </tr>
+    <tr>
+      <td class="step">3: Shift right Multiplier</td>
+      <td class="changed">0000</td>
+      <td>0010 0000</td>
+      <td>0000 0110</td>
+    </tr>
+  </tbody>
+</table>
+
+<style>{`
+.mult-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  font-family: monospace;
+  font-size: 0.7rem;
+  margin: 1.5rem 0;
+}
+.mult-table th,
+.mult-table td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.mult-table th {
+  background: #00a8cc;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  font-weight: 600;
+}
+.mult-table th:nth-child(2) {
+  text-align: left;
+}
+.mult-table td {
+  border: 1px solid #333;
+  padding: 0.2rem 0.4rem;
+  text-align: center;
+}
+.mult-table .step {
+  text-align: left;
+}
+.mult-table .changed {
+  color: #00a8cc;
+}
+.mult-table .circled {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  line-height: 1.2em;
+  border: 2px solid #00a8cc;
+  border-radius: 50%;
+  color: #00a8cc;
+  text-align: center;
+}
+`}</style>
+
+Now practice tracing through the algorithm yourself. Draw out the iteration table to find the final product:
+
+<AdaptiveQuiz
+  generator="binary-multiplication-table"
+  baseSeed={456}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>

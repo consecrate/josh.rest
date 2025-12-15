@@ -1,0 +1,128 @@
+---
+import Base from "./Base.astro";
+import CourseSidebar from "../components/CourseSidebar.astro";
+import type { CourseSection } from "../lib/courses";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  title: string;
+  description?: string;
+  courseTitle: string;
+  sections: CourseSection[];
+  currentSlug: string;
+  nextLesson?: CollectionEntry<"courses"> | null;
+}
+
+const {
+  title,
+  description = "josh.rest — Interactive learning",
+  courseTitle,
+  sections,
+  currentSlug,
+  nextLesson,
+} = Astro.props;
+---
+
+<Base title={`${title} — josh.rest`} description={description} fullWidth>
+  <div class="course-layout">
+    <CourseSidebar sections={sections} currentSlug={currentSlug} />
+    <main class="course-content">
+      <div class="content-wrapper">
+        <header class="lesson-header">
+          <span class="course-name">{courseTitle}</span>
+          <h1>{title}</h1>
+        </header>
+        <article class="lesson-content">
+          <slot />
+        </article>
+        {
+          nextLesson && (
+            <div class="chapter-complete">
+              <p class="complete-text">You've completed this chapter</p>
+              <a href={`/courses/${nextLesson.id}`} class="keep-learning">
+                Keep learning <span class="arrow">›</span>
+              </a>
+            </div>
+          )
+        }
+      </div>
+    </main>
+  </div>
+</Base>
+
+<style>
+  .course-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .course-content {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .content-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-xl);
+  }
+
+  .lesson-header {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .course-name {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: var(--space-sm);
+  }
+
+  .lesson-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+  }
+
+  .lesson-content {
+    line-height: 1.8;
+  }
+
+  .chapter-complete {
+    margin-top: var(--space-2xl);
+    padding: var(--space-lg);
+    background: var(--surface);
+    border-radius: 8px;
+  }
+
+  .complete-text {
+    margin: 0 0 var(--space-sm);
+    color: var(--text);
+  }
+
+  .keep-learning {
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .keep-learning:hover {
+    text-decoration: underline;
+  }
+
+  .arrow {
+    font-size: 1.2em;
+  }
+
+  /* Mobile: show back link */
+  @media (max-width: 900px) {
+    .content-wrapper {
+      padding: var(--space-lg);
+    }
+
+    .lesson-header h1 {
+      font-size: 1.8rem;
+    }
+  }
+</style>

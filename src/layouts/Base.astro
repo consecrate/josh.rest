@@ -1,0 +1,46 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  fullWidth?: boolean;
+}
+
+const { title, description = 'josh.rest — Learning through interaction', fullWidth = false } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    {fullWidth ? <slot /> : <div class="container"><slot /></div>}
+  </body>
+</html>
+
+<script>
+  import renderMathInElement from 'katex/contrib/auto-render';
+
+  function renderMath() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      throwOnError: false,
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderMath);
+  } else {
+    renderMath();
+  }
+</script>
