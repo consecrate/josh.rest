@@ -1,0 +1,63 @@
+---
+title: "Transition to Modern Law"
+description: "Why the EU moved from a Directive to a Regulation, and what it means for Bob."
+order: 2
+section: "The Foundation of Law"
+sectionOrder: 1
+---
+
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+
+# The GDPR Awakening
+
+It's 2016. Bob is struggling. The 1995 Directive is a mess.
+*   In France, he has to register his database with the government.
+*   In Germany, he needs a specific Data Protection Officer.
+*   In Spain, the fines are different.
+
+It's a nightmare of fragmentation. But then, good news (sort of). The EU announces the **General Data Protection Regulation (GDPR)**.
+
+## Directive vs. Regulation
+
+The shift from the 1995 Directive to the 2016 GDPR (enforced in May 2018) was a massive legal upgrade.
+
+### What is a Directive?
+A **Directive** is a legislative act that sets out a **goal** that all EU countries must achieve. However, it is up to the individual countries to devise their own laws on how to reach these goals.
+*   **Result**: 28 different variations of the law. (Fragmentation).
+
+### What is a Regulation?
+A **Regulation** is a binding legislative act. It must be applied in its entirety across the EU. It is "directly applicable."
+*   **Result**: One single law for the entire EU. (Harmonization).
+
+For Bob, this is actually better. He now has one set of rules to follow for all of Europe, instead of 28. But the rules are much stricter, and the fines are massive (up to 4% of global revenue).
+
+<MultipleChoice
+  question="Which legal instrument ensures that the law is exactly the same in every EU country?"
+  options={[
+    "A Directive",
+    "A Regulation",
+    "A Recommendation",
+    "A Treaty"
+  ]}
+  correct={1}
+  explanation="A **Regulation** is directly applicable and uniform across all member states, unlike a Directive which requires local implementation."
+/>
+
+## Key Changes in GDPR
+
+1.  **Harmonization**: One law for the continent.
+2.  **Extraterritorial Scope**: It applies to anyone offering goods or services to people in the EU, even if the company (like DataVault) is based in the US.
+3.  **Enforcement**: Drastically higher fines to ensure companies take it seriously.
+
+## Practice: Directive or Regulation?
+
+Can you distinguish between these two legal tools?
+
+<AdaptiveQuiz
+  generator="law-directive-vs-regulation"
+  baseSeed={404}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={6}
+/>

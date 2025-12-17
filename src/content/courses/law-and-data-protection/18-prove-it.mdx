@@ -1,0 +1,73 @@
+---
+title: "Prove It"
+description: "Accountability (Article 5(2))"
+order: 18
+comingSoon: false
+section: "GDPR Principles (The Rules)"
+sectionOrder: 5
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# The Boss Principle
+
+Bob is feeling good. He has a privacy policy, he secured the server, and he deleted the old data.
+He tells Alice, "I am compliant!"
+Alice says, "Prove it."
+
+Bob points to the server. "Look, it's encrypted."
+"That's not proof," Alice says. "Where is the documentation? Where is the risk assessment? Where is the policy document signed by the CEO?"
+
+## Accountability
+
+**Article 5(2)** is the "Accountability" principle. It says:
+> The Controller shall be responsible for, and be able to **demonstrate compliance** with, paragraph 1.
+
+This shifts the **Burden of Proof**.
+*   Old World: The Regulator has to prove you broke the law.
+*   New World (GDPR): **You** have to prove you followed it.
+
+If you are doing everything right but haven't written it down, you are **not compliant**.
+
+## The Tools of Accountability
+
+How do you prove it? You create a paper trail (or a digital one).
+
+### 1. ROPA (Record of Processing Activities)
+A master spreadsheet that lists every data flow in your company.
+*   *What data? Why? Where does it go? How long do we keep it?*
+
+### 2. DPIA (Data Protection Impact Assessment)
+A risk assessment for high-risk projects (like AI, biometrics, or large-scale tracking).
+*   *What could go wrong? How do we mitigate it?*
+
+### 3. DPO (Data Protection Officer)
+An independent expert you hire to watch over the company. Required for Public Authorities and high-risk processors.
+
+### 4. Privacy by Design
+Building privacy into the product from Day 1, not bolting it on at the end.
+
+<MultipleChoice
+  question="Who has the 'Burden of Proof' under GDPR?"
+  options={[
+    "The Data Subject (User).",
+    "The Data Protection Authority (Regulator).",
+    "The Controller (Company).",
+    "The Police."
+  ]}
+  correct={2}
+  explanation="The Controller is responsible for 'demonstrating compliance'. If the regulator knocks on your door, YOU must show the proof."
+/>
+
+## Practice: The Auditor
+
+You are the DPA Auditor. Review Bob's situation and tell him which document or role he is missing.
+
+<AdaptiveQuiz
+  generator="law-accountability-check"
+  baseSeed={18}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

@@ -1,0 +1,79 @@
+---
+title: "The 'Give Me Everything' Button"
+description: "Right of Access & Portability (Articles 15 & 20)"
+order: 20
+comingSoon: false
+section: "Data Subject Rights (The Users Strike Back)"
+sectionOrder: 6
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Bob's Nightmare
+
+An email arrives:
+> "Subject: SAR
+> Dear DataVault,
+> Please provide a copy of all personal data you hold about me."
+
+Bob laughs. "Ignore it."
+Alice grabs his mouse. "Bob, that is a **Subject Access Request (SAR)**. If you ignore it, we get fined."
+
+Bob panics. "Do I send them the database schema? The server logs? The backups?"
+
+## Right of Access (Article 15)
+
+The Right of Access is the gateway right. It allows users to verify what you are doing.
+You must provide:
+1.  **Confirmation**: "Yes, we have your data."
+2.  **A Copy**: The actual data itself.
+3.  **Context**: The same info from the Privacy Notice (Purpose, Retention, etc.).
+
+**The Rules:**
+*   **Free of charge** (usually).
+*   **Within 1 month**.
+*   **Electronic format** (if requested by email).
+
+<MultipleChoice
+  question="Can Bob charge a $10 'Admin Fee' for handling a standard Access Request?"
+  options={[
+    "Yes, to cover his time.",
+    "Yes, but only for paper copies.",
+    "No, it must be free (unless the request is excessive).",
+    "No, never."
+  ]}
+  correct={2}
+  explanation="Article 12(5) states that information provided under Articles 13-22 must be provided **free of charge**. Fees are only allowed for 'manifestly unfounded or excessive' requests (e.g., asking for the same thing every week)."
+/>
+
+## Right to Data Portability (Article 20)
+
+Then, a second email arrives from a user who wants to switch to Bob's competitor, "DataBin".
+> "Please send my data to DataBin in a format they can import."
+
+Bob is angry. "Why should I help them leave?"
+"Because," Alice says, "it's their data, not yours."
+
+The Right to Portability applies when:
+1.  Processing is based on **Consent** or **Contract**.
+2.  AND processing is **automated**.
+
+You must provide the data in a format that is:
+*   **Structured**
+*   **Commonly Used**
+*   **Machine-Readable**
+
+(Think CSV, JSON, XML. Not PDF, not screenshots, not paper).
+
+## Practice: The Format Checker
+
+Bob is trying to be "technically compliant" but practically annoying. Help him choose the format that actually satisfies Article 20.
+
+<AdaptiveQuiz
+  generator="law-dsr-format"
+  baseSeed={20}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

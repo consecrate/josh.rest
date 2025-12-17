@@ -1,0 +1,72 @@
+---
+title: "Stay on Target"
+description: "Purpose Limitation (Article 5(1)(b))"
+order: 14
+comingSoon: false
+section: "GDPR Principles (The Rules)"
+sectionOrder: 5
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Function Creep
+
+Bob has a great idea.
+"We have 10,000 phone numbers collected for Two-Factor Authentication (2FA)," he says.
+"Why don't we use them to send SMS ads? It's a goldmine!"
+
+Alice shakes her head. "That's **Function Creep**, Bob. And it's illegal."
+
+## Purpose Limitation
+
+**Article 5(1)(b)** states that data must be:
+1.  Collected for **specified, explicit, and legitimate purposes**.
+2.  Not further processed in a manner that is **incompatible** with those purposes.
+
+Translation: **You have to stick to the plan.**
+If you collected data for Purpose A (Security), you cannot just switch to Purpose B (Marketing) whenever you feel like it.
+
+## The Compatibility Test
+
+Can you *ever* change purposes? Yes, but only if the new purpose is **Compatible**.
+To decide, ask:
+*   **Link**: Is there a strong link between the original and new purpose?
+*   **Context**: What is the relationship between you and the user?
+*   **Nature**: Is the data sensitive?
+*   **Consequences**: Will this hurt the user?
+*   **Safeguards**: Is the data encrypted or anonymized?
+
+### Examples
+*   **Compatible**: Using shipping data to calculate average delivery times (Stats).
+*   **Compatible**: Using medical records for scientific research (with safeguards).
+*   **Incompatible**: Using 2FA numbers for Marketing (Users didn't expect this).
+*   **Incompatible**: Using security CCTV to spy on employee breaks.
+
+## The Research Exception
+
+The GDPR loves science. Processing for **archiving in the public interest, scientific or historical research, or statistical purposes** is *always* considered compatible (Article 5(1)(b)), provided you have safeguards (like anonymization).
+
+<MultipleChoice
+  question="You collected email addresses to send receipts. Can you now sell them to a partner company?"
+  options={[
+    "Yes, data is an asset.",
+    "Yes, if the partner is nice.",
+    "No, unless you get fresh consent.",
+    "No, unless the receipts were digital."
+  ]}
+  correct={2}
+  explanation="Selling data is almost never 'Compatible' with the original purpose of service delivery. It is a new, separate purpose that requires its own legal basis (usually Consent)."
+/>
+
+## Practice: Pivot or Pause?
+
+Bob is brainstorming new ways to use his data. Tell him which pivots are safe (Compatible) and which require a full stop (Incompatible).
+
+<AdaptiveQuiz
+  generator="law-purpose-compatibility"
+  baseSeed={14}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

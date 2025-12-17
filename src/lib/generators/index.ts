@@ -1,35 +1,29 @@
 import type { ProblemGenerator } from './types';
-import { binaryMultiplicationGenerator } from './binary-multiplication';
-import { binaryMultiplicationCarryGenerator } from './binary-multiplication-carry';
-import { binaryMultiplicationTableGenerator } from './binary-multiplication-table';
-import { binaryDivisionQuotientGenerator } from './binary-division';
-import { binaryDivisionTableGenerator } from './binary-division-table';
 
 export type { Problem, ProblemGenerator } from './types';
 export { mulberry32, shuffleWithSeed, randInt, hashCode } from './prng';
 
-const generators = new Map<string, ProblemGenerator>([
-  [binaryMultiplicationGenerator.type, binaryMultiplicationGenerator],
-  [binaryMultiplicationCarryGenerator.type, binaryMultiplicationCarryGenerator],
-  [binaryMultiplicationTableGenerator.type, binaryMultiplicationTableGenerator],
-  [binaryDivisionQuotientGenerator.type, binaryDivisionQuotientGenerator],
-  [binaryDivisionTableGenerator.type, binaryDivisionTableGenerator],
-]);
+// Auto-discover all generator modules (exclude index, types, prng)
+const modules = import.meta.glob<{ generators: readonly ProblemGenerator[] }>(
+  ['./*.ts', '!./index.ts', '!./types.ts', '!./prng.ts'],
+  { eager: true },
+);
+
+// Build registry from discovered modules
+const registry = new Map<string, ProblemGenerator>();
+
+for (const mod of Object.values(modules)) {
+  for (const gen of mod.generators) {
+    registry.set(gen.type, gen);
+  }
+}
 
 export function getGenerator(type: string): ProblemGenerator {
-  const gen = generators.get(type);
+  const gen = registry.get(type);
   if (!gen) throw new Error(`Unknown generator: ${type}`);
   return gen;
 }
 
 export function listGenerators(): string[] {
-  return [...generators.keys()];
+  return [...registry.keys()];
 }
-
-export {
-  binaryMultiplicationGenerator,
-  binaryMultiplicationCarryGenerator,
-  binaryMultiplicationTableGenerator,
-  binaryDivisionQuotientGenerator,
-  binaryDivisionTableGenerator,
-};

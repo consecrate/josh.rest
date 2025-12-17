@@ -44,7 +44,7 @@ function generateWrongQuotients(correct: number, dividend: number, divisor: numb
   return [...wrongs];
 }
 
-export const binaryDivisionQuotientGenerator: ProblemGenerator<BinaryDivProblem> = {
+const binaryDivisionQuotientGenerator: ProblemGenerator<BinaryDivProblem> = {
   type: 'binary-division-quotient',
   displayName: 'Binary Division (Find Quotient)',
 
@@ -84,6 +84,8 @@ export const binaryDivisionQuotientGenerator: ProblemGenerator<BinaryDivProblem>
     };
   },
 };
+
+export const generators = [binaryDivisionQuotientGenerator] as const;
 
 // ------- TESTS -------
 // Run via: node -e "import('./binary-division.js').then(m => m.runTests())"

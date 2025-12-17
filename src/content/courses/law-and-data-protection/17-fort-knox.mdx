@@ -1,0 +1,72 @@
+---
+title: "Fort Knox"
+description: "Integrity and Confidentiality (Security)"
+order: 17
+comingSoon: false
+section: "GDPR Principles (The Rules)"
+sectionOrder: 5
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# The Open Door
+
+Bob leaves his laptop open on the cafe table while he goes to order a latte.
+Alice walks by, closes it, and glares at him.
+"That," she says, "was a data breach."
+
+## The Security Principle
+
+**Article 5(1)(f)** requires data to be processed in a manner that ensures **appropriate security**. This includes protection against:
+*   Unauthorized or unlawful processing (Hacking, spying).
+*   Accidental loss, destruction, or damage (Fires, bugs, deleting the wrong file).
+
+This is often called the **Integrity and Confidentiality** principle, but in security circles, we call it the **CIA Triad**.
+
+### 1. Confidentiality (The "Secret")
+Only authorized people should see the data.
+*   **Threats**: Hackers, lost laptops, nosey employees, phishing.
+*   **Defense**: Encryption, Access Controls, NDAs.
+
+### 2. Integrity (The "Truth")
+The data should not be altered or corrupted.
+*   **Threats**: Malware, buggy code, SQL injection, disk errors.
+*   **Defense**: Checksums, backups, immutable logs, input validation.
+
+### 3. Availability (The "Access")
+The data must be available when needed.
+*   **Threats**: Ransomware, DDoS attacks, power outages, fires.
+*   **Defense**: Backups, Disaster Recovery Plans, Redundant servers.
+
+## Risk-Based Approach
+
+You don't need Fort Knox security for a grocery list. But you do for medical records.
+The GDPR says you must implement **"Technical and Organizational Measures" (TOMs)** appropriate to the **risk**.
+
+*   **Technical**: Encryption, Firewalls, Multi-Factor Authentication.
+*   **Organizational**: Training, Policies, Physical security (locking doors).
+
+<MultipleChoice
+  question="Which of these is an 'Organizational' security measure?"
+  options={[
+    "Encrypting the hard drive.",
+    "Installing a firewall.",
+    "Training employees on how to spot phishing emails.",
+    "Using HTTPS."
+  ]}
+  correct={2}
+  explanation="Encryption, Firewalls, and HTTPS are Technical measures (software/hardware). Training is an Organizational measure (people/processes). You need both."
+/>
+
+## Practice: CIA Triad
+
+Identify which security pillar has been compromised in these scenarios.
+
+<AdaptiveQuiz
+  generator="law-security-triad"
+  baseSeed={17}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

@@ -1,0 +1,83 @@
+---
+title: "The Legal Basis Buffet"
+description: "Understanding Article 6 and Lawful Bases"
+order: 12
+comingSoon: false
+section: "GDPR Principles (The Rules)"
+sectionOrder: 5
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# The Menu
+
+After the "Email List Fiasco," Bob is cautious. He wants to process data correctly.
+"So I need to ask for permission for *everything*?" he asks.
+
+Alice shakes her head. "No. That's a common myth. 'Consent' is just one item on the menu. There are **6 Lawful Bases** in Article 6. You must choose the right one for the job."
+
+Think of it like a buffet. You can't take everything; you have to pick the one plate that fits your hunger (purpose).
+
+## The 6 Lawful Bases
+
+### 1. Contract (The "Business Deal")
+*   **When to use**: You need the data to fulfill a contract with the user, or to take steps at their request before entering a contract.
+*   **Example**: Delivering a package, processing a credit card payment, paying an employee.
+*   **Why**: If they don't give you the address, you can't ship the item. It's necessary.
+
+### 2. Legal Obligation (The "Law Made Me Do It")
+*   **When to use**: You are required by *another* law (not GDPR) to process data.
+*   **Example**: Sending salary data to the tax office, performing KYC (Know Your Customer) checks for banking, keeping invoices for tax audits.
+*   **Note**: This must be a statutory obligation, not just a contractual one.
+
+### 3. Vital Interests (The "Life Saver")
+*   **When to use**: To protect someone's life.
+*   **Example**: An unconscious car crash victim arrives at the ER. The hospital searches their ID for allergies.
+*   **Limit**: Only for life-or-death situations where consent is impossible.
+
+### 4. Public Task (The "Official Duty")
+*   **When to use**: You are a public authority (or acting as one) performing an official function.
+*   **Example**: Tax collection, garbage collection, police work, public health administration.
+*   **Who**: Mostly government agencies.
+
+### 5. Legitimate Interests (The "Balancing Act")
+*   **When to use**: You have a valid interest (commercial, security, etc.) *AND* it doesn't override the user's rights.
+*   **Example**: Fraud detection, network security, direct marketing (sometimes), personalized content.
+*   **Requirement**: You must do a "Balancing Test" (LIA). Does your benefit outweigh their privacy risk?
+
+### 6. Consent (The "Permission Slip")
+*   **When to use**: When none of the above apply, and you want to give the user a genuine choice.
+*   **Example**: Sending a newsletter, tracking cookies, sharing data with third parties.
+*   **Warning**: Consent is hard to get right (see next lesson). Don't use it if you don't need to!
+
+## Bob's Mistake: "Consent Fatigue"
+
+Bob originally tried to make users check a box saying "I Consent" for everything—shipping, billing, and login.
+Alice explains: "Bob, if they uncheck the box, can you still ship the product?"
+"No."
+"Then it's not Consent. It's **Contract**. Don't ask for permission for things you *must* do. Just do them, and tell them about it."
+
+<MultipleChoice
+  question="Bob wants to process employee bank details to pay their monthly salary. Which lawful basis should he use?"
+  options={[
+    "Consent (Ask them nicely)",
+    "Contract (Employment agreement)",
+    "Vital Interests (They need money to eat)",
+    "Legitimate Interests (Bob likes paying people)"
+  ]}
+  correct={1}
+  explanation="The correct basis is Contract. Paying the salary is a core part of the employment contract. Asking for consent is dangerous because if they say 'No', you still have to pay them!"
+/>
+
+## Practice: Match the Basis
+
+Help Bob categorize his processing activities into the correct Lawful Basis.
+
+<AdaptiveQuiz
+  generator="law-lawful-basis-matcher"
+  baseSeed={12}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

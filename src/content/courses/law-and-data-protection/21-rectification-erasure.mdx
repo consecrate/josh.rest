@@ -1,0 +1,60 @@
+---
+title: "The History Eraser"
+description: "Right to Rectification & Erasure (Articles 16 & 17)"
+order: 21
+comingSoon: false
+section: "Data Subject Rights (The Users Strike Back)"
+sectionOrder: 6
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Bob's Permanent Record
+
+Bob loves data. He never deletes anything. "Storage is cheap!" he says.
+But then a user writes: "I got married. My name is now Alice Smith, not Alice Jones. Fix it."
+Bob groans. "Database updates are hard."
+**Article 16 (Right to Rectification)**: You *must* correct inaccurate data without undue delay.
+
+Then another user writes: "I'm leaving. Delete everything."
+Bob panics. "But I need their transaction history for my charts!"
+**Article 17 (Right to Erasure / Right to be Forgotten)**: You *must* delete data if...
+*   It's no longer necessary.
+*   Consent is withdrawn.
+*   They object (and you have no overriding grounds).
+*   It was unlawful to begin with.
+
+## It's Not Absolute
+
+Bob thinks, "Wait, if someone commits a crime on my platform and then asks to be deleted, do I have to destroy the evidence?"
+
+**NO.** The Right to Erasure has big exceptions:
+1.  **Freedom of Expression** (Journalism).
+2.  **Legal Obligation** (Tax laws require keeping invoices).
+3.  **Public Interest** (Public health).
+4.  **Legal Claims** (If you are being sued).
+
+<MultipleChoice
+  question="A user demands deletion of their account. However, DataVault is currently suing that user for unpaid fees. Must Bob delete the data?"
+  options={[
+    "Yes, the Right to be Forgotten is absolute.",
+    "Yes, but he can keep a backup.",
+    "No, he can keep it for the 'establishment, exercise or defence of legal claims'.",
+    "No, because he owns the data."
+  ]}
+  correct={2}
+  explanation="Article 17(3)(e) provides an exception for data necessary for legal claims. Bob can keep the data relevant to the lawsuit."
+/>
+
+## Practice: The Erasure Judge
+
+Bob is reviewing deletion requests. Some are valid, some are blocked by exceptions. You be the judge.
+
+<AdaptiveQuiz
+  generator="law-erasure-judge"
+  baseSeed={21}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

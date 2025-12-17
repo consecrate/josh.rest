@@ -1,0 +1,60 @@
+---
+title: "Why Data Protection Matters"
+description: "The business case for compliance: Trust, Risk, and Money."
+order: 2
+section: "The Foundation of Law"
+sectionOrder: 1
+---
+
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+
+# The Near Miss
+
+Bob is still debating whether to delete the "Stalker Mode" feature when news breaks. A competitor, "LeakyApp," has suffered a massive data breach. Millions of user chats were leaked online because they stored them in plain text.
+
+The consequences for LeakyApp are swift and brutal:
+1.  **Fines**: Regulators fine them millions.
+2.  **Churn**: Users delete the app in droves.
+3.  **Stock Crash**: Investors pull out.
+4.  **Lawsuits**: Users sue for damages.
+
+Bob is terrified. He realizes that **Data Protection** isn't just a legal checkbox—it's an existential requirement for his business.
+
+## The Business Case for Compliance
+
+Bob needs to convince his investors to budget $50,000 for a security audit. He prepares his arguments. It's not just about avoiding fines; it's about building value.
+
+### 1. Trust as a Currency
+In the digital economy, **Trust** is the most valuable asset. If users trust you with their data, they will use your product. If they don't, you have no business.
+*   **Example**: Apple positions "Privacy" as a luxury product feature to sell iPhones.
+
+### 2. Risk Mitigation
+Data breaches are expensive. The average cost of a data breach is in the millions (investigation, notification, legal fees, fines). Spending on prevention is cheaper than paying for a cure.
+
+### 3. Market Access
+If Bob wants to sell to big enterprise clients or operate in Europe, he *must* be compliant. Nobody will buy B2B software that isn't GDPR or SOC2 compliant.
+
+<MultipleChoice
+  question="Which of the following is the 'positive' business argument for data protection?"
+  options={[
+    "It prevents us from going to jail.",
+    "It builds consumer trust and brand value.",
+    "It allows us to hide our secrets better.",
+    "It makes the database faster."
+  ]}
+  correct={1}
+  explanation="While avoiding jail is good, building **Trust** is the positive value-add. It differentiates the product in the market."
+/>
+
+## Simulation: The Board Meeting
+
+Bob walks into the boardroom. The investors are skeptical. They want to spend money on ads, not security. Help Bob convince them.
+
+<AdaptiveQuiz
+  generator="law-ds-business-case"
+  baseSeed={202}
+  initialCount={3}
+  appendCount={1}
+  maxQuestions={5}
+/>

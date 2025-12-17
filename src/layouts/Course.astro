@@ -7,7 +7,7 @@ import type { CollectionEntry } from "astro:content";
 interface Props {
   title: string;
   description?: string;
-  courseTitle: string;
+  sectionTitle?: string;
   sections: CourseSection[];
   currentSlug: string;
   nextLesson?: CollectionEntry<"courses"> | null;
@@ -16,7 +16,7 @@ interface Props {
 const {
   title,
   description = "josh.rest — Interactive learning",
-  courseTitle,
+  sectionTitle,
   sections,
   currentSlug,
   nextLesson,
@@ -24,12 +24,29 @@ const {
 ---
 
 <Base title={`${title} — josh.rest`} description={description} fullWidth>
-  <div class="course-layout">
+  <div class="course-layout" id="course-layout">
     <CourseSidebar sections={sections} currentSlug={currentSlug} />
+    <div class="sidebar-toggle-wrapper">
+      <button
+        class="sidebar-toggle"
+        id="sidebar-toggle"
+        title="Toggle Course Sidebar"
+      >
+        <svg
+          class="toggle-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M15 18l-6-6 6-6"></path>
+        </svg>
+      </button>
+    </div>
     <main class="course-content">
       <div class="content-wrapper">
         <header class="lesson-header">
-          <span class="course-name">{courseTitle}</span>
+          {sectionTitle && <span class="section-name">{sectionTitle}</span>}
           <h1>{title}</h1>
         </header>
         <article class="lesson-content">
@@ -50,10 +67,75 @@ const {
   </div>
 </Base>
 
+<script>
+  const layout = document.getElementById("course-layout");
+  const toggle = document.getElementById("sidebar-toggle");
+
+  toggle?.addEventListener("click", () => {
+    layout?.classList.toggle("sidebar-collapsed");
+  });
+</script>
+
 <style>
   .course-layout {
     display: flex;
     min-height: 100vh;
+    position: relative;
+  }
+
+  .course-layout.sidebar-collapsed :global(.course-sidebar) {
+    width: 0;
+    border-right: none;
+  }
+
+  .course-layout.sidebar-collapsed :global(.sidebar-content) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar-toggle-wrapper {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 0;
+    z-index: 20;
+  }
+
+  .sidebar-toggle {
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    background: #1b1912;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.2s ease;
+  }
+
+  .course-layout.sidebar-collapsed .sidebar-toggle {
+    left: 12px;
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .toggle-icon {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.2s ease;
+  }
+
+  .course-layout.sidebar-collapsed .toggle-icon {
+    transform: rotate(180deg);
   }
 
   .course-content {
@@ -71,7 +153,7 @@ const {
     margin-bottom: var(--space-2xl);
   }
 
-  .course-name {
+  .section-name {
     display: block;
     font-size: 0.9rem;
     color: var(--muted);
@@ -115,8 +197,12 @@ const {
     font-size: 1.2em;
   }
 
-  /* Mobile: show back link */
+  /* Mobile */
   @media (max-width: 900px) {
+    .sidebar-toggle-wrapper {
+      display: none;
+    }
+
     .content-wrapper {
       padding: var(--space-lg);
     }

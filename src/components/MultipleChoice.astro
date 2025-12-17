@@ -1,4 +1,6 @@
 ---
+import { inlineMarkdown } from "../lib/markdown";
+
 interface Props {
   question: string;
   options: string[];
@@ -8,17 +10,22 @@ interface Props {
 
 const { question, options, correct, explanation } = Astro.props;
 const id = `mc-${Math.random().toString(36).slice(2, 9)}`;
+
+// Convert markdown to HTML
+const questionHtml = inlineMarkdown(question);
+const optionsHtml = options.map(inlineMarkdown);
+const explanationHtml = explanation ? inlineMarkdown(explanation) : undefined;
 ---
 
 <div
   class="multiple-choice"
   data-correct={correct}
   data-id={id}
-  data-explanation={explanation}
+  data-explanation={explanationHtml}
 >
   <fieldset>
     <legend class="question">
-      <span set:html={question} />
+      <span set:html={questionHtml} />
     </legend>
 
     <div class="options">
@@ -27,7 +34,7 @@ const id = `mc-${Math.random().toString(36).slice(2, 9)}`;
           <label class="option" data-index={index}>
             <span class="radio" />
             <input type="radio" name={id} value={index} />
-            <span class="option-text" set:html={option} />
+            <span class="option-text" set:html={optionsHtml[index]} />
             <span class="status-icon" />
           </label>
         ))

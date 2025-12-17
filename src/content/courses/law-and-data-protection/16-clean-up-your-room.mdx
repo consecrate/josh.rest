@@ -1,0 +1,75 @@
+---
+title: "Clean Up Your Room"
+description: "Accuracy and Storage Limitation"
+order: 16
+comingSoon: false
+section: "GDPR Principles (The Rules)"
+sectionOrder: 5
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Digital Hoarding
+
+Bob discovers a hard drive in the office closet labeled "Backups 2005".
+"This is history!" he says.
+"This is a ticking time bomb," says Alice.
+
+## Two Principles in One
+
+This lesson covers two related principles:
+1.  **Accuracy** (Article 5(1)(d))
+2.  **Storage Limitation** (Article 5(1)(e))
+
+## 1. Accuracy
+Data must be **accurate** and, where necessary, **kept up to date**.
+*   If a user moves house, you must update their address.
+*   If a user disputes a debt, you must correct the record if they are right.
+*   Incorrect data leads to incorrect decisions (e.g., shipping to the wrong house, denying a loan by mistake).
+
+**The Right to Rectification**: Users have the right to ask you to fix their data. You must do it without delay.
+
+## 2. Storage Limitation
+Data must be kept **no longer than is necessary** for the purposes for which it is processed.
+
+**You cannot keep data "forever" just because storage is cheap.**
+Every piece of data must have an expiration date (a **Retention Period**).
+
+### Retention Policies
+You need a policy that defines how long you keep things.
+*   **Tax Records**: Often 6-10 years (Legal Obligation).
+*   **CCTV**: Often 30 days (Security vs Privacy balance).
+*   **User Accounts**: Until deleted + maybe 30 days grace period.
+*   **Marketing Lists**: Until they unsubscribe.
+
+### The Exception: Archiving
+You *can* keep data longer for:
+*   Public interest archiving
+*   Scientific/Historical research
+*   Statistical purposes
+...but only if you implement safeguards (like anonymization).
+
+<MultipleChoice
+  question="A user cancels their subscription and deletes their account. What should Bob do with their data?"
+  options={[
+    "Keep it forever in a 'Ghost' table.",
+    "Delete it immediately (or after a short grace period), unless legally required to keep specific records (like invoices).",
+    "Archive it on a public server.",
+    "Sell it."
+  ]}
+  correct={1}
+  explanation="When the purpose ends (the user left), the data must be deleted. The only exception is if a law (like tax law) requires you to keep specific transaction records."
+/>
+
+## Practice: The Shredder
+
+Bob is cleaning up the server. Help him decide which files to **Keep** and which to **Delete** based on the retention rules.
+
+<AdaptiveQuiz
+  generator="law-retention-policy"
+  baseSeed={16}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

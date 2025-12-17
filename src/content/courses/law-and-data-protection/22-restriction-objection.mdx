@@ -1,0 +1,64 @@
+---
+title: "The Emergency Brake"
+description: "Right to Restriction & Objection (Articles 18 & 21)"
+order: 22
+comingSoon: false
+section: "Data Subject Rights (The Users Strike Back)"
+sectionOrder: 6
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Stop!
+
+Sometimes, a user doesn't want data deleted, they just want you to **stop using it**.
+
+## Right to Restriction (Article 18)
+
+Think of this as the "Pause Button".
+A user might say: "This data is wrong! I want you to fix it. But while you are checking, **don't show it to anyone**."
+
+When data is Restricted:
+*   You can store it.
+*   You CANNOT process it further (no analysis, no sharing).
+
+## Right to Object (Article 21)
+
+Think of this as the "Opt-Out Button".
+This applies when you are processing based on **Legitimate Interest** or **Public Task**.
+
+The user says: "I know you have a legitimate interest, but I don't like it."
+
+### The Two Types of Objection
+
+1.  **Direct Marketing (Absolute Right)**
+    *   If a user says "Stop marketing to me," you **MUST STOP**. No questions asked. No balancing test.
+    *   This is why "Unsubscribe" links are mandatory.
+
+2.  **Other Processing (Qualified Right)**
+    *   If a user objects to other things (e.g., "Stop using my data for security analytics"), you can say NO if you have **Compelling Legitimate Grounds** that override their rights.
+
+<MultipleChoice
+  question="Bob sends a newsletter. A user clicks 'Unsubscribe'. Bob thinks: 'But my newsletter is really good, I'll keep sending it for a week to convince them.' Is this legal?"
+  options={[
+    "Yes, if he has a legitimate interest.",
+    "Yes, if he offers a discount.",
+    "No. The right to object to direct marketing is absolute.",
+    "No, unless the user re-subscribes."
+  ]}
+  correct={2}
+  explanation="There is no wiggle room here. Article 21(2) says that where the data subject objects to processing for direct marketing purposes, the personal data shall no longer be processed for such purposes."
+/>
+
+## Practice: The Objection Handler
+
+Users are shouting at Bob. Tell him whether he must STOP immediately or if he can fight back.
+
+<AdaptiveQuiz
+  generator="law-marketing-check"
+  baseSeed={22}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

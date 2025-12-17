@@ -17,8 +17,13 @@ const courses = defineCollection({
     description: z.string(),
     order: z.number(),
     comingSoon: z.boolean().default(false),
+    section: z.string().optional(),
+    sectionOrder: z.number().optional(),
   }),
 });
 
 export const collections = { posts, courses };
+
+
+
 

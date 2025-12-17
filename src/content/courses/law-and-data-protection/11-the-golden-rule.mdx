@@ -1,0 +1,88 @@
+---
+title: "The Golden Rule"
+description: "Lawfulness, Fairness, and Transparency"
+order: 11
+comingSoon: false
+section: "GDPR Principles (The Rules)"
+sectionOrder: 5
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# The Triad
+
+Bob is excited. He just bought a list of 10,000 email addresses from a vendor called "MegaDataCorp".
+
+"I'm going to send them all an invite to DataVault!" Bob says.
+"Did they agree to receive emails from you?" Alice asks.
+"No, but I paid for the list! That makes it legal, right?"
+
+Alice sighs. "Bob, paying for data doesn't make it lawful. And even if it were technically legal, it would still be unfair."
+
+Bob has just run into **Article 5(1)(a)** of the GDPR, the "Golden Rule" of data protection. It states that personal data must be processed:
+1.  **Lawfully**
+2.  **Fairly**
+3.  **Transparently**
+
+These three principles are distinct but interconnected. Failing one means failing all.
+
+## 1. Lawfulness (The "Ticket")
+
+**Lawfulness** means you have a legal right to process the data. You can't just process data because you want to; you need a valid legal basis (like Consent, Contract, or Legal Obligation).
+
+Think of it like a train ticket. You need a valid ticket (Legal Basis) to get on the train (Process Data). If you don't have one, you are a stowaway (Illegal Processing).
+
+> Bob's mistake: Buying an email list usually lacks a valid legal basis because the people on that list never consented to their data being sold to *him*.
+
+## 2. Fairness (The "Creep Factor")
+
+**Fairness** is about expectations. Even if you have a legal basis, you cannot process data in a way that is detrimental, unexpected, or misleading to the data subject.
+
+A good test for fairness is the **"Reasonable Expectation" test**:
+*   *Would a user be surprised to learn you are doing this?*
+*   *If they knew, would they feel manipulated or harmed?*
+
+> Bob's mistake: Even if the list vendor claimed they had "consent," sending unsolicited emails to people who have never heard of you is unexpected and intrusive. It fails the fairness test.
+
+### Adverse Effects
+Fairness also looks at **Adverse Effects**. Are you using data to harm people?
+*   **Price Discrimination**: Charging Mac users more than PC users.
+*   **Exclusion**: Using data to exclude people from insurance or loans without justification.
+*   **Manipulation**: Using psychological triggers to force users to stay on an app.
+
+## 3. Transparency (The "No Surprises" Rule)
+
+**Transparency** means being open and honest about what you are doing. You must tell people *who* you are, *what* you are collecting, *why*, and *who* you are sharing it with.
+
+This is usually done via a **Privacy Policy** (or Privacy Notice). But it's not enough to just have a policy; it must be:
+*   Concise
+*   Intelligible
+*   Easily accessible
+*   Written in plain language
+
+> Bob's mistake: If he emails these people, they will ask: "How did you get my email?" If he can't give a clear, honest answer, he lacks transparency.
+
+<MultipleChoice
+  question="Which of these scenarios best illustrates a violation of 'Fairness' (even if it might be technically lawful)?"
+  options={[
+    "Sending a receipt to a customer after they buy a product.",
+    "Using a flashlight app's permission to harvest location data for advertisers.",
+    "Deleting user data after they cancel their account.",
+    "Asking for a password to log in."
+  ]}
+  correct={1}
+  explanation="This is a classic Fairness violation. While the user might have technically 'consented' by clicking 'Allow', it is deceptive and outside their reasonable expectations for a flashlight app."
+/>
+
+## Practice: The Fairness Meter
+
+Bob is still confused about the difference between "Legal" and "Fair." Help him evaluate these scenarios.
+
+<AdaptiveQuiz
+  generator="law-fairness-meter"
+  baseSeed={11}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

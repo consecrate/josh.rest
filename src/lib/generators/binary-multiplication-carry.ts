@@ -97,7 +97,7 @@ function generateWrongAnswers(correct: number, rng: () => number): number[] {
   return [...wrongs];
 }
 
-export const binaryMultiplicationCarryGenerator: ProblemGenerator<BinaryMultCarryProblem> = {
+const binaryMultiplicationCarryGenerator: ProblemGenerator<BinaryMultCarryProblem> = {
   type: 'binary-multiplication-with-carry',
   displayName: 'Binary Multiplication (With Carries)',
 
@@ -143,6 +143,8 @@ export const binaryMultiplicationCarryGenerator: ProblemGenerator<BinaryMultCarr
     };
   },
 };
+
+export const generators = [binaryMultiplicationCarryGenerator] as const;
 
 // ------- TESTS -------
 // Run via: node -e "import('./binary-multiplication-carry.js').then(m => m.runTests())"

@@ -214,7 +214,7 @@ function generateWrongQuotients(correct: number, rng: () => number): number[] {
   return [...wrongs];
 }
 
-export const binaryDivisionTableGenerator: ProblemGenerator<BinaryDivTableProblem> = {
+const binaryDivisionTableGenerator: ProblemGenerator<BinaryDivTableProblem> = {
   type: 'binary-division-table',
   displayName: 'Binary Division (Iteration Table)',
 
@@ -257,6 +257,8 @@ export const binaryDivisionTableGenerator: ProblemGenerator<BinaryDivTableProble
     };
   },
 };
+
+export const generators = [binaryDivisionTableGenerator] as const;
 
 // ------- TESTS -------
 // Run via: node -e "import('./binary-division-table.js').then(m => m.runTests())"

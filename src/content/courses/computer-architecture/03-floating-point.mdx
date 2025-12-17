@@ -1,0 +1,132 @@
+---
+title: "Floating Point"
+description: "IEEE 754 Floating-Point Representation"
+order: 3
+section: "Number Representation"
+sectionOrder: 2
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+
+Integers are great for counting things (1, 2, 3), but they're terrible at measuring things. How do you represent the mass of an electron or the distance to a galaxy using just integers? You'd need numbers that are incredibly small or incredibly large.
+
+We solve this with **scientific notation**.
+
+- Small: $1.23 \times 10^{-9}$
+- Large: $3.0 \times 10^8$
+
+Notice the pattern? We have a **signichand** (the $1.23$ part) and an **exponent** (the $-9$ part). Computers do the exact same thing, but in **binary**.
+
+$$1.101_2 \times 2^3$$
+
+Since the point "floats" around depending on the exponent, we call this **floating point**.
+
+---
+
+## The Big Idea: The "3 Containers"
+
+To store a floating-point number, we literally just store three pieces of information packed together:
+
+1.  **Sign ($S$)**: Is it positive or negative? ($1$ bit)
+2.  **Exponent ($E$)**: How big or small is the number? (~8 bits)
+3.  **Fraction ($F$)**: What are the actual digits? (~23 bits)
+
+The formula looks scary, but it's just scientific notation:
+
+$$(-1)^S \times (1.\text{Fraction}) \times 2^{\text{Exponent}}$$
+
+---
+
+## IEEE 754 Single Precision (32-bit)
+
+This is the standard way to store "floats" in almost every programming language (`float` in C/Java, `Number` in JavaScript).
+
+| Sign | Exponent | Fraction |
+| :--: | :------: | :-------: |
+| 1 bit | 8 bits | 23 bits |
+
+### Trick #1: The Hidden Bit
+In binary scientific notation, the first digit is *always* $1$ (e.g., $1.001$, $1.110$). Why? Because if it were $0$ (like $0.110$), we would shift the point until it became $1$ ($1.10 \times 2^{-1}$).
+
+Since it's **always** $1$, we don't need to store it! We get 1 bit of precision for free. The "Fraction" field only stores what comes *after* the dot.
+
+### Trick #2: Exponent Bias
+We want to support negative exponents (like $2^{-5}$ for small numbers), but we don't want to waste a sign bit inside the exponent field.
+
+Instead, we use a **bias**. We treat the stored number as an unsigned integer (0 to 255), but we subtract **127** from it to get the actual exponent.
+
+- Stored $127$ $\rightarrow$ Actual $0$ ($127 - 127$)
+- Stored $130$ $\rightarrow$ Actual $3$ ($130 - 127$)
+- Stored $120$ $\rightarrow$ Actual $-7$ ($120 - 127$)
+
+So the full decoded value is:
+
+$$\text{Value} = (-1)^S \times (1 + \text{Fraction}) \times 2^{(E - 127)}$$
+
+Let's look at an example.
+
+<AdaptiveQuiz
+  generator="float-decode-simple"
+  baseSeed={42}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+## Encoding Practice
+
+Now let's try going the other way. If I give you the number $-6.25$, how do you store it?
+
+1.  **Sign**: Negative $\rightarrow$ $1$
+2.  **Binary**: $6.25 = 110.01_2$
+3.  **Normalize**: Shift point to get $1.1001 \times 2^2$
+4.  **Exponent**: Actual is $2$. Add bias $127$: store $129$ ($10000001_2$)
+5.  **Fraction**: Drop the leading $1$. Store $1001000...$
+
+<AdaptiveQuiz
+  generator="float-encode-simple"
+  baseSeed={123}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+## Special Cases and "Weird" Numbers
+
+You might wonder: "If the stored exponent $0$ means actual exponent $-127$, how do we represent $0$?"
+
+IEEE 754 reserves the standard "all zeros" and "all ones" exponents for special meanings:
+
+| Exponent ($E$) | Fraction ($F$) | Meaning |
+| :--- | :--- | :--- |
+| **All 0s** ($0$) | **All 0s** ($0$) | **Zero** ($\pm0$) |
+| **All 0s** ($0$) | **Non-zero** | **Subnormal** (extremely tiny numbers) |
+| **Most values** ($1\dots254$) | **Any** | **Normalized** (standard numbers) |
+| **All 1s** ($255$) | **All 0s** ($0$) | **Infinity** ($\pm\infty$) |
+| **All 1s** ($255$) | **Non-zero** | **NaN** (Not a Number, e.g. $\sqrt{-1}$) |
+
+<AdaptiveQuiz
+  generator="float-special-cases"
+  baseSeed={456}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+## Summary: Range vs. Precision
+
+Why do we have `double` (64-bit) if `float` (32-bit) exists?
+
+- **Float (32-bit)**: ~7 decimal digits of precision. Good for graphics, games, and ML models where speed > perfect accuracy.
+- **Double (64-bit)**: ~16 decimal digits of precision. Essential for scientific simulations, financial calculations, and long-running physics engines.
+
+| Format | Size | Bias | Range ($2^x$) |
+| :--- | :--- | :--- | :--- |
+| **Single** | 32 bits | 127 | $2^{-126} \to 2^{127}$ |
+| **Double** | 64 bits | 1023 | $2^{-1022} \to 2^{1023}$ |

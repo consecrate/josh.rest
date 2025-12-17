@@ -185,7 +185,7 @@ function generateWrongAnswers(correct: number, rng: () => number): number[] {
   return [...wrongs];
 }
 
-export const binaryMultiplicationTableGenerator: ProblemGenerator<BinaryMultTableProblem> = {
+const binaryMultiplicationTableGenerator: ProblemGenerator<BinaryMultTableProblem> = {
   type: 'binary-multiplication-table',
   displayName: 'Binary Multiplication (Iteration Table)',
 
@@ -225,6 +225,8 @@ export const binaryMultiplicationTableGenerator: ProblemGenerator<BinaryMultTabl
     };
   },
 };
+
+export const generators = [binaryMultiplicationTableGenerator] as const;
 
 // ------- TESTS -------
 // Run via: node -e "import('./binary-multiplication-table.js').then(m => m.runTests())"

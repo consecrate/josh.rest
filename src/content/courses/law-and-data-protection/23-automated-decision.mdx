@@ -1,0 +1,66 @@
+---
+title: "The Black Box"
+description: "Automated Decision Making (Article 22)"
+order: 23
+comingSoon: false
+section: "Data Subject Rights (The Users Strike Back)"
+sectionOrder: 6
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# The LoanBot 3000
+
+Bob is tired of manually approving user accounts. He builds "LoanBot 3000", an AI that looks at a user's zip code, browser history, and shoe size to decide if they get premium access.
+
+Alice, a lawyer, applies. LoanBot 3000 says: **DENIED**.
+Alice demands to know why.
+Bob says: "I don't know, it's a neural network. It's a black box."
+Alice says: "That's illegal."
+
+## Article 22: Automated Individual Decision-Making
+
+The user has the right **not to be subject to a decision based solely on automated processing** (including profiling), which produces **legal effects** or **similarly significant effects**.
+
+### The Keywords
+
+1.  **Solely Automated**: No human influence. (If a human rubber-stamps the AI's decision without looking, it's still considered automated).
+2.  **Significant Effects**: Denying a loan, firing someone, refusing entry to a country. (Targeting an ad for shoes is usually *not* significant enough, though it can be).
+
+### When is it Allowed?
+
+Bob CAN use LoanBot if:
+1.  It is **Necessary for entering a contract** (e.g., instant credit check).
+2.  It is **Authorized by Law** (fraud prevention).
+3.  He has **Explicit Consent**.
+
+### The Safeguards
+
+Even if allowed, Bob must provide:
+*   **Human Intervention**: A way for Alice to appeal to a real person.
+*   **Explanation**: Meaningful information about the "logic involved".
+
+<MultipleChoice
+  question="Which of these decisions is most likely to be regulated by Article 22?"
+  options={[
+    "Netflix recommending a movie.",
+    "An algorithm deciding to terminate an Uber driver's account based on ratings.",
+    "A spam filter moving an email to the Junk folder.",
+    "A website changing its background color based on time of day."
+  ]}
+  correct={1}
+  explanation="Terminating employment or a contract is a 'legal or similarly significant effect'. Movie recommendations and spam filters (usually) do not rise to this level of severity."
+/>
+
+## Practice: The AI Judge
+
+Review Bob's automation ideas. Are they allowed?
+
+<AdaptiveQuiz
+  generator="law-adm-check"
+  baseSeed={23}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

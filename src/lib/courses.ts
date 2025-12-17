@@ -4,65 +4,51 @@ export interface CourseSection {
   slug: string;
   title: string;
   order: number;
-  comingSoon: boolean;
   lessons: CollectionEntry<'courses'>[];
 }
 
-interface GroupedCourse {
-  slug: string;
-  availableLessons: CollectionEntry<'courses'>[];
-  comingSoonLessons: CollectionEntry<'courses'>[];
-}
-
-export async function getCourseStructure(): Promise<CourseSection[]> {
-  const lessons = await getCollection('courses');
-
-  // Group by course folder (first segment of id)
-  const grouped = lessons.reduce((acc, lesson) => {
-    const courseSlug = lesson.id.split('/')[0];
-    if (!acc[courseSlug]) acc[courseSlug] = [];
-    acc[courseSlug].push(lesson);
-    return acc;
-  }, {} as Record<string, CollectionEntry<'courses'>[]>);
-
-  // Build grouped courses
-  const groupedCourses: GroupedCourse[] = Object.entries(grouped).map(([slug, courseLessons]) => {
-    const sortedLessons = courseLessons.sort((a, b) => a.data.order - b.data.order);
-    return {
-      slug,
-      availableLessons: sortedLessons.filter(l => !l.data.comingSoon),
-      comingSoonLessons: sortedLessons.filter(l => l.data.comingSoon),
-    };
-  });
-
-  // Flatten into CourseSection format with available and coming soon split
-  const result: CourseSection[] = [];
-
-  for (const { slug, availableLessons, comingSoonLessons } of groupedCourses) {
-    // Add available section
-    if (availableLessons.length > 0) {
-      result.push({
-        slug,
-        title: formatTitle(slug),
-        order: 1,
-        comingSoon: false,
-        lessons: availableLessons,
-      });
-    }
-
-    // Add coming soon section
-    if (comingSoonLessons.length > 0) {
-      result.push({
-        slug: `${slug}-coming-soon`,
-        title: 'Coming Soon',
-        order: 2,
-        comingSoon: true,
-        lessons: comingSoonLessons,
-      });
-    }
+export async function getCourseStructure(courseSlug?: string): Promise<CourseSection[]> {
+  let lessons = await getCollection('courses');
+  
+  // Filter by course if specified
+  if (courseSlug) {
+    lessons = lessons.filter(l => l.id.startsWith(courseSlug + '/'));
   }
 
-  return result;
+  // Group lessons by section name
+  const sectionMap = new Map<string, {
+    order: number;
+    lessons: CollectionEntry<'courses'>[];
+  }>();
+
+  for (const lesson of lessons) {
+    const sectionName = lesson.data.section ?? '';
+    const sectionOrder = lesson.data.sectionOrder ?? 0;
+    
+    if (!sectionMap.has(sectionName)) {
+      sectionMap.set(sectionName, { order: sectionOrder, lessons: [] });
+    }
+    sectionMap.get(sectionName)!.lessons.push(lesson);
+  }
+
+  // Convert to array and sort
+  const sections: CourseSection[] = [];
+  for (const [title, { order, lessons: sectionLessons }] of sectionMap) {
+    // Sort lessons within section by order
+    sectionLessons.sort((a, b) => a.data.order - b.data.order);
+    
+    sections.push({
+      slug: title.toLowerCase().replace(/\s+/g, '-') || 'overview',
+      title,
+      order,
+      lessons: sectionLessons,
+    });
+  }
+
+  // Sort sections by order, then by title alphabetically as tiebreaker
+  sections.sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
+
+  return sections;
 }
 
 export async function getCourseLessons(courseSlug: string): Promise<CollectionEntry<'courses'>[]> {
@@ -70,11 +56,4 @@ export async function getCourseLessons(courseSlug: string): Promise<CollectionEn
   return lessons
     .filter(l => l.id.startsWith(courseSlug + '/'))
     .sort((a, b) => a.data.order - b.data.order);
-}
-
-function formatTitle(slug: string): string {
-  return slug
-    .split('-')
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
 }

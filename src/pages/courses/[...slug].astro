@@ -18,20 +18,20 @@ type Props = {
 };
 
 const { lesson } = Astro.props;
-const sections = await getCourseStructure();
 const { Content } = await render(lesson);
 
-// Extract course title from slug
+// Extract course slug first (needed for sidebar filtering)
 const courseSlug = lesson.id.split("/")[0];
 const courseTitle = courseSlug
   .split("-")
   .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
   .join(" ");
 
-// Find next lesson
-const allLessons = sections
-  .filter((s) => !s.comingSoon)
-  .flatMap((s) => s.lessons);
+// Get sections for THIS course only
+const sections = await getCourseStructure(courseSlug);
+
+// Find next lesson within this course (only available lessons)
+const allLessons = sections.flatMap((s) => s.lessons.filter(l => !l.data.comingSoon));
 const currentIndex = allLessons.findIndex((l) => l.id === lesson.id);
 const nextLesson =
   currentIndex >= 0 && currentIndex < allLessons.length - 1
@@ -42,7 +42,7 @@ const nextLesson =
 <Course
   title={lesson.data.title}
   description={lesson.data.description}
-  courseTitle={courseTitle}
+  sectionTitle={lesson.data.section}
   sections={sections}
   currentSlug={lesson.id}
   nextLesson={nextLesson}

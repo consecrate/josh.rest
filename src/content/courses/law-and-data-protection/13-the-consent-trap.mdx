@@ -1,0 +1,78 @@
+---
+title: "The Consent Trap"
+description: "Conditions for Valid Consent (Article 7)"
+order: 13
+comingSoon: false
+section: "GDPR Principles (The Rules)"
+sectionOrder: 5
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# "I Agree"
+
+Bob decides that "Legitimate Interests" is too complicated (too much paperwork). He goes back to Consent.
+He creates a signup form with a pre-ticked box:
+`[x] I agree to the Terms of Service and to receive daily marketing emails.`
+
+Alice takes one look and deletes the code.
+"Bob, that's not consent. That's a trap."
+
+## The 4 Conditions of Valid Consent
+
+Under Article 7 and Recital 32, consent is not just a checkbox. It must meet four strict criteria to be valid. If it fails even one, it's **invalid** (meaning you are processing illegally).
+
+### 1. Freely Given (No Coercion)
+The user must have a *genuine choice*.
+*   **The Problem**: "Bundling." saying "Sign up for our service (and we will also sell your data)."
+*   **The Rule**: You cannot make consent a condition of service unless the data is *necessary* for that service.
+*   **Power Imbalance**: Employees usually cannot freely give consent to employers because they fear being fired.
+
+### 2. Specific (Granularity)
+Consent must be for a specific purpose. You can't ask for "General Permission."
+*   **The Problem**: "I agree to data processing." (Too vague!)
+*   **The Rule**: Separate checkboxes for separate purposes.
+    *   `[ ] Terms of Service` (Contract)
+    *   `[ ] Marketing Emails` (Consent)
+    *   `[ ] Share with Partners` (Consent)
+
+### 3. Informed (No Legalese)
+The user must know *what* they are agreeing to.
+*   **The Problem**: Buried in page 45 of a PDF.
+*   **The Rule**: Clear, plain language. Identify the controller (you) and the purposes.
+
+### 4. Unambiguous (The "Clear Act")
+Consent requires a clear affirmative action.
+*   **The Problem**: Pre-ticked boxes (`[x]`), Silence, Inactivity, "By continuing to use..."
+*   **The Rule**: The user must *do* something to consent (click, check, sign). **Silence is not consent.**
+
+## The Right to Withdraw
+
+> "It must be as easy to withdraw consent as to give it." (Article 7(3))
+
+If it took one click to join, it must take one click to leave. You cannot make them call a phone number or send a fax to unsubscribe.
+
+<MultipleChoice
+  question="Which of these is a valid example of GDPR consent?"
+  options={[
+    "A pre-ticked box saying 'Send me offers'.",
+    "A mandatory checkbox 'I agree to marketing' to create an account.",
+    "An empty checkbox 'I would like to receive the newsletter' that the user must click.",
+    "A sentence in the footer: 'By browsing this site you agree to cookies'."
+  ]}
+  correct={2}
+  explanation="Only the empty checkbox requires a 'Clear Affirmative Action' (Unambiguous) and offers a choice (Freely Given). Pre-ticked boxes and implied consent are banned."
+/>
+
+## Practice: Valid or Void?
+
+Bob is trying to design his forms again. Help him identify which consent flows are valid and which are traps.
+
+<AdaptiveQuiz
+  generator="law-valid-consent"
+  baseSeed={13}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

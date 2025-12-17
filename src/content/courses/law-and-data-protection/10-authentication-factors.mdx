@@ -1,0 +1,64 @@
+---
+title: "Prove It’s You"
+description: "Authentication Factors and Identity"
+order: 10
+comingSoon: false
+section: "The Anatomy of Data"
+sectionOrder: 4
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# The Gatekeeper
+
+Bob is building the login system for DataVault. He wants it to be secure, but he also wants it to be easy.
+
+"I'll just ask for a password," Bob says.
+"That's weak," says Alice.
+"Okay, password and a secret question: 'What is your dog's name?'"
+"Still weak. Those are both the same *kind* of factor."
+
+## Identification vs. Authentication
+
+First, let's distinguish:
+- **Identification**: Telling the system *who* you are (e.g., typing your username). "I am User 99."
+- **Authentication**: *Proving* that you are who you claim to be. "Here is the password for User 99."
+
+## The Three Factors of Authentication
+
+To prove identity, you generally use one (or more) of three factors:
+
+### 1. Knowledge (Something you KNOW)
+- Passwords
+- PIN codes
+- Secret answers ("Mother's maiden name")
+- **Weakness**: Can be guessed, phished, or shared.
+
+### 2. Possession (Something you HAVE)
+- A physical key
+- A smartphone (receiving an SMS or app notification)
+- A smart card / ID badge
+- A USB security key (YubiKey)
+- **Weakness**: Can be stolen or lost.
+
+### 3. Inherence (Something you ARE)
+- Fingerprint
+- Face recognition
+- Iris scan
+- Voice print
+- **Weakness**: Cannot be changed if compromised (you can't change your fingerprints!). Also, this is often **Biometric Data** (Article 9 Special Category), so it requires careful handling.
+
+## Multi-Factor Authentication (MFA)
+
+Secure systems use **Multi-Factor Authentication**. This means using **two different factors**.
+- **Good MFA**: Password (Knowledge) + Phone Code (Possession).
+- **Bad MFA**: Password (Knowledge) + Secret Question (Knowledge). This is just "Two-Step" verification, not "Multi-Factor."
+
+<AdaptiveQuiz
+  generator="law-auth-factors"
+  baseSeed={10}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

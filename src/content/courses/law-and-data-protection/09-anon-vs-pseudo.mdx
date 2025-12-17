@@ -1,0 +1,51 @@
+---
+title: "The Hashing Illusion"
+description: "Anonymisation vs. Pseudonymisation"
+order: 9
+comingSoon: false
+section: "The Anatomy of Data"
+sectionOrder: 4
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Bob's Loophole
+
+Panicked by the strict rules for Special Categories, Bob decides to "fix" his database.
+
+"I've solved it!" Bob announces. "I ran all the email addresses through a hashing algorithm. Now `bob@example.com` is just `5e8848...`. It's anonymous! GDPR doesn't apply anymore!"
+
+Alice shakes her head. "Bob, that's not anonymous. That's **pseudonymous**. And yes, GDPR still applies."
+
+## The Distinction
+
+This is one of the most common misunderstandings in tech.
+
+### Pseudonymisation (GDPR Applies)
+- **Definition**: Processing personal data so it can no longer be attributed to a specific subject *without the use of additional information* (like a key).
+- **Key Feature**: **Reversible**. If you have the key, or if you can brute-force the hash, you get the data back.
+- **Status**: It is a **security measure** (good!), but it is still personal data.
+- **Example**: Hashing passwords, replacing names with User IDs, encrypting a database.
+
+### Anonymisation (GDPR Exempt)
+- **Definition**: Processing personal data so the subject is **identifiable no longer**.
+- **Key Feature**: **Irreversible**. It must be impossible (or unreasonably difficult) for *anyone* (including you) to re-identify the person.
+- **Status**: It is **no longer personal data**. GDPR rules vanish.
+- **Example**: Aggregated statistics ("50% of visitors are from France"), effectively blurred faces where the original footage is destroyed.
+
+## The Risk of Re-identification
+
+Bob argues, "But I threw away the salt!"
+
+Alice counters, "But can you guarantee that no one can ever link this data back? What if they cross-reference it with another leaked database?"
+
+If there is a "reasonable means" to re-identify the user—even by combining it with outside data—it is not anonymous. It is pseudonymous.
+
+<AdaptiveQuiz
+  generator="law-anon-vs-pseudo"
+  baseSeed={9}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

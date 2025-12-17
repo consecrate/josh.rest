@@ -1,0 +1,55 @@
+---
+title: "Radioactive Data"
+description: "Special Categories (Article 9) and why they matter."
+order: 8
+comingSoon: false
+section: "The Anatomy of Data"
+sectionOrder: 4
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Bob's "Engagement" Idea
+
+Bob's marketing team has a brilliant idea for increasing user engagement on DataVault.
+
+"Let's add a profile section!" Bob says. "Users can share their political views, their health goals, and maybe even their religious holidays so we can send them cards. We'll use this to recommend products!"
+
+Alice looks horrified. "Bob, you are trying to collect **radioactive data**."
+
+## Special Categories (Article 9)
+
+Not all data is created equal. Some information is so sensitive that its misuse could destroy someone's life, career, or freedom. The GDPR calls these **Special Categories of Personal Data** (often called "Sensitive Data").
+
+**Processing this data is generally PROHIBITED** unless you meet very specific, strict exceptions (like explicit consent or medical necessity).
+
+The list is specific (Article 9):
+- Racial or ethnic origin
+- Political opinions
+- Religious or philosophical beliefs
+- Trade union membership
+- Genetic data
+- Biometric data (for the purpose of uniquely identifying a natural person)
+- Health data
+- Data concerning a person's sex life or sexual orientation
+
+### Why It Matters
+
+If Bob collects "political views," he is processing Article 9 data.
+- **Higher Security**: He needs stronger encryption and access controls.
+- **DPIA**: He almost certainly needs a Data Protection Impact Assessment.
+- **Explicit Consent**: A simple "I agree" checkbox might not be enough; he needs "explicit" consent.
+
+## Criminal Convictions (Article 10)
+
+There is another category: **Criminal Convictions and Offences**.
+This is handled under Article 10. Generally, you cannot process this data unless you are an official authority (like the police) or have specific legal authorization. A background check startup like Bob's "DataVault" can't just scrape criminal records without strict legal grounds.
+
+<AdaptiveQuiz
+  generator="law-special-category-detector"
+  baseSeed={8}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

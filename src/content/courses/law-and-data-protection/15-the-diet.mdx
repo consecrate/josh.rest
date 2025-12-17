@@ -1,0 +1,71 @@
+---
+title: "The Diet"
+description: "Data Minimization (Article 5(1)(c))"
+order: 15
+comingSoon: false
+section: "GDPR Principles (The Rules)"
+sectionOrder: 5
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Data Hoarding
+
+Bob is designing his database schema. He adds columns for:
+*   `user_id`
+*   `email`
+*   `password_hash`
+*   `religion`
+*   `shoe_size`
+*   `mother_maiden_name`
+
+"Bob," Alice asks. "Why do we need their shoe size?"
+"You never know!" Bob says. "Data is the new oil! Maybe we'll sell shoes later."
+
+Alice deletes the columns. "Data isn't oil, Bob. It's **toxic waste**. It's a liability. The more you hold, the more you can leak."
+
+## Data Minimization
+
+**Article 5(1)(c)** requires data to be:
+1.  **Adequate**: Enough to do the job.
+2.  **Relevant**: Directly related to the job.
+3.  **Limited to what is necessary**: No "nice-to-haves."
+
+This is the principle of **Data Minimization**. You should collect the *minimum* amount of data needed to achieve your specific purpose.
+
+### Why Minimize?
+1.  **Security**: If you don't have it, hackers can't steal it.
+2.  **Accuracy**: Less data is easier to keep up-to-date.
+3.  **Trust**: Users prefer apps that don't ask creepy questions.
+
+## The "Nice-to-Have" Trap
+
+Product managers often say: "Let's collect it just in case."
+GDPR says: "If you don't have a specific use case *right now*, do not collect it."
+
+> **Example**: A flashlight app needs permission to access the Flash/Camera. It does *not* need access to Contacts, Location, or Microphone.
+
+<MultipleChoice
+  question="Which of these follows the principle of Data Minimization?"
+  options={[
+    "Collecting Date of Birth for a Newsletter 'just in case' you want to send birthday emails later.",
+    "Collecting precise GPS location for a Weather App.",
+    "Collecting precise GPS location for a Calculator App.",
+    "Collecting all photos on the phone for a Profile Picture upload."
+  ]}
+  correct={1}
+  explanation="A Weather App actually *needs* your location to function (to show local weather). That is adequate and relevant. A Calculator does not. Profile picture uploads should only access the specific photo selected, not the whole library."
+/>
+
+## Practice: The Schema Audit
+
+Review these data collection forms. Identify the field that violates Data Minimization.
+
+<AdaptiveQuiz
+  generator="law-data-minimization"
+  baseSeed={15}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

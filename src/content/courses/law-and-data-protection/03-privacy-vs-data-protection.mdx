@@ -1,0 +1,78 @@
+---
+title: "Privacy vs. Data Protection"
+description: "Distinguishing between Data Privacy (Rights) and Data Security (Protection)."
+order: 1
+section: "The Foundation of Law"
+sectionOrder: 1
+---
+
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+
+# The "Creepy" Feature
+
+Bob's app is growing. He decides to add a "Stalker Mode" (he calls it "Friend Tracker") that logs every user's location every 5 minutes to "improve the algorithm." He proudly shows it to Alice.
+
+Alice recoils. "Bob, that's creepy. You can't just track people like that."
+
+"But it's secure!" Bob argues. "I used AES-256 encryption. Nobody can steal the data. It's protected!"
+
+Alice sighs. "Bob, you're confusing **Data Protection** (Security) with **Data Privacy**."
+
+## Privacy vs. Data Protection (Security)
+
+These two terms are often used interchangeably, but they mean very different things in the legal world.
+
+### 1. Data Protection (Security)
+This is about **guarding the vault**. It's the technical and organizational measures to keep data safe from unauthorized access, loss, or destruction.
+*   **Focus**: Security, Integrity, Availability.
+*   **Example**: Encryption, Firewalls, Backups, Access Logs.
+*   **Bob's View**: "My database is unhackable."
+
+### 2. Data Privacy
+This is about **the user's rights**. It's about who is allowed to collect data, why, and how they use it. It's the right to be left alone and to control one's own information.
+*   **Focus**: Rights, Consent, Transparency, Fairness.
+*   **Example**: Asking for permission, collecting only what is needed, deleting data when asked.
+*   **Alice's View**: "It doesn't matter if the vault is unhackable if you shouldn't have put my secrets in there in the first place."
+
+<MultipleChoice
+  question="If a hacker steals user passwords because the server wasn't patched, what kind of failure is this primarily?"
+  options={[
+    "Security Failure (Data Protection)",
+    "Privacy Violation (Rights)",
+    "Marketing Failure",
+    "Feature Request"
+  ]}
+  correct={0}
+  explanation="This is a **Security Failure**. The mechanism for protecting the data failed. While the result is a loss of privacy, the root cause is a failure of protection."
+/>
+
+<MultipleChoice
+  question="If a company sells your email address to a spammer without telling you, but uses a secure encrypted transfer to do it, what is this?"
+  options={[
+    "Security Failure",
+    "Privacy Violation",
+    "Network Error",
+    "Database Optimization"
+  ]}
+  correct={1}
+  explanation="This is a **Privacy Violation**. The data was handled securely (encrypted), but the *use* of the data was unauthorized and violated your rights."
+/>
+
+## The Right to Privacy
+
+Why does Alice care so much? Because Privacy is a fundamental human right. In Europe, it is often called the right to **Informational Self-Determination**—the right of an individual to decide for themselves when and within what limits their personal data is disclosed.
+
+When Bob tracks users without a good reason, he is infringing on their freedom, even if he keeps the data "safe."
+
+### Practice: Identify the Issue
+
+Is the following scenario a Security Failure or a Privacy Violation?
+
+<AdaptiveQuiz
+  generator="law-privacy-vs-security"
+  baseSeed={101}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={6}
+/>

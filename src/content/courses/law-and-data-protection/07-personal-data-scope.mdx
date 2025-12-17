@@ -1,0 +1,59 @@
+---
+title: "The Scope of 'Personal'"
+description: "What counts as personal data under GDPR?"
+order: 7
+comingSoon: false
+section: "The Anatomy of Data"
+sectionOrder: 4
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Is "User_ID_99" a Person?
+
+Bob is busy optimizing his database schema. He looks at his `Users` table and feels pretty good.
+
+"Alice," he says, "I'm not storing names anymore. I just use `User_ID` numbers and save their `Browser_Fingerprint` for security. So I don't have any 'personal data', right? I'm GDPR compliant!"
+
+Alice sighs. "Bob, if you can use that ID to look up who they are, or if you can use that fingerprint to single them out from a crowd, it's personal data."
+
+Bob is confused. "But it's just a number!"
+
+## Defined: Personal Data
+
+The GDPR defines **Personal Data** as any information relating to an **identified or identifiable natural person**.
+
+- **Identified**: You know exactly who it is (e.g., "John Smith").
+- **Identifiable**: You *could* figure out who it is using "reasonable means."
+
+This is a massive scope. It includes:
+- **Direct Identifiers**: Name, Passport Number, Email Address.
+- **Indirect Identifiers**: IP Address, Cookie ID, RFID tag, Location Data.
+- **Characteristics**: Physical, physiological, genetic, mental, economic, cultural, or social identity.
+
+### The "Mosaic Effect"
+
+Think of data like pieces of a puzzle. One piece (a zip code) might not identify someone. Another piece (gender) might not either. But if you combine:
+- Zip Code: 90210
+- Gender: Male
+- Date of Birth: Jan 1, 1980
+- Car Model: Tesla Model S
+
+Suddenly, you might be looking at exactly one person. This ability to combine disparate data points to **single out** an individual makes all those points "personal data."
+
+## What is NOT Personal Data?
+
+To stop Bob from panicking completely, Alice explains what falls *outside* the scope:
+
+1.  **Anonymous Data**: Information where the person is *irreversibly* unidentifiable. (We'll cover this more in Lesson 9).
+2.  **Deceased Persons**: GDPR only protects living individuals. (Note: Some member states have their own laws for the deceased).
+3.  **Legal Persons (Corporations)**: Information about "Acme Corp" (registration number, headquarters) is not personal data. However, `ceo@acme-corp.com` *is* personal data because it identifies the CEO.
+
+<AdaptiveQuiz
+  generator="law-personal-data-classifier"
+  baseSeed={7}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

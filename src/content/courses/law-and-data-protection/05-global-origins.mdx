@@ -1,0 +1,64 @@
+---
+title: "Origins of EU Law"
+description: "From Human Rights to Data Rights: The history of European privacy law."
+order: 1
+section: "The Foundation of Law"
+sectionOrder: 1
+---
+
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+
+# Going Global
+
+DataVault is a hit! Users are signing up from everywhere—including Paris, Berlin, and Rome.
+
+Bob receives a formal letter from a French user asking to see all the data Bob holds on him, citing "The Law."
+
+Bob is confused. "I'm an American company. Why do I care about French law?"
+
+He consults a lawyer, who laughs. "The internet has no borders, Bob, but laws do. And if you want to do business in Europe, you play by European rules."
+
+## Why is Europe So Strict?
+
+To understand European law, you have to understand history. In the 20th century, Europe suffered under totalitarian regimes (fascism and communism) that used **state surveillance** to oppress people. Registers of names and addresses were used to round up dissidents and minorities.
+
+As a result, in Europe, **Privacy is a Human Right** connected to dignity and safety. In the US, privacy is often treated more like a consumer protection issue (like truthful advertising).
+
+## The Timeline of Data Rights
+
+### 1948: Universal Declaration of Human Rights (UDHR)
+After WWII, the UN declared in **Article 12** that "No one shall be subjected to arbitrary interference with his privacy."
+
+### 1950: European Convention on Human Rights (ECHR)
+**Article 8** created a binding right to "respect for private and family life." This is the grandfather of all EU privacy laws.
+
+### 1981: Convention 108
+The Council of Europe passed the first legally binding international treaty specifically for automatic processing of personal data.
+
+### 1995: The Data Protection Directive (95/46/EC)
+The EU realized the early internet needed rules. They passed a "Directive" to set common standards across Europe. This was the law of the land until the GDPR came along.
+
+<MultipleChoice
+  question="Why does Europe have historically stricter privacy laws than the US?"
+  options={[
+    "Because they hate technology.",
+    "Because of historical trauma involving state surveillance and totalitarianism.",
+    "Because they want to tax American companies.",
+    "Because the weather is colder."
+  ]}
+  correct={1}
+  explanation="Historical context is key. Experiences with the Gestapo and Stasi made privacy a matter of life and death, enshrining it as a fundamental human right."
+/>
+
+## Practice: Legal History
+
+Test your knowledge of the timeline.
+
+<AdaptiveQuiz
+  generator="law-history-timeline"
+  baseSeed={303}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={6}
+/>

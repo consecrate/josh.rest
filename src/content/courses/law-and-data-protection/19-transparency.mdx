@@ -1,0 +1,80 @@
+---
+title: "The Transparency Window"
+description: "Right to be Informed (Articles 13 & 14)"
+order: 19
+comingSoon: false
+section: "Data Subject Rights (The Users Strike Back)"
+sectionOrder: 6
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Bob's Secret Recipe
+
+Bob is proud of his app. He wants users to sign up quickly.
+He adds a checkbox: "I agree to the Terms."
+The "Terms" link goes to a 50-page PDF written in Latin (almost).
+
+Alice stops him. "Bob, you can't do that."
+"Why? Everyone does it!" Bob argues.
+"Not under GDPR," Alice says. "Article 12 requires transparency. You must explain what you are doing in a way a human can actually understand."
+
+## The Right to be Informed
+
+The GDPR is built on the principle that people should know what is happening to their data. You cannot collect data in secret.
+
+You must provide this information **at the time of collection** (if collecting directly from the user).
+
+### Article 13 vs. Article 14
+
+There are two lists of information you must provide, depending on where you got the data:
+
+| **Article 13 (Direct Collection)** | **Article 14 (Indirect Collection)** |
+| :--- | :--- |
+| You ask the user for their data (e.g., signup form). | You buy a list or scrape data (e.g., from LinkedIn). |
+| Provide info **immediately**. | Provide info within **one month** (or when you first contact them). |
+| You already know the user (obviously). | You must tell the user **where you got the data**. |
+
+<MultipleChoice
+  question="Bob buys a marketing list from a data broker. Which Article applies?"
+  options={[
+    "Article 13 (Direct Collection)",
+    "Article 14 (Indirect Collection)",
+    "Neither, he doesn't need to tell them.",
+    "Article 6 (Lawfulness)"
+  ]}
+  correct={1}
+  explanation="Since Bob obtained the data from a third party (the broker) and not the data subjects themselves, Article 14 applies. He must inform the users he has their data."
+/>
+
+## What Must You Say? (The Checklist)
+
+Whether it's Art 13 or 14, you must typically provide:
+
+1.  **Identity**: Who are you? (Bob, CEO of DataVault)
+2.  **Purpose**: Why do you want the data? (To ship the product)
+3.  **Legal Basis**: Why is it legal? (Contract, Consent, Legitimate Interest)
+4.  **Retention**: How long will you keep it? (Until you delete your account)
+5.  **Rights**: What can the user do? (Access, Delete, Object)
+6.  **Recipients**: Who else sees it? (AWS, Stripe, Mailchimp)
+7.  **Transfers**: Is it leaving the EU?
+
+### The Layered Approach
+
+You can't dump all this in one wall of text. The GDPR encourages a **Layered Notice**:
+*   **Layer 1**: Short, punchy summary (e.g., "We use cookies for analytics. [Read More]")
+*   **Layer 2**: More detail on specific topics.
+*   **Layer 3**: The full legal policy.
+
+## Practice: The Notice Inspector
+
+Bob has written a draft privacy notice. It's... not great. Can you spot what's missing?
+
+<AdaptiveQuiz
+  generator="law-notice-check"
+  baseSeed={19}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>
