@@ -1,0 +1,588 @@
+---
+title: "Relations & Functions Worksheet"
+description: "Interactive practice problems on relations, functions, and equivalence"
+order: 2
+section: "Worksheets"
+sectionOrder: 1
+isWorksheet: true
+---
+
+import WorksheetProblem from "../../../components/WorksheetProblem.astro";
+import LiveWorksheet from "../../../components/LiveWorksheet.astro";
+
+<LiveWorksheet title="Relations & Functions" description="28 problems with detailed derivations">
+
+<WorksheetProblem number={1}>
+  <Fragment slot="question">Describe $\mathbb{Z} \times \mathbb{Z}$</Fragment>
+  <Fragment slot="answer">The set of all possible ordered pairs where both the first and second elements are integers.</Fragment>
+  <Fragment slot="derivation">
+The **Cartesian product** $A \times B$ is simply the set of all possible combinations $(a, b)$ where $a$ comes from set $A$ and $b$ comes from set $B$.
+
+In this specific case, both sets are $\mathbb{Z}$ (the integers: ..., -2, -1, 0, 1, 2, ...).
+
+So, $\mathbb{Z} \times \mathbb{Z}$ contains every pair $(x, y)$ where $x$ and $y$ are integers.
+
+**Visual Intuition:**
+If you imagine a 2D graph, this set represents all the "grid points" — the points where the vertical and horizontal grid lines cross.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={2}>
+  <Fragment slot="question">How many relations are there from set $A$ to set $B$ where $|A|=m, |B|=n$?</Fragment>
+  <Fragment slot="answer">$2^{mn}$</Fragment>
+  <Fragment slot="derivation">
+Let's break this down step-by-step:
+
+1.  **What is a relation?**
+    A relation from $A$ to $B$ is defined as _any_ subset of the Cartesian product $A \times B$. This means any collection of pairs from $A \times B$ counts as a relation.
+
+2.  **How big is the Cartesian product?**
+    Since we have $m$ choices for the first element and $n$ choices for the second, the total number of pairs is $|A \times B| = m \times n$.
+
+3.  **How many subsets are there?**
+    For any set with $k$ elements, the number of possible subsets (including the empty set and the set itself) is $2^k$. This is called the Power Set.
+
+**Conclusion:**
+Since our "set of pairs" has size $mn$, the number of possible subsets—and thus the number of possible relations—is $2^{mn}$.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={3}>
+  <Fragment slot="question">Is $f(x) = \frac{x}{x+1}$ invertible?</Fragment>
+  <Fragment slot="answer">Yes.</Fragment>
+  <Fragment slot="derivation">
+To check if a function is invertible, we primarily need to check if it is **one-to-one (injective)**. This means that no two *different* inputs ($x$) give the same output ($y$).
+
+**The Test:**
+Assume we have two inputs, $a$ and $b$, that give the same result: $f(a) = f(b)$. If we can prove that $a$ _must_ equal $b$, then the function is one-to-one.
+
+$$ \frac{a}{a+1} = \frac{b}{b+1} $$
+
+Cross-multiply to get rid of the fractions:
+$$ a(b+1) = b(a+1) $$
+
+Expand both sides:
+$$ ab + a = ab + b $$
+
+Subtract $ab$ from both sides:
+$$ a = b $$
+
+**Conclusion:**
+Since assuming $f(a)=f(b)$ leads directly to $a=b$, the function is injective. It maps every input to a unique output, so we can reverse it perfectly. It is invertible.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={4}>
+  <Fragment slot="question">For which $a \in \mathbb{R}$ is $f(x)=ax$ invertible? Find $f^{-1}$.</Fragment>
+  <Fragment slot="answer">$a \neq 0$. Inverse: $f^{-1}(y) = \frac{y}{a}$.</Fragment>
+  <Fragment slot="derivation">
+**Part 1: When is it invertible?**
+For a function to be invertible, we must be able to uniquely determine the input $x$ given an output $y$.
+$$ y = ax $$
+To solve for $x$, we would divide by $a$:
+$$ x = \frac{y}{a} $$
+This operation is valid *only* if **$a \neq 0$**. If $a=0$, then $f(x)=0$ for *all* $x$, meaning we can't tell which $x$ produced the output (infinite-to-one mapping).
+
+**Part 2: Finding the Inverse**
+The inverse function $f^{-1}$ essentially "undoes" what $f$ did.
+
+1.  Start with $y = ax$
+2.  Swap $x$ and $y$ (standard technique for finding inverse formulas): $x = ay$
+3.  Solve for the new $y$:
+    $$ y = \frac{x}{a} $$
+
+So, $f^{-1}(x) = \frac{x}{a}$.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={5}>
+  <Fragment slot="question">Investigate properties of $R_5$ on $\mathbb{Z}$: $(x,y) \in R_5 \iff 5 \mid (x-y)$.</Fragment>
+  <Fragment slot="answer">Equivalence Relation (Reflexive, Symmetric, Transitive).</Fragment>
+  <Fragment slot="derivation">
+This notation $5 \mid (x-y)$ means "$x$ minus $y$ is a multiple of 5". This is also known as "congruence modulo 5". Let's check the three properties for an **Equivalence Relation**:
+
+1.  **Reflexive (Does every number relate to itself?)**
+    We test $(x, x)$. Is $x - x$ divisible by 5?
+    $x - x = 0$. Since $0 = 5 \times 0$, yes, 5 divides 0.
+    **Status: Reflexive.**
+
+2.  **Symmetric (Is the relation a two-way street?)**
+    If $(x, y)$ is in the relation, does $(y, x)$ have to be?
+    Assume $x - y = 5k$ (a multiple of 5).
+    Then $y - x = -(x - y) = -5k = 5(-k)$.
+    Since $-k$ is still an integer, $y - x$ is also a multiple of 5.
+    **Status: Symmetric.**
+
+3.  **Transitive (Does it chain together?)**
+    If $x$ relates to $y$, and $y$ relates to $z$, does $x$ relate to $z$?
+    Assume $x - y = 5k$ and $y - z = 5j$.
+    Let's add these equations:
+    $(x - y) + (y - z) = 5k + 5j$
+    $x - z = 5(k + j)$
+    So $x - z$ is indeed a multiple of 5.
+    **Status: Transitive.**
+
+Since it satisfies all three, it is an **Equivalence Relation**.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={6}>
+  <Fragment slot="question">Is $=$ an equivalence relation?</Fragment>
+  <Fragment slot="answer">Yes.</Fragment>
+  <Fragment slot="derivation">
+Equality is the "prototypical" equivalence relation. All other equivalence relations try to mimic equality in some way.
+
+1.  **Reflexive:** Is $a = a$? **Yes**, obviously.
+2.  **Symmetric:** If $a = b$, is $b = a$? **Yes**.
+3.  **Transitive:** If $a = b$ and $b = c$, is $a = c$? **Yes**.
+
+Therefore, it is an equivalence relation.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={7}>
+  <Fragment slot="question">Is $>$ an equivalence relation?</Fragment>
+  <Fragment slot="answer">No.</Fragment>
+  <Fragment slot="derivation">
+Let's test the properties:
+
+1.  **Reflexive:** Is $a > a$? **No**. A number is never strictly greater than itself.
+
+We can stop right there. Since it fails the first test, it cannot be an equivalence relation.
+
+(Note: It is Transitive ($a>b \land b>c \implies a>c$), but it fails Reflexive and Symmetric).
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={8}>
+  <Fragment slot="question">Is $\geq$ an equivalence relation?</Fragment>
+  <Fragment slot="answer">No.</Fragment>
+  <Fragment slot="derivation">
+Let's test the properties:
+
+1.  **Reflexive:** Is $a \geq a$? **Yes**.
+2.  **Symmetric:** If $a \geq b$, does that mean $b \geq a$?
+    Let's try an example: $5 \geq 2$ is true.
+    But is $2 \geq 5$? **No**.
+
+Since it fails symmetry, it is **not** an equivalence relation.
+
+(Note: Because it is Reflexive, Antisymmetric, and Transitive, it is actually a **Partial Order**).
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={9}>
+  <Fragment slot="question">$A = \{x \in \mathbb{Z}^+ \mid 2 \mid x, x \le 30\}$. (a) Find $A$. (b) Let $B = \{x \in A \mid 6 \mid x\}$, $C = \{x \in A \mid 8 \mid x\}$. Find $B \cup C$ and $B \cap C$.</Fragment>
+  <Fragment slot="answer">(a) $A = \{2, 4, ..., 30\}$. (b) Union and Intersection details below.</Fragment>
+  <Fragment slot="derivation">
+**(a) Constructing Set A**
+We need positive integers up to 30 that are divisible by 2 (even numbers).
+$A = \{2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30\}$
+
+**(b) Filtering Subsets**
+
+- **Set B (Multiples of 6):** Look at $A$ and pick numbers divisible by 6.
+  $B = \{6, 12, 18, 24, 30\}$
+- **Set C (Multiples of 8):** Look at $A$ and pick numbers divisible by 8.
+  $C = \{8, 16, 24\}$
+
+**Calculating Operations**
+
+- **Union ($B \cup C$):** "Combine everyone together". List every number that appears in _either_ B or C (don't repeat duplicates).
+  $B \cup C = \{6, 8, 12, 16, 18, 24, 30\}$
+- **Intersection ($B \cap C$):** "Find the common ground". List only numbers that appear in _both_ sets.
+  Only 24 is in both lists.
+  $B \cap C = \{24\}$
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={10}>
+  <Fragment slot="question">$R$ on $M_{n \times n}$: $(A,B) \in R \iff A = PBP^{-1}$ (Similarity). Is $R$ an equivalence relation?</Fragment>
+  <Fragment slot="answer">Yes.</Fragment>
+  <Fragment slot="derivation">
+This relates to Linear Algebra. Two matrices are "similar" if they represent the same linear transformation just viewed from different bases (coordinate systems).
+
+Let's check the properties formally:
+
+1.  **Reflexive:** Is $A$ similar to itself?
+    We need $A = P A P^{-1}$. If we choose $P$ to be the Identity matrix ($I$), then $I A I^{-1} = A$.
+    **Yes.**
+
+2.  **Symmetric:** If $A$ is similar to $B$, is $B$ similar to $A$?
+    Given $A = P B P^{-1}$, we can solve for $B$.
+    Multiply left by $P^{-1}$ and right by $P$:
+    $P^{-1} A P = B$
+    This looks like the same form: $B = Q A Q^{-1}$ where $Q = P^{-1}$.
+    **Yes.**
+
+3.  **Transitive:** If $A$ similar to $B$, and $B$ similar to $C$...
+    $A = P B P^{-1}$
+    $B = Q C Q^{-1}$
+    Substitute the second equation into the first:
+    $A = P (Q C Q^{-1}) P^{-1} = (PQ) C (Q^{-1}P^{-1}) = (PQ) C (PQ)^{-1}$
+    So $A$ is similar to $C$ using the change-of-basis matrix $PQ$.
+    **Yes.**
+
+**Conclusion:** It is an equivalence relation.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={11}>
+  <Fragment slot="question">$A = \text{webpages}$, $(a,b) \in R \iff \exists$ common link. What are the properties of $R$?</Fragment>
+  <Fragment slot="answer">Reflexive and Symmetric. Not Transitive.</Fragment>
+  <Fragment slot="derivation">
+Let's translate "common link": Two pages are related if they both link to the same third page (or pages).
+
+1.  **Reflexive:** Does page $a$ have a common link with itself?
+    Yes, assuming the page links to _something_, it shares those links with itself.
+
+2.  **Symmetric:** If $a$ and $b$ share a link, do $b$ and $a$ share a link?
+    Yes, obviously. "Sharing" is mutual.
+
+3.  **Transitive:** This is the tricky one.
+    - Page $A$ links to Google.
+    - Page $B$ links to Google AND Facebook.
+    - Page $C$ links to Facebook.
+    
+    $A$ and $B$ relate (share Google).
+    $B$ and $C$ relate (share Facebook).
+    **BUT** $A$ and $C$ share nothing!
+
+    So the relation is **NOT Transitive**.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={12}>
+  <Fragment slot="question">$A=\{1,2\}$, $R$ on $2^A$: $(B,C) \in R \iff B \subseteq C$. (a) Write the matrix $M_R$. (b) What are the properties?</Fragment>
+  <Fragment slot="answer">(a) See derivation for matrix. (b) Partial Order.</Fragment>
+  <Fragment slot="derivation">
+**(a) Constructing the Matrix**
+First, list all elements of the power set $2^A$ (all subsets of $\{1,2\}$):
+Elements: $\emptyset, \{1\}, \{2\}, \{1,2\}$. Let's number them 1 to 4.
+
+We put a 1 in the matrix at $(Row, Col)$ if $Row \subseteq Col$.
+
+- $\emptyset$ is a subset of everything. (Row 1 is all 1s).
+- $\{1\}$ is a subset of itself and $\{1,2\}$.
+- $\{2\}$ is a subset of itself and $\{1,2\}$.
+- $\{1,2\}$ is a subset of only itself.
+
+$$M_R = \begin{pmatrix} 1 & 1 & 1 & 1 \\ 0 & 1 & 0 & 1 \\ 0 & 0 & 1 & 1 \\ 0 & 0 & 0 & 1 \end{pmatrix}$$
+
+**(b) Properties**
+
+- **Reflexive:** Diagonal is all 1s (Every set contains itself).
+- **Antisymmetric:** No symmetry across the diagonal. If $A \subseteq B$ and $B \subseteq A$, then $A=B$.
+- **Transitive:** If $A \subseteq B$ and $B \subseteq C$, then $A \subseteq C$.
+
+A relation with these three properties is called a **Partial Order**.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={13}>
+  <Fragment slot="question">$A=\{a,b,c\}$ with given matrix $M_R$. Find: (a) $R^{-1}$, (b) $\overline{R}$, (c) $R^2$.</Fragment>
+  <Fragment slot="answer">(a) $R^{-1} = R$. (b) Complement details below. (c) Universal relation.</Fragment>
+  <Fragment slot="derivation">
+Given Matrix:
+$$M_R = \begin{pmatrix} 0 & 1 & 1 \\ 1 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$$
+
+**(a) Inverse Relation $R^{-1}$**
+To find the inverse, we transpose the matrix (swap rows and columns).
+Looking at $M_R$, it is **symmetric** (it looks the same if you flip it over the diagonal).
+Therefore, its transpose is identical to itself.
+$R^{-1} = R$.
+
+**(b) Complement $\overline{R}$**
+The complement is "everything NOT in the relation". We flip 0s to 1s and 1s to 0s.
+$$ \begin{pmatrix} 1 & 0 & 0 \\ 0 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix} $$
+This corresponds to the pairs $\{(a,a), (b,c), (c,b)\}$.
+
+**(c) Composition $R^2$**
+This corresponds to matrix multiplication (using Boolean logic: $1+1=1$).
+If you multiply $M_R \times M_R$, you are checking "Can I get from $i$ to $j$ in exactly 2 hops?".
+In this graph, you can reach any node from any other node in 2 steps.
+Thus, the result is a matrix of all 1s (the **Universal Relation**).
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={14}>
+  <Fragment slot="question">Determine if $R_1$ and $R_2$ are equivalence relations given their matrices.</Fragment>
+  <Fragment slot="answer">$R_1$: No. $R_2$: Yes.</Fragment>
+  <Fragment slot="derivation">
+**Visual Checks for Equivalence Relations:**
+1.  **Reflexive:** The main diagonal (top-left to bottom-right) must be all 1s.
+2.  **Symmetric:** The matrix must look identical if folded along the diagonal.
+
+**Analyzing $R_1$:**
+Check symmetry. Look at row 1, col 2 vs row 2, col 1.
+If $m_{12} \neq m_{21}$, it's not symmetric.
+Since it fails symmetry, it is **not** an equivalence relation.
+
+**Analyzing $R_2$:**
+
+- Diagonal is all 1s? **Yes**. (Reflexive)
+- Symmetric? **Yes**.
+- Transitive? We look for "block" structures.
+  Nodes 1, 2, 3 form a solid $3 \times 3$ block of 1s (they are all connected to each other).
+  Node 4 is isolated (only connected to itself).
+  This "islands of connected nodes" structure is the signature of an equivalence relation.
+  **Yes**, it is an equivalence relation.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={15}>
+  <Fragment slot="question">$R$: Direct flights between cities. What do $R^2$, $R^3$, and $R^{-1}$ represent?</Fragment>
+  <Fragment slot="answer">$R^2$: 1 stopover. $R^3$: 2 stopovers. $R^{-1}$: Return flights.</Fragment>
+  <Fragment slot="derivation">
+Think of $R$ as "can fly directly".
+
+**(a) $R^2$ (Composition $R \circ R$)**
+$(a,c) \in R^2$ means there exists some intermediate city $b$ such that $a \to b$ AND $b \to c$.
+In plain English: You flew from $a$ to $c$ with **exactly one stopover**.
+
+**(b) $R^3$ ($R \circ R \circ R$)**
+This adds another link to the chain: $a \to b \to c \to d$.
+This represents flights with **exactly two stopovers**.
+
+**(c) $R^{-1}$ (Inverse)**
+$(a,b) \in R^{-1}$ is the pair $(b,a)$ from the original relation.
+If $R$ is "flight from $a$ to $b$", then $R^{-1}$ is "flight from $b$ to $a$".
+This represents the **return flight**.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={16}>
+  <Fragment slot="question">Find the reflexive closure of $R = \{(a,b) \in \mathbb{Z}^2 \mid a \neq b\}$.</Fragment>
+  <Fragment slot="answer">The universal relation $\mathbb{Z} \times \mathbb{Z}$.</Fragment>
+  <Fragment slot="derivation">
+**What is a Reflexive Closure?**
+It means taking a relation and adding the *minimum* number of pairs needed to make it reflexive.
+To be reflexive, we need every element to relate to itself: we need $(a,a)$ for every integer $a$.
+
+**Current Relation:**
+$R$ contains every pair $(a,b)$ where $a$ and $b$ are _different_.
+
+**The Fix:**
+We add all pairs where $a$ and $b$ are the _same_ ($\Delta = \{(a,a)\}$).
+
+**Result:**
+If you have "all pairs where distinct" AND "all pairs where same", you essentially have **all possible pairs**.
+The result is the full Cartesian product $\mathbb{Z} \times \mathbb{Z}$.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={17}>
+  <Fragment slot="question">Find the symmetric closure of $R = \{(a,b) \in \mathbb{Z}^2 \mid a \mid b\}$.</Fragment>
+  <Fragment slot="answer">$\{(a,b) \mid a \mid b \lor b \mid a\}$</Fragment>
+  <Fragment slot="derivation">
+**What is a Symmetric Closure?**
+It means ensuring that for every arrow $a \to b$, there is a return arrow $b \to a$.
+In set terms, it is $R \cup R^{-1}$.
+
+**Analysis:**
+
+- $R$ is "a divides b" (e.g., $(2,6)$ is in $R$).
+- $R^{-1}$ is the reverse: "b divides a" (e.g., $(6,2)$ is in $R^{-1}$).
+
+**Result:**
+The union contains pairs where EITHER $a$ divides $b$ OR $b$ divides $a$.
+This doesn't simplify to a neat name, so we describe it as the set of pairs where one number divides the other.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={18}>
+  <Fragment slot="question">$R$: Students who share at least one class. What does $R^2$ represent?</Fragment>
+  <Fragment slot="answer">Students connected by a common classmate.</Fragment>
+  <Fragment slot="derivation">
+Let's trace the path logic:
+$(a,c) \in R^2$ means there exists a person $b$ such that:
+1.  $a$ shares a class with $b$.
+2.  $b$ shares a class with $c$.
+
+So, $a$ and $c$ might not know each other directly, but they have a mutual classmate ($b$).
+$R^2$ represents the relationship "We have a friend-of-a-friend (classmate-wise)."
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={19}>
+  <Fragment slot="question">Find the transitive closure $R^*$ using Warshall's algorithm.</Fragment>
+  <Fragment slot="answer">Nodes 1, 2, 3 become fully connected.</Fragment>
+  <Fragment slot="derivation">
+Transitive closure is about finding **reachability**: "Can I get from A to B *eventually*?"
+
+**Analyzing the Graph:**
+
+- $1 \to 3$
+- $3 \to 2$
+- $2 \to 1$
+- $1 \to 4$
+
+Notice the cycle: $1 \to 3 \to 2 \to 1$.
+In a transitive closure, if you are in a cycle, everyone in that cycle can reach everyone else.
+So $\{1, 2, 3\}$ becomes a "clique" (fully connected block of 1s in the matrix).
+
+**Node 4:**
+Node 4 is reachable from 1 (and thus from 2 and 3 via 1), but Node 4 has no outgoing edges.
+
+**Resulting Matrix:**
+The top $3 \times 3$ block will be all 1s.
+The column for 4 will have 1s in rows 1, 2, 3 (because 1, 2, and 3 can all reach 4).
+Row 4 will be all 0s (4 can't go anywhere).
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={20}>
+  <Fragment slot="question">$R = \{(1,2), (2,1), (2,3), (3,4), (4,1)\}$. Find the symmetric closure.</Fragment>
+  <Fragment slot="answer">$\{(1,2), (2,1), (2,3), (3,2), (3,4), (4,3), (4,1), (1,4)\}$</Fragment>
+  <Fragment slot="derivation">
+To find the symmetric closure, we just walk through the list and make sure every pair has its reverse.
+
+1.  $(1,2)$ exists. Is $(2,1)$ there? Yes. Good.
+2.  $(2,3)$ exists. Is $(3,2)$ there? No. **Add $(3,2)$.**
+3.  $(3,4)$ exists. Is $(4,3)$ there? No. **Add $(4,3)$.**
+4.  $(4,1)$ exists. Is $(1,4)$ there? No. **Add $(1,4)$.**
+
+**Final List:**
+The original set plus the three new pairs we added.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={21}>
+  <Fragment slot="question">Is similarity of matrices an equivalence relation?</Fragment>
+  <Fragment slot="answer">Yes.</Fragment>
+  <Fragment slot="derivation">
+(See Problem 10 for the detailed proof).
+
+In short:
+
+1.  **Reflexive:** Any matrix is similar to itself (via Identity matrix).
+2.  **Symmetric:** If A is similar to B, B is similar to A (via Inverse matrix).
+3.  **Transitive:** Similarity chains together (via Matrix Multiplication).
+
+Yes, it is a classic example of an equivalence relation in Linear Algebra.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={22}>
+  <Fragment slot="question">Bit strings: $s \sim t \iff \#_1(s) = \#_1(t)$ (same number of 1s). (a) Is this an equivalence relation? (b) How many strings of length $n$ have exactly two 1s?</Fragment>
+  <Fragment slot="answer">(a) Yes. (b) $\frac{n(n-1)}{2}$.</Fragment>
+  <Fragment slot="derivation">
+**(a) Equivalence Check**
+Think about what this relation does: it groups strings into buckets based on "how many 1s they have".
+*   Does $s$ have the same number of 1s as $s$? **Yes.**
+*   If $s$ has same count as $t$, does $t$ have same count as $s$? **Yes.**
+*   If count($s$) = count($t$) and count($t$) = count($u$), is count($s$) = count($u$)? **Yes.**
+So, yes, it is an equivalence relation.
+
+**(b) Combinatorics**
+We have a string of length $n$ (n empty slots).
+We need to place exactly two '1's.
+
+- Pick a slot for the first '1': $n$ choices.
+- Pick a slot for the second '1': $n-1$ choices.
+- Total ways = $n(n-1)$.
+- **Wait!** The order doesn't matter (picking slot 3 then 5 is same as 5 then 3). So we divide by 2.
+
+Formula: $\binom{n}{2} = \frac{n(n-1)}{2}$.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={24}>
+  <Fragment slot="question">Rationals: $(a,b) \sim (c,d) \iff ad = bc$. Is this an equivalence relation?</Fragment>
+  <Fragment slot="answer">Yes.</Fragment>
+  <Fragment slot="derivation">
+This looks abstract, but it's actually how we define fractions!
+Think of pair $(a,b)$ as the fraction $\frac{a}{b}$.
+The condition $ad = bc$ is just cross-multiplication for $\frac{a}{b} = \frac{c}{d}$.
+
+So the question really asks: "Is equality of fractions an equivalence relation?"
+Since it models the concept of "equal value", the answer is naturally **Yes**.
+
+We can verify technically:
+
+- Reflexive: $ab = ba$ (True).
+- Symmetric: If $ad=bc$, then $cb=da$ (True).
+- Transitive: Requires a bit of algebra, but holds true.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={25}>
+  <Fragment slot="question">Determine which of the given matrices represent partial orderings.</Fragment>
+  <Fragment slot="answer">Matrix (b) and (c).</Fragment>
+  <Fragment slot="derivation">
+**Recall: Partial Order Properties**
+1.  **Reflexive:** Diagonal must be all 1s.
+2.  **Antisymmetric:** If $m_{ij}=1$ (where $i \neq j$), then $m_{ji}$ MUST be 0. No two-way streets off the diagonal.
+3.  **Transitive:** If $i \to j$ and $j \to k$, then $i \to k$.
+
+**Analysis:**
+
+- **Matrix (a):** Has $1$ at $(1,2)$ and $1$ at $(2,1)$. This violates Antisymmetry. **No.**
+- **Matrix (b):** Diagonal is 1s. It is "Upper Triangular" (all 1s are above diagonal), which guarantees Antisymmetry automatically. It also checks out for transitivity. **Yes.**
+- **Matrix (c):** Diagonal is 1s. No symmetric entries. Transitivity holds. **Yes.**
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={28}>
+  <Fragment slot="question">Draw the Hasse diagram for divisibility on $\{2,4,5,10,12,20,25\}$.</Fragment>
+  <Fragment slot="answer">See derivation for the diagram edges.</Fragment>
+  <Fragment slot="derivation">
+A **Hasse Diagram** is a clean way to draw a Partial Order.
+Rules:
+1.  Higher numbers go above lower numbers.
+2.  Don't draw loops (reflexivity is implied).
+3.  Don't draw "shortcut" lines if a path already exists (transitivity is implied). e.g., if $2 \to 4$ and $4 \to 12$, don't draw $2 \to 12$.
+
+**Step-by-Step Construction:**
+
+1.  **Start at the bottom (numbers that nothing divides):**
+    2 and 5 are the "roots".
+
+2.  **Level 2 (What do 2 and 5 divide directly?):**
+
+    - $2$ divides $4$ and $10$.
+    - $5$ divides $10$ and $25$.
+    - (Draw lines $2\to4, 2\to10, 5\to10, 5\to25$)
+
+3.  **Level 3 (What do 4, 10, 25 divide?):**
+    - $4$ divides $12$ and $20$.
+    - $10$ divides $20$.
+    - $25$ divides nothing else in the set.
+    - (Draw lines $4\to12, 4\to20, 10\to20$)
+
+**Final Structure:**
+
+- 2 connects up to 4 and 10.
+- 5 connects up to 10 and 25.
+- 4 connects up to 12 and 20.
+- 10 connects up to 20.
+- 12, 20, 25 are at the top.
+
+</Fragment>
+</WorksheetProblem>
+
+</LiveWorksheet>

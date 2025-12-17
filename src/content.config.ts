@@ -19,6 +19,7 @@ const courses = defineCollection({
     comingSoon: z.boolean().default(false),
     section: z.string().optional(),
     sectionOrder: z.number().optional(),
+    isWorksheet: z.boolean().default(false),
   }),
 });
 

@@ -11,6 +11,7 @@ interface Props {
   sections: CourseSection[];
   currentSlug: string;
   nextLesson?: CollectionEntry<"courses"> | null;
+  isWorksheet?: boolean;
 }
 
 const {
@@ -20,6 +21,7 @@ const {
   sections,
   currentSlug,
   nextLesson,
+  isWorksheet = false,
 } = Astro.props;
 ---
 
@@ -45,10 +47,12 @@ const {
     </div>
     <main class="course-content">
       <div class="content-wrapper">
-        <header class="lesson-header">
-          {sectionTitle && <span class="section-name">{sectionTitle}</span>}
-          <h1>{title}</h1>
-        </header>
+        {!isWorksheet && (
+          <header class="lesson-header">
+            {sectionTitle && <span class="section-name">{sectionTitle}</span>}
+            <h1>{title}</h1>
+          </header>
+        )}
         <article class="lesson-content">
           <slot />
         </article>

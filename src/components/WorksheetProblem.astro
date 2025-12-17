@@ -1,0 +1,205 @@
+---
+interface Props {
+  number: number;
+}
+
+const { number } = Astro.props;
+const id = `ws-${number}-${Math.random().toString(36).slice(2, 9)}`;
+
+const hasDerivation = Astro.slots.has("derivation");
+---
+
+<div class="worksheet-problem" data-id={id}>
+  <div class="problem-header">
+    <span class="problem-number">{number}.</span>
+    <div class="problem-question">
+      <slot name="question" />
+    </div>
+  </div>
+
+  <button
+    class="toggle-answer"
+    data-target={id}
+    aria-expanded="false"
+    aria-controls={`${id}-answer`}
+  >
+    Show Answer
+  </button>
+
+  <div class="answer-section hidden" id={`${id}-answer`}>
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <div class="answer-content">
+        <slot name="answer" />
+      </div>
+    </div>
+
+    {hasDerivation && (
+      <div class="derivation">
+        <div class="derivation-label">Derivation</div>
+        <div class="derivation-content">
+          <slot name="derivation" />
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .worksheet-problem {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+  }
+
+  .problem-header {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .problem-number {
+    font-weight: 700;
+    color: var(--heading);
+    flex-shrink: 0;
+  }
+
+  .problem-question {
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .toggle-answer {
+    font-family: inherit;
+    font-size: 0.875rem;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--muted);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .toggle-answer:hover {
+    color: var(--text);
+    border-color: var(--text);
+  }
+
+  .toggle-answer[aria-expanded="true"] {
+    color: var(--text);
+    border-color: var(--text);
+  }
+
+  .answer-section {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.2s ease;
+  }
+
+  .answer-section.hidden {
+    display: none;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .answer-box {
+    margin-bottom: var(--space-lg);
+  }
+
+  .answer-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--correct);
+    margin-bottom: var(--space-sm);
+  }
+
+  .answer-content {
+    color: var(--heading);
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .derivation {
+    padding-top: var(--space-md);
+  }
+
+  .derivation-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: var(--space-sm);
+  }
+
+  .derivation-content {
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  /* Inline styles for slot content */
+  .problem-question :global(p),
+  .answer-content :global(p) {
+    margin: 0;
+  }
+
+  .derivation-content :global(p) {
+    margin: 0 0 var(--space-md) 0;
+  }
+
+  .derivation-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* KaTeX display math within answers */
+  .answer-section :global(.katex-display) {
+    margin: var(--space-md) 0;
+    text-align: left;
+    width: auto;
+    margin-left: 0;
+  }
+
+  /* List styles in derivations */
+  .derivation-content :global(ol),
+  .derivation-content :global(ul) {
+    margin: var(--space-sm) 0;
+    padding-left: var(--space-xl);
+  }
+
+  .derivation-content :global(li) {
+    margin-bottom: var(--space-xs);
+  }
+</style>
+
+<script>
+  function initWorksheetProblems() {
+    document.querySelectorAll<HTMLElement>(".worksheet-problem").forEach((problem) => {
+      const btn = problem.querySelector<HTMLButtonElement>(".toggle-answer");
+      const answerSection = problem.querySelector<HTMLElement>(".answer-section");
+
+      if (!btn || !answerSection) return;
+
+      btn.addEventListener("click", () => {
+        const isHidden = answerSection.classList.contains("hidden");
+        
+        answerSection.classList.toggle("hidden");
+        btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
+        btn.textContent = isHidden ? "Hide Answer" : "Show Answer";
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initWorksheetProblems);
+  } else {
+    initWorksheetProblems();
+  }
+</script>

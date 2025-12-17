@@ -6,12 +6,13 @@ import Base from '../layouts/Base.astro';
   <header class="site-header">
     <h1>Josh</h1>
     <p class="wip">W.I.P</p>
-    <p>
-      <a href="/courses">Access Comp Arch Course.</a>
-    </p>
-    <p>
-      <a href="/courses/law-and-data-protection/01-introduction">Access the Law and Data Protection Course</a>
-    </p>
+    <nav>
+      <ul>
+        <li><a href="/courses/computer-architecture/01-binary-multiplication">Computer Architecture</a></li>
+        <li><a href="/courses/law-and-data-protection/01-introduction">Law and Data Protection</a></li>
+        <li><a href="/courses/algebra/01-introduction">Algebra</a></li>
+      </ul>
+    </nav>
   </header>
 </Base>
 
@@ -27,5 +28,14 @@ import Base from '../layouts/Base.astro';
   .wip {
     color: var(--muted);
     margin-bottom: var(--space-md);
+  }
+
+  nav ul {
+    list-style: disc;
+    padding-left: var(--space-lg);
+  }
+
+  nav li {
+    margin-bottom: var(--space-sm);
   }
 </style>

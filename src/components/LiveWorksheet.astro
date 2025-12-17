@@ -1,0 +1,109 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<div class="live-worksheet">
+  <div class="worksheet-header">
+    <h2 class="worksheet-title">{title}</h2>
+    {description && <p class="worksheet-description">{description}</p>}
+    <div class="worksheet-controls">
+      <button class="control-btn show-all-btn">Show All Answers</button>
+      <button class="control-btn hide-all-btn">Hide All Answers</button>
+    </div>
+  </div>
+  <div class="worksheet-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .live-worksheet {
+    margin: var(--space-xl) 0;
+  }
+
+  .worksheet-header {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .worksheet-title {
+    font-size: 1.4rem;
+    color: var(--heading);
+    margin: 0 0 var(--space-sm) 0;
+  }
+
+  .worksheet-description {
+    color: var(--muted);
+    margin: 0 0 var(--space-lg) 0;
+    font-size: 0.95rem;
+  }
+
+  .worksheet-controls {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .control-btn {
+    font-family: inherit;
+    font-size: 0.8rem;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .control-btn:hover {
+    color: var(--text);
+    border-color: var(--text);
+  }
+
+  .worksheet-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .worksheet-content :global(.worksheet-problem) {
+    margin: 0;
+  }
+</style>
+
+<script>
+  function initLiveWorksheets() {
+    document.querySelectorAll<HTMLElement>(".live-worksheet").forEach((worksheet) => {
+      const showAllBtn = worksheet.querySelector<HTMLButtonElement>(".show-all-btn");
+      const hideAllBtn = worksheet.querySelector<HTMLButtonElement>(".hide-all-btn");
+
+      showAllBtn?.addEventListener("click", () => {
+        worksheet.querySelectorAll<HTMLButtonElement>(".toggle-answer").forEach((btn) => {
+          if (btn.getAttribute("aria-expanded") === "false") {
+            btn.click();
+          }
+        });
+      });
+
+      hideAllBtn?.addEventListener("click", () => {
+        worksheet.querySelectorAll<HTMLButtonElement>(".toggle-answer").forEach((btn) => {
+          if (btn.getAttribute("aria-expanded") === "true") {
+            btn.click();
+          }
+        });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLiveWorksheets);
+  } else {
+    initLiveWorksheets();
+  }
+</script>
