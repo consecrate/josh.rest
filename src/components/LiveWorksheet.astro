@@ -12,7 +12,6 @@ const { title, description } = Astro.props;
     <h2 class="worksheet-title">{title}</h2>
     {description && <p class="worksheet-description">{description}</p>}
     <div class="worksheet-controls">
-      <button class="control-btn hello-mode-btn">Hello Mode</button>
       <button class="control-btn show-all-btn">Show All Answers</button>
       <button class="control-btn hide-all-btn">Hide All Answers</button>
     </div>
@@ -67,12 +66,6 @@ const { title, description } = Astro.props;
     border-color: var(--text);
   }
 
-  .control-btn.active {
-    background: var(--accent, #e97a1e);
-    color: #fff;
-    border-color: var(--accent, #e97a1e);
-  }
-
   .worksheet-content {
     display: flex;
     flex-direction: column;
@@ -87,21 +80,8 @@ const { title, description } = Astro.props;
 <script>
   function initLiveWorksheets() {
     document.querySelectorAll<HTMLElement>(".live-worksheet").forEach((worksheet) => {
-      const helloModeBtn = worksheet.querySelector<HTMLButtonElement>(".hello-mode-btn");
       const showAllBtn = worksheet.querySelector<HTMLButtonElement>(".show-all-btn");
       const hideAllBtn = worksheet.querySelector<HTMLButtonElement>(".hide-all-btn");
-
-      helloModeBtn?.addEventListener("click", () => {
-        const isActive = worksheet.classList.toggle("hello-mode");
-        helloModeBtn.classList.toggle("active", isActive);
-        helloModeBtn.textContent = isActive ? "Exit Hello Mode" : "Hello Mode";
-        
-        // Dispatch event to child problems
-        worksheet.dispatchEvent(new CustomEvent("hello-mode-toggle", { 
-          detail: { active: isActive },
-          bubbles: true 
-        }));
-      });
 
       showAllBtn?.addEventListener("click", () => {
         worksheet.querySelectorAll<HTMLButtonElement>(".toggle-answer").forEach((btn) => {
