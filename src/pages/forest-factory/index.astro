@@ -223,37 +223,22 @@ const generatorsJson = JSON.stringify(allGenerators);
   const PACKS_MAP = Object.fromEntries(PACKS.map(p => [p.id, p]));
   const GENERATORS_MAP = Object.fromEntries(ALL_GENERATORS.map(g => [g.type, g]));
 
-  // Minimal client-side markdown processor (fallback when API unavailable)
-  function inlineMarkdown(text) {
-    // Process list blocks: consecutive lines starting with "- "
-    const processBlock = (block) => {
-      const lines = block.split('\n');
-      const result = [];
-      let listItems = [];
-      
-      for (const line of lines) {
-        if (line.startsWith('- ')) {
-          listItems.push(line.slice(2));
-        } else {
-          if (listItems.length) {
-            result.push(`<ul>${listItems.map(li => `<li>${li}</li>`).join('')}</ul>`);
-            listItems = [];
-          }
-          result.push(line);
-        }
-      }
-      if (listItems.length) {
-        result.push(`<ul>${listItems.map(li => `<li>${li}</li>`).join('')}</ul>`);
-      }
-      return result.join('<br>');
-    };
-    
+  // Simple client-side text processor for quiz content
+  // Handles XSS prevention, basic markdown (bold), and newlines
+  // Leaves $...$ and $$...$$ intact for KaTeX to process
+  function formatText(text) {
+    if (!text) return '';
     return text
-      .split(/\n\n/)
-      .map(processBlock)
-      .join('<br><br>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>');
+      // Escape HTML entities first (XSS prevention)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      // Convert **bold** to <strong>
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      // Convert *italic* to <em>
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      // Convert \n to <br>
+      .replace(/\n/g, '<br>');
   }
 
   // State
@@ -597,10 +582,10 @@ const generatorsJson = JSON.stringify(allGenerators);
       const gen = GENERATORS_MAP[type];
       
       questions.push({
-        question: inlineMarkdown(`Question ${i + 1}: ${gen?.displayName || type}`),
+        question: `Question ${i + 1}: ${gen?.displayName || type}`,
         options: ['Option A', 'Option B', 'Option C', 'Option D'],
         correctIndex: Math.floor(rng() * 4),
-        explanation: inlineMarkdown('This is a client-side generated placeholder.')
+        explanation: 'This is a client-side generated placeholder.'
       });
     }
     
@@ -653,8 +638,8 @@ const generatorsJson = JSON.stringify(allGenerators);
     quizProgress.textContent = `Q${currentIndex + 1} of ${questions.length}`;
     progressFill.style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
     
-    // Render question text
-    questionText.innerHTML = question.question;
+    // Render question text (formatText handles XSS, bold, newlines; leaves math for KaTeX)
+    questionText.innerHTML = formatText(question.question);
     
     // Render options
     const isLocked = state.quiz.locked[currentIndex];
@@ -678,7 +663,7 @@ const generatorsJson = JSON.stringify(allGenerators);
       return `
         <button class="${classes}" data-index="${i}">
           <span class="quiz-option-key">${String.fromCharCode(65 + i)}</span>
-          <span class="quiz-option-text">${opt}</span>
+          <span class="quiz-option-text">${formatText(opt)}</span>
         </button>
       `;
     }).join('');
@@ -687,7 +672,7 @@ const generatorsJson = JSON.stringify(allGenerators);
     const explanationEl = $('question-explanation');
     const explanationContent = $('explanation-content');
     if (isLocked && question.explanation) {
-      explanationContent.innerHTML = question.explanation;
+      explanationContent.innerHTML = formatText(question.explanation);
       explanationEl.style.display = '';
     } else {
       explanationEl.style.display = 'none';

@@ -4,7 +4,7 @@ import { getGenerator } from '../generators';
 import { mulberry32 } from '../generators/prng';
 
 /**
- * Generate a mock test with deterministic randomness.
+ * Generate a mock test with deterministic randomness and unique questions.
  * 
  * @param generatorTypes - Array of generator type IDs to use
  * @param seed - Seed for deterministic RNG (same seed = same quiz)
@@ -21,23 +21,33 @@ export function generateMockTest(
 
   const rng = mulberry32(seed);
   const questions: Problem[] = [];
+  const seenQuestions = new Set<string>();
+  
+  let attempt = 0;
+  const maxAttempts = count * 10; // Prevent infinite loop if not enough unique questions
 
-  for (let i = 0; i < count; i++) {
+  while (questions.length < count && attempt < maxAttempts) {
     // Pick random generator from list
     const typeIndex = Math.floor(rng() * generatorTypes.length);
     const type = generatorTypes[typeIndex];
     
     try {
       const generator = getGenerator(type);
-      // Derive question seed from quiz seed and question index
-      const questionSeed = (seed * 31 + i * 7919) >>> 0;
+      // Derive question seed from quiz seed and attempt index
+      const questionSeed = (seed * 31 + attempt * 7919) >>> 0;
       const problem = generator.generate(questionSeed);
-      questions.push(problem);
+      
+      // Only add if question text is unique
+      if (!seenQuestions.has(problem.question)) {
+        seenQuestions.add(problem.question);
+        questions.push(problem);
+      }
     } catch {
       // Skip invalid generator types
       console.warn(`Unknown generator type: ${type}`);
-      i--; // Try again with a different generator
     }
+    
+    attempt++;
   }
 
   return {

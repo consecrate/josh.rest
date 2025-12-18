@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro';
 import { generateMockTest } from '../../../lib/forest-factory';
-import { inlineMarkdown } from '../../../lib/markdown';
 
 export const prerender = false;
 
@@ -30,20 +29,10 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    // Return raw quiz data - client handles markdown and KaTeX rendering
     const quiz = generateMockTest(generators, seed, count);
 
-    // Process markdown to HTML (mirrors MultipleChoice.astro pattern)
-    const processedQuestions = quiz.questions.map(q => ({
-      question: inlineMarkdown(q.question),
-      options: q.options.map(inlineMarkdown),
-      correctIndex: q.correctIndex,
-      explanation: inlineMarkdown(q.explanation),
-    }));
-
-    return new Response(JSON.stringify({
-      ...quiz,
-      questions: processedQuestions,
-    }), {
+    return new Response(JSON.stringify(quiz), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
