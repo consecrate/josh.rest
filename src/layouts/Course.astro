@@ -1,6 +1,7 @@
 ---
 import Base from "./Base.astro";
 import CourseSidebar from "../components/CourseSidebar.astro";
+import CopyButton from "../components/CopyButton.astro";
 import type { CourseSection } from "../lib/courses";
 import type { CollectionEntry } from "astro:content";
 
@@ -51,6 +52,7 @@ const {
         }
       </div>
     </main>
+    <CopyButton />
   </div>
 </Base>
 
