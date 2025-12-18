@@ -1,0 +1,299 @@
+---
+title: "Partial Orders & Hasse Diagrams Bolt"
+description: "Master partial orders with the hierarchy mental model and Hasse diagram fluency."
+order: 6
+section: "Bolts"
+sectionOrder: 2
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import ContentBlock from "../../../components/ContentBlock.astro";
+
+# The Hierarchy Mental Model
+
+A **partial order** creates a hierarchy — like a family tree, organizational chart, or divisibility lattice. Some elements are "above" others, but not everything is comparable.
+
+$$
+\begin{array}{c}
+12 \\
+\diagup \quad \diagdown \\
+4 \quad\quad 6 \\
+\diagdown \quad \diagup \\
+2 \quad 3 \\
+\diagdown \diagup \\
+1
+\end{array}
+$$
+
+Think: **1 divides 2, 2 divides 4, but 4 and 6 are incomparable** (neither divides the other).
+
+---
+
+## The Three Requirements
+
+### 1. Reflexive: "I'm at least as good as myself"
+
+Every element is related to itself. $a \leq a$.
+
+$$\forall a: (a, a) \in R$$
+
+**Matrix Check:** Diagonal is all **1s**.
+
+### 2. Antisymmetric: "No ties (except with yourself)"
+
+If $a \leq b$ AND $b \leq a$, then $a = b$. No two *distinct* elements can both be "above" each other.
+
+$$(a, b) \in R \land (b, a) \in R \Rightarrow a = b$$
+
+**Matrix Check:** If $M_{ij} = 1$ where $i \neq j$, then $M_{ji} = 0$.
+
+### 3. Transitive: "If a ≤ b ≤ c, then a ≤ c"
+
+The hierarchy chains correctly.
+
+$$(a, b) \in R \land (b, c) \in R \Rightarrow (a, c) \in R$$
+
+<MultipleChoice
+  question="Which matrix represents a partial order on $\\{1, 2, 3\\}$?"
+  options={[
+    "$\\begin{pmatrix} 1 & 1 & 1 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1 \\end{pmatrix}$ — Upper triangular",
+    "$\\begin{pmatrix} 1 & 1 & 0 \\\\ 1 & 1 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}$ — Symmetric blocks",
+    "$\\begin{pmatrix} 1 & 1 & 0 \\\\ 0 & 1 & 1 \\\\ 1 & 0 & 1 \\end{pmatrix}$ — Has a cycle",
+    "$\\begin{pmatrix} 0 & 1 & 1 \\\\ 0 & 0 & 1 \\\\ 0 & 0 & 0 \\end{pmatrix}$ — Strict order"
+  ]}
+  correct={0}
+  explanation="Upper triangular with 1s on diagonal is the classic partial order pattern. The symmetric one is an equivalence relation (fails antisymmetry). The cycle one fails transitivity. The last fails reflexivity."
+/>
+
+---
+
+## Partial Order vs. Equivalence Relation
+
+| Partial Order | Equivalence Relation |
+|---------------|---------------------|
+| Reflexive ✓ | Reflexive ✓ |
+| **Antisymmetric** | **Symmetric** |
+| Transitive ✓ | Transitive ✓ |
+| Creates **hierarchy** | Creates **partitions** |
+| Example: $\leq$, $\subseteq$, divides | Example: $=$, $\equiv \pmod{n}$ |
+
+**The key difference:** Antisymmetric vs. Symmetric. They're opposite conditions!
+
+<MultipleChoice
+  question="Can a relation be BOTH an equivalence relation AND a partial order?"
+  options={[
+    "No, never",
+    "Yes, but only the empty relation",
+    "Yes, only the identity relation (equality)",
+    "Yes, any reflexive relation"
+  ]}
+  correct={2}
+  explanation="To be both symmetric AND antisymmetric, the only off-diagonal pairs allowed are... none! This leaves only the identity relation where $aRb \\iff a = b$."
+/>
+
+---
+
+## Hasse Diagrams: The Clean Picture
+
+A **Hasse diagram** strips away redundant information:
+
+1. **No loops** — Reflexivity is assumed (everything relates to itself)
+2. **No transitive edges** — If $a < b < c$, don't draw $a \to c$
+3. **Direction implied** — Larger elements are drawn *above* smaller ones
+
+### Drawing Rules
+
+$$
+\text{Full Graph} \quad \longrightarrow \quad \text{Hasse Diagram}
+$$
+
+Remove:
+- Self-loops (implied by reflexivity)
+- "Shortcut" edges (implied by transitivity)
+- Arrows (direction is "up")
+
+<MultipleChoice
+  question="In a Hasse diagram for divisibility on $\\{2, 4, 6, 12\\}$, is there a direct edge from 2 to 12?"
+  options={[
+    "Yes, because 2 | 12",
+    "No, because 2 | 4 | 12 (go through 4)",
+    "No, because 2 | 6 | 12 (go through 6)",
+    "Both B and C (either path works)"
+  ]}
+  correct={3}
+  explanation="Both paths exist: $2 \\to 4 \\to 12$ and $2 \\to 6 \\to 12$. Since intermediate elements exist, we don't draw the direct edge $2 \\to 12$."
+/>
+
+---
+
+## Special Elements
+
+### Minimal vs. Least
+
+- **Minimal**: Nothing is *strictly below* it (could be multiple)
+- **Least (Minimum)**: Below *everything else* (unique if exists)
+
+$$
+\begin{array}{c}
+\text{Divisibility on } \{2, 3, 6\}: \\
+2 \quad 3 \quad \text{(both minimal)} \\
+\quad \diagdown \diagup \\
+\quad\quad 6
+\end{array}
+$$
+
+No *least* element exists (2 and 3 are incomparable).
+
+<MultipleChoice
+  question="In the poset of divisibility on $\\{2, 3, 4, 6, 12\\}$, what are the minimal elements?"
+  options={[
+    "Just 2",
+    "Just 2 and 3",
+    "2, 3, and 4",
+    "12"
+  ]}
+  correct={1}
+  explanation="2 and 3 have nothing below them in this set. 4 has 2 below it. 6 has 2 and 3 below it. 12 is maximal, not minimal."
+/>
+
+### Maximal vs. Greatest
+
+Same idea, but "above":
+- **Maximal**: Nothing is *strictly above* it
+- **Greatest (Maximum)**: Above *everything else*
+
+<MultipleChoice
+  question="Does the poset $\\{1, 2, 4, 8\\}$ under divisibility have a greatest element?"
+  options={[
+    "Yes, it's 1",
+    "Yes, it's 8",
+    "No, 4 and 8 are both maximal",
+    "No greatest element exists"
+  ]}
+  correct={1}
+  explanation="This is a chain: $1 | 2 | 4 | 8$. Every element is comparable! 8 divides nothing else, and everything divides 8. So 8 is the greatest (and only maximal) element."
+/>
+
+---
+
+## Bounds: LUB and GLB
+
+For a subset $S$ of a poset:
+
+### Upper Bound
+An element $u$ such that $\forall s \in S: s \leq u$.
+
+### Lower Bound  
+An element $l$ such that $\forall s \in S: l \leq s$.
+
+### LUB (Least Upper Bound / Supremum / Join)
+The *smallest* upper bound. Written $\sup(S)$ or $\bigvee S$.
+
+### GLB (Greatest Lower Bound / Infimum / Meet)
+The *largest* lower bound. Written $\inf(S)$ or $\bigwedge S$.
+
+<MultipleChoice
+  question="In divisibility on $\\{1, 2, 3, 4, 6, 12\\}$, what is $\\text{LUB}(\\{2, 3\\})$?"
+  options={[
+    "1",
+    "6",
+    "12",
+    "Does not exist"
+  ]}
+  correct={1}
+  explanation="Upper bounds of $\\{2, 3\\}$ are elements divisible by both: $\\{6, 12\\}$. The smallest is 6. (This is the LCM!)"
+/>
+
+<MultipleChoice
+  question="In divisibility on $\\{1, 2, 3, 4, 6, 12\\}$, what is $\\text{GLB}(\\{4, 6\\})$?"
+  options={[
+    "1",
+    "2",
+    "12",
+    "Does not exist"
+  ]}
+  correct={1}
+  explanation="Lower bounds of $\\{4, 6\\}$ are elements that divide both: $\\{1, 2\\}$. The largest is 2. (This is the GCD!)"
+/>
+
+---
+
+## Lattices: When LUB and GLB Always Exist
+
+A poset where every pair has both a LUB and GLB is called a **lattice**.
+
+**Examples:**
+- Divisibility on divisors of $n$ — always a lattice
+- Power set with $\subseteq$ — always a lattice (LUB = union, GLB = intersection)
+- $\mathbb{Z}$ with $\leq$ — a lattice (it's a total order!)
+
+<MultipleChoice
+  question="Is divisibility on $\\{2, 3, 4, 6\\}$ a lattice?"
+  options={[
+    "Yes",
+    "No — $\\text{GLB}(2, 3)$ doesn't exist",
+    "No — $\\text{LUB}(4, 6)$ doesn't exist",
+    "No — both B and C"
+  ]}
+  correct={2}
+  explanation="GLB(2,3) would be GCD(2,3)=1, but 1 isn't in the set! Also, LUB(4,6)=12 isn't in the set. Both bounds missing means it's not a lattice."
+/>
+
+---
+
+## Cover Relations
+
+$a$ **covers** $b$ (written $a \lessdot b$ or $b \gtrdot a$) means:
+- $a < b$ (a is strictly below b)
+- No element $c$ exists with $a < c < b$
+
+These are the edges we draw in a Hasse diagram!
+
+<MultipleChoice
+  question="In divisibility on $\\{1, 2, 4, 8, 16\\}$, what covers 4?"
+  options={[
+    "2 and 8",
+    "Just 8",
+    "Just 2",
+    "1, 2, 8, and 16"
+  ]}
+  correct={1}
+  explanation="2 is below 4 (2 | 4), so 2 doesn't cover 4 — 4 covers 2! 8 is the only element with $4 | 8$ and no element strictly between. 16 has 8 between it and 4."
+/>
+
+---
+
+# Infinite Drill: Minimal/Maximal Elements
+
+<AdaptiveQuiz
+  generator="hasse-minmax-elements"
+  baseSeed={77777}
+  initialCount={5}
+  appendCount={2}
+  maxQuestions={20}
+/>
+
+---
+
+## Bonus: Is It a Partial Order?
+
+<AdaptiveQuiz
+  generator="relation-is-partial-order"
+  baseSeed={88888}
+  initialCount={5}
+  appendCount={2}
+  maxQuestions={15}
+/>
+
+---
+
+## Bonus: Poset Bounds (LUB/GLB)
+
+<AdaptiveQuiz
+  generator="poset-bounds"
+  baseSeed={99999}
+  initialCount={5}
+  appendCount={2}
+  maxQuestions={15}
+/>

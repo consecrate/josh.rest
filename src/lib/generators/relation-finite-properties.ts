@@ -216,7 +216,7 @@ const whichFailsGenerator: ProblemGenerator = {
     const passingProps = PROPERTIES.filter((p) => p.check(matrix)).map((p) => p.name);
 
     // Distractors are things that pass
-    let distractors = passingProps.slice(0, 3);
+    const distractors: string[] = passingProps.slice(0, 3);
     
     // If we don't have enough passing properties (e.g. empty matrix fails Ref, Equiv, PO, but is Sym, Anti, Trans)
     // We fill with other failing properties? No, question is "Which FAILS".

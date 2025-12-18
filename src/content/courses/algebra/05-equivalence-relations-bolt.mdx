@@ -1,0 +1,226 @@
+---
+title: "Equivalence Relations Bolt"
+description: "Master equivalence relations with the partition mental model and infinite practice."
+order: 5
+section: "Bolts"
+sectionOrder: 2
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import ContentBlock from "../../../components/ContentBlock.astro";
+
+# The Partition Mental Model
+
+An **equivalence relation** groups elements into **non-overlapping buckets**. Every element belongs to exactly one bucket, and elements in the same bucket are "equivalent" to each other.
+
+Think of it like sorting socks: you can sort by **color** (all blue socks together, all red together) or by **size** (all small together, all large together). Each sorting rule is an equivalence relation!
+
+$$
+\underbrace{\{🔵, 🔵, 🔵\}}_{\text{Bucket 1}} \quad \underbrace{\{🔴, 🔴\}}_{\text{Bucket 2}} \quad \underbrace{\{🟢\}}_{\text{Bucket 3}}
+$$
+
+---
+
+## The Three Requirements
+
+For a relation to create valid "buckets" (partitions), it must satisfy three properties:
+
+### 1. Reflexive: "I belong with myself"
+
+Every element must be in *some* bucket, and trivially, it's in the same bucket as itself.
+
+$$\forall a: (a, a) \in R$$
+
+**Matrix Check:** All diagonal entries must be **1**.
+
+### 2. Symmetric: "If you're with me, I'm with you"
+
+If $a$ is in the same bucket as $b$, then $b$ is in the same bucket as $a$. Buckets don't have one-way membership!
+
+$$(a, b) \in R \Rightarrow (b, a) \in R$$
+
+**Matrix Check:** The matrix must be **symmetric** (mirror image across diagonal).
+
+### 3. Transitive: "Friends of friends are friends"
+
+If $a$ is with $b$, and $b$ is with $c$, then $a$ and $c$ must also be together. Buckets don't have "half-members"!
+
+$$(a, b) \in R \land (b, c) \in R \Rightarrow (a, c) \in R$$
+
+**Matrix Check:** Requires checking paths (or use Warshall).
+
+---
+
+## Visual Recognition
+
+Equivalence relation matrices have a distinctive **block diagonal** structure. Elements in the same equivalence class form solid squares of 1s.
+
+$$
+\begin{pmatrix}
+\boxed{1} & \boxed{1} & 0 & 0 \\
+\boxed{1} & \boxed{1} & 0 & 0 \\
+0 & 0 & \boxed{1} & \boxed{1} \\
+0 & 0 & \boxed{1} & \boxed{1}
+\end{pmatrix}
+$$
+
+Two equivalence classes: $\{1, 2\}$ and $\{3, 4\}$.
+
+<MultipleChoice
+  question="Which matrix represents an equivalence relation?"
+  options={[
+    "$\\begin{pmatrix} 1 & 1 & 0 \\\\ 1 & 1 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}$ — Two blocks",
+    "$\\begin{pmatrix} 1 & 1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}$ — Upper triangular",
+    "$\\begin{pmatrix} 0 & 1 & 0 \\\\ 1 & 0 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}$ — Missing diagonal",
+    "$\\begin{pmatrix} 1 & 1 & 1 \\\\ 1 & 1 & 0 \\\\ 1 & 0 & 1 \\end{pmatrix}$ — Asymmetric"
+  ]}
+  correct={0}
+  explanation="The first matrix shows two clear equivalence classes: {1,2} and {3}. It's reflexive (diagonal is 1s), symmetric (mirror image), and transitive (blocks are solid). The others fail: upper triangular isn't symmetric, missing diagonal isn't reflexive, and the last isn't symmetric."
+/>
+
+---
+
+## Classic Examples
+
+### Congruence Modulo n
+
+The relation $x \equiv y \pmod{n}$ groups integers by their remainder when divided by $n$.
+
+**Example:** Modulo 3 partitions $\mathbb{Z}$ into 3 buckets:
+- $[0] = \{\ldots, -6, -3, 0, 3, 6, \ldots\}$
+- $[1] = \{\ldots, -5, -2, 1, 4, 7, \ldots\}$  
+- $[2] = \{\ldots, -4, -1, 2, 5, 8, \ldots\}$
+
+<MultipleChoice
+  question="In $\\mathbb{Z}_5$, which equivalence class does $-7$ belong to?"
+  options={[
+    "$[0]$",
+    "$[2]$",
+    "$[3]$",
+    "$[4]$"
+  ]}
+  correct={2}
+  explanation="$-7 = -2 \\cdot 5 + 3$, so $-7 \\equiv 3 \\pmod{5}$. Alternatively: $-7 + 10 = 3$."
+/>
+
+### Same Parity
+
+"Has the same parity" (both even or both odd) creates exactly 2 buckets.
+
+### Same Length (Strings)
+
+Strings of the same length form an equivalence class. On $\\{a, b\\}^3$, each string of length 3 is equivalent only to itself... wait, that's wrong! "Same length" on strings of *varying* lengths creates classes.
+
+<MultipleChoice
+  question="If $R$ is 'same parity' on $\\{1, 2, 3, 4, 5, 6\\}$, how many equivalence classes are there?"
+  options={[
+    "1",
+    "2",
+    "3",
+    "6"
+  ]}
+  correct={1}
+  explanation="Parity always creates exactly 2 classes: Evens $\\{2, 4, 6\\}$ and Odds $\\{1, 3, 5\\}$."
+/>
+
+---
+
+## Equivalence Classes
+
+Given an equivalence relation $R$ and an element $a$, the **equivalence class** of $a$ is:
+
+$$[a] = \{x \mid (a, x) \in R\}$$
+
+All elements equivalent to $a$. Key insight: **equivalence classes either completely overlap or are completely disjoint**.
+
+### Counting Elements in a Class
+
+For bit strings of length $n$ where the equivalence is "same number of 1s":
+- How many strings have exactly $k$ ones? $\binom{n}{k}$
+
+<MultipleChoice
+  question="How many bit strings of length 5 are in the equivalence class 'exactly 2 ones'?"
+  options={[
+    "5",
+    "10",
+    "20",
+    "32"
+  ]}
+  correct={1}
+  explanation="We choose which 2 positions have 1s: $\\binom{5}{2} = \\frac{5!}{2! \\cdot 3!} = 10$."
+/>
+
+---
+
+## Quick Identification Tips
+
+**Is it an equivalence relation?**
+
+1. **Check Reflexive First** — Does $a R a$ for all $a$? 
+   - $>$ fails immediately ($a > a$ is false)
+   - $=$ passes ($a = a$ is true)
+
+2. **Check Symmetric** — Is the relation "mutual"?
+   - Divides ($|$) fails: $2 | 4$ but $4 \nmid 2$
+   - Same remainder passes: if $a \equiv b$, then $b \equiv a$
+
+3. **Transitivity usually follows** — If it's symmetric and "makes sense", transitivity often holds.
+
+<MultipleChoice
+  question="Is 'having a common factor greater than 1' an equivalence relation on $\\mathbb{Z}^+$?"
+  options={[
+    "Yes — it groups numbers by shared factors",
+    "No — it fails reflexivity (1 has no common factor with itself > 1)",
+    "No — it fails transitivity (4 and 6 share 2, 6 and 9 share 3, but 4 and 9 share nothing)",
+    "Both B and C are correct"
+  ]}
+  correct={3}
+  explanation="Two issues: (1) Reflexivity fails for 1 (and arguably all primes if we're strict). (2) Transitivity fails: 4-6 share 2, 6-9 share 3, but gcd(4,9)=1."
+/>
+
+---
+
+## From Partition to Relation (and back)
+
+**Partition → Relation:** Given buckets, two elements are related iff they're in the same bucket.
+
+**Relation → Partition:** Given an equivalence relation, each equivalence class $[a]$ is a bucket.
+
+<MultipleChoice
+  question="A set $A$ has 6 elements. An equivalence relation creates 3 classes of sizes 1, 2, and 3. How many ordered pairs are in $R$?"
+  options={[
+    "6",
+    "14",
+    "21",
+    "36"
+  ]}
+  correct={1}
+  explanation="Each class of size $k$ contributes $k^2$ pairs (everyone related to everyone). Total: $1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14$."
+/>
+
+---
+
+# Infinite Drill
+
+Master equivalence relation recognition with endless practice!
+
+<AdaptiveQuiz
+  generator="relation-is-equivalence"
+  baseSeed={54321}
+  initialCount={5}
+  appendCount={2}
+  maxQuestions={20}
+/>
+
+---
+
+## Bonus: Modulo Drill
+
+<AdaptiveQuiz
+  generator="equivalence-class-modulo"
+  baseSeed={11111}
+  initialCount={5}
+  appendCount={2}
+  maxQuestions={15}
+/>
