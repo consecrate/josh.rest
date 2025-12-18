@@ -20,6 +20,7 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@sylphx/pdf-reader-mcp": "^2.0.8"
+    "@sylphx/pdf-reader-mcp": "^2.0.8",
+    "wrangler": "^4.55.0"
   }
 }
