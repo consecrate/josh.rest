@@ -1,0 +1,467 @@
+---
+title: "Number Theory Bolt"
+description: "Master modular arithmetic, GCD, inverses, and Fermat's Little Theorem with visual intuition and infinite practice."
+order: 5
+section: "Bolts"
+sectionOrder: 2
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import ContentBlock from "../../../components/ContentBlock.astro";
+
+# The Clock World
+
+Number theory is the mathematics of the **modular world**—a world where numbers wrap around like hours on a clock.
+
+When it's 10 o'clock and you wait 5 hours, you don't get 15 o'clock—you get **3 o'clock**. This is modular arithmetic in action: $10 + 5 \equiv 3 \pmod{12}$.
+
+---
+
+## Modular Arithmetic: The Remainder Game
+
+The expression $a \pmod{n}$ asks: *"What's the remainder when $a$ is divided by $n$?"*
+
+$$47 \pmod{10} = 7 \quad \text{(because } 47 = 10 \times 4 + \mathbf{7}\text{)}$$
+
+**The Last Digit Trick:** The last digit of any number is simply that number mod 10!
+- $12345 \pmod{10} = 5$
+- $999 \pmod{10} = 9$
+
+<MultipleChoice
+  question="What is $83 \pmod{9}$?"
+  options={[
+    "$2$",
+    "$8$",
+    "$11$",
+    "$0$"
+  ]}
+  correct={0}
+  explanation="$83 = 9 \times 9 + 2$, so the remainder is 2."
+/>
+
+---
+
+## Negative Numbers: Adding Your Way Up
+
+What about $-3 \pmod{7}$? We need a positive remainder between 0 and 6.
+
+**The trick:** Keep adding $n$ until you're positive!
+
+$$-3 + 7 = 4$$
+
+So $-3 \equiv 4 \pmod{7}$.
+
+**Intuition:** On a clock, going back 3 hours is the same as going forward 9 hours (on a 12-hour clock). Both land on the same position!
+
+<MultipleChoice
+  question="What is $-5 \pmod{9}$?"
+  options={[
+    "$4$",
+    "$5$",
+    "$-5$",
+    "$14$"
+  ]}
+  correct={0}
+  explanation="$-5 + 9 = 4$. So $-5 \equiv 4 \pmod{9}$."
+/>
+
+---
+
+## The Superpower: Reduce First, Then Compute
+
+Here's the magic that makes modular arithmetic so powerful:
+
+$$(a + b) \pmod{n} = [(a \pmod{n}) + (b \pmod{n})] \pmod{n}$$
+$$(a \cdot b) \pmod{n} = [(a \pmod{n}) \cdot (b \pmod{n})] \pmod{n}$$
+
+**Translation:** You can reduce each piece first, then add/multiply, then reduce again. This keeps numbers small!
+
+**Example:** What's $47 \times 83 \pmod{9}$?
+
+Instead of computing $47 \times 83 = 3901$ then dividing:
+
+$$47 \equiv 2 \pmod{9}, \quad 83 \equiv 2 \pmod{9}$$
+$$47 \times 83 \equiv 2 \times 2 = 4 \pmod{9}$$
+
+Done in your head! 🧠
+
+<AdaptiveQuiz
+  generator="number-theory-mod-multiply"
+  baseSeed={1001}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={12}
+/>
+
+---
+
+## Last Digits: A Practical Application
+
+To find the last digit of a sum, just add the last digits!
+
+**Example:** Last digit of $2403 + 791 + 688 + 4339$?
+
+Last digits: $3 + 1 + 8 + 9 = 21$
+
+Last digit of 21 is **1**. ✓
+
+<AdaptiveQuiz
+  generator="number-theory-last-digit"
+  baseSeed={2002}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+# The Division Ladder: GCD
+
+The **Greatest Common Divisor** $\gcd(a, b)$ is the largest number that divides both $a$ and $b$.
+
+## Euclidean Algorithm: The Elegant Descent
+
+Instead of factoring (which gets hard for large numbers), use the **Euclidean Algorithm**—a beautiful recursive descent.
+
+**The Rule:** $\gcd(a, b) = \gcd(b, a \bmod b)$
+
+**Example:** Find $\gcd(48, 18)$
+
+$$\begin{aligned}
+48 &= 18 \times 2 + 12 \quad &\Rightarrow \gcd(48, 18) &= \gcd(18, 12) \\
+18 &= 12 \times 1 + 6 \quad &\Rightarrow \gcd(18, 12) &= \gcd(12, 6) \\
+12 &= 6 \times 2 + 0 \quad &\Rightarrow \gcd(12, 6) &= 6
+\end{aligned}$$
+
+When the remainder hits 0, the **last non-zero remainder** is your GCD!
+
+<MultipleChoice
+  question="What is $\gcd(84, 36)$?"
+  options={[
+    "$6$",
+    "$12$",
+    "$4$",
+    "$18$"
+  ]}
+  correct={1}
+  explanation="$84 = 36 \times 2 + 12$, then $36 = 12 \times 3 + 0$. So $\gcd = 12$."
+/>
+
+---
+
+## Coprime: The Special Relationship
+
+Two numbers are **coprime** (or relatively prime) if $\gcd(a, b) = 1$.
+
+This means they share **no common factors** except 1.
+
+**Examples:**
+- $\gcd(15, 8) = 1$ ✓ Coprime!
+- $\gcd(15, 9) = 3$ ✗ Not coprime (both divisible by 3)
+
+<MultipleChoice
+  question="Are 35 and 22 coprime?"
+  options={[
+    "Yes, they are coprime",
+    "No, they share a factor"
+  ]}
+  correct={0}
+  explanation="$35 = 5 \times 7$ and $22 = 2 \times 11$. No common factors, so $\gcd(35, 22) = 1$."
+/>
+
+<AdaptiveQuiz
+  generator="number-theory-gcd-basic"
+  baseSeed={3003}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={12}
+/>
+
+---
+
+## LCM: The Other Side of the Coin
+
+The **Least Common Multiple** is connected to GCD by a beautiful formula:
+
+$$\text{lcm}(a, b) = \frac{a \times b}{\gcd(a, b)}$$
+
+**Why it works:** The product $a \times b$ counts the common factors twice, so we divide by GCD to correct.
+
+<AdaptiveQuiz
+  generator="number-theory-lcm"
+  baseSeed={3004}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={8}
+/>
+
+---
+
+# Multiplicative Inverses: Division in Mod World
+
+In regular arithmetic, every non-zero number has a multiplicative inverse: $5 \times \frac{1}{5} = 1$.
+
+In modular arithmetic, we ask: *Does $a^{-1}$ exist such that $a \cdot a^{-1} \equiv 1 \pmod{n}$?*
+
+## The Golden Rule
+
+$$a \text{ has an inverse in } \mathbb{Z}_n \iff \gcd(a, n) = 1$$
+
+**Intuition:** If $a$ and $n$ share a factor, then $a \cdot x$ will always be a multiple of that factor—it can never equal 1!
+
+**Example:** Does $3$ have an inverse mod $10$?
+
+$\gcd(3, 10) = 1$ ✓
+
+Yes! And $3 \times 7 = 21 \equiv 1 \pmod{10}$, so $3^{-1} = 7$ in $\mathbb{Z}_{10}$.
+
+<MultipleChoice
+  question="Does $6$ have a multiplicative inverse in $\mathbb{Z}_{10}$?"
+  options={[
+    "Yes",
+    "No"
+  ]}
+  correct={1}
+  explanation="$\gcd(6, 10) = 2 \neq 1$. Since they share factor 2, no inverse exists. Any $6 \times x$ will be even, never reaching 1 (odd)."
+/>
+
+---
+
+## Finding Inverses: The EEA Method
+
+The **Extended Euclidean Algorithm** finds $x, y$ such that:
+
+$$ax + ny = \gcd(a, n)$$
+
+When $\gcd(a, n) = 1$, we get $ax + ny = 1$, which means $ax \equiv 1 \pmod{n}$!
+
+So $x \pmod{n}$ is the inverse.
+
+**Example:** Find $5^{-1}$ in $\mathbb{Z}_{11}$.
+
+$$11 = 5 \times 2 + 1$$
+$$1 = 11 - 5 \times 2$$
+
+So $5 \times (-2) \equiv 1 \pmod{11}$, meaning $5^{-1} = -2 \equiv 9 \pmod{11}$.
+
+**Check:** $5 \times 9 = 45 = 44 + 1 = 4 \times 11 + 1 \equiv 1$ ✓
+
+<AdaptiveQuiz
+  generator="number-theory-inverse-small"
+  baseSeed={4004}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={12}
+/>
+
+---
+
+## Modular Division
+
+"Dividing by $a$" in mod world means "multiplying by $a^{-1}$".
+
+$$\frac{b}{a} \equiv b \cdot a^{-1} \pmod{n}$$
+
+**Example:** What's $\frac{3}{7}$ in $\mathbb{Z}_{11}$?
+
+First find $7^{-1}$: Since $7 \times 8 = 56 = 55 + 1 \equiv 1 \pmod{11}$, we have $7^{-1} = 8$.
+
+Then: $\frac{3}{7} \equiv 3 \times 8 = 24 \equiv 2 \pmod{11}$.
+
+<AdaptiveQuiz
+  generator="number-theory-mod-division"
+  baseSeed={4005}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+## Solving Linear Congruences
+
+To solve $ax \equiv b \pmod{n}$:
+
+1. Find $a^{-1}$ (requires $\gcd(a, n) = 1$)
+2. Multiply both sides: $x \equiv b \cdot a^{-1} \pmod{n}$
+
+<AdaptiveQuiz
+  generator="number-theory-linear-congruence"
+  baseSeed={4006}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+# Fermat's Little Theorem: The Power Reducer
+
+How do you compute $7^{1000000} \pmod{13}$? 
+
+You can't calculate $7^{1000000}$ directly—it has millions of digits! But Fermat's Little Theorem saves the day.
+
+## The Theorem
+
+If $p$ is **prime** and $\gcd(a, p) = 1$, then:
+
+$$a^{p-1} \equiv 1 \pmod{p}$$
+
+This is the **reset button** for powers!
+
+---
+
+## Using FLT: The Three-Step Method
+
+**Problem:** Compute $7^{1000} \pmod{13}$.
+
+**Step 1:** Verify FLT applies.
+- Is 13 prime? ✓
+- Is $\gcd(7, 13) = 1$? ✓
+
+**Step 2:** Apply FLT. Since $7^{12} \equiv 1 \pmod{13}$:
+
+**Step 3:** Reduce the exponent mod $(p-1)$.
+$$1000 = 12 \times 83 + 4$$
+$$7^{1000} = (7^{12})^{83} \cdot 7^4 \equiv 1^{83} \cdot 7^4 \equiv 7^4 \pmod{13}$$
+
+**Step 4:** Compute the small power.
+$$7^4 = 2401 = 13 \times 184 + 9 \equiv 9 \pmod{13}$$
+
+<MultipleChoice
+  question="Using FLT, what is $3^{100} \pmod{7}$?"
+  options={[
+    "$4$",
+    "$2$",
+    "$1$",
+    "$6$"
+  ]}
+  correct={0}
+  explanation="$7$ is prime and $\gcd(3, 7) = 1$, so FLT says $3^6 \equiv 1 \pmod{7}$. Reduce the exponent: $100 = 6 \times 16 + 4$, so $3^{100} \equiv 3^4 = 81 \equiv 4 \pmod{7}$."
+/>
+
+<AdaptiveQuiz
+  generator="number-theory-flt-basic"
+  baseSeed={5005}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={12}
+/>
+
+---
+
+## Power Cycles: Finding the Pattern
+
+Sometimes the cycle is shorter than $p - 1$. The period always **divides** $p - 1$, but may be smaller.
+
+**Example:** Powers of 2 mod 7:
+- $2^1 = 2$
+- $2^2 = 4$
+- $2^3 = 8 \equiv 1$
+- $2^4 = 2$ (cycle restarts!)
+
+Period is **3**, which divides $7 - 1 = 6$. ✓
+
+<AdaptiveQuiz
+  generator="number-theory-power-cycle"
+  baseSeed={5006}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+## FLT Bonus: Finding Inverses!
+
+From $a^{p-1} \equiv 1 \pmod{p}$, we can derive:
+
+$$a \cdot a^{p-2} \equiv 1 \pmod{p}$$
+
+So **$a^{-1} \equiv a^{p-2} \pmod{p}$**!
+
+**Example:** $5^{-1}$ in $\mathbb{Z}_7$:
+
+$$5^{-1} \equiv 5^{7-2} = 5^5 \pmod{7}$$
+
+$5^2 = 25 \equiv 4$, $5^4 \equiv 16 \equiv 2$, $5^5 = 5^4 \cdot 5 \equiv 2 \cdot 5 = 10 \equiv 3$.
+
+Check: $5 \times 3 = 15 = 14 + 1 \equiv 1$ ✓
+
+<AdaptiveQuiz
+  generator="number-theory-flt-inverse"
+  baseSeed={5007}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+## Euler's Theorem: The General Version
+
+What if $n$ is **not** prime? Use Euler's Theorem:
+
+$$a^{\phi(n)} \equiv 1 \pmod{n} \quad \text{when } \gcd(a, n) = 1$$
+
+Where $\phi(n)$ is **Euler's totient function**—the count of integers from 1 to $n$ that are coprime to $n$.
+
+**Key formulas:**
+- $\phi(p) = p - 1$ for prime $p$
+- $\phi(p^k) = p^{k-1}(p - 1)$
+- $\phi(mn) = \phi(m)\phi(n)$ when $\gcd(m, n) = 1$
+
+<AdaptiveQuiz
+  generator="number-theory-euler-theorem"
+  baseSeed={5008}
+  initialCount={2}
+  appendCount={2}
+  maxQuestions={10}
+/>
+
+---
+
+# Infinite Drill: Master All Concepts
+
+Now test your skills across all number theory concepts!
+
+## Modular Arithmetic Fundamentals
+
+<AdaptiveQuiz
+  generator="number-theory-mod-basic"
+  baseSeed={9001}
+  initialCount={5}
+  appendCount={3}
+  maxQuestions={20}
+/>
+
+## GCD & Coprimality
+
+<AdaptiveQuiz
+  generator="number-theory-gcd-euclidean"
+  baseSeed={9002}
+  initialCount={5}
+  appendCount={3}
+  maxQuestions={20}
+/>
+
+## Multiplicative Inverses
+
+<AdaptiveQuiz
+  generator="number-theory-inverse-eea"
+  baseSeed={9003}
+  initialCount={5}
+  appendCount={3}
+  maxQuestions={20}
+/>
+
+## Fermat's Little Theorem
+
+<AdaptiveQuiz
+  generator="number-theory-flt-steps"
+  baseSeed={9004}
+  initialCount={5}
+  appendCount={3}
+  maxQuestions={20}
+/>
