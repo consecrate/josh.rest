@@ -1,15 +1,19 @@
 ---
+import "../styles/quiz.css";
+
 interface Props {
   number: number;
+  distractors?: string[];
 }
 
-const { number } = Astro.props;
+const { number, distractors = [] } = Astro.props;
 const id = `ws-${number}-${Math.random().toString(36).slice(2, 9)}`;
 
 const hasDerivation = Astro.slots.has("derivation");
+const distractorsJson = JSON.stringify(distractors);
 ---
 
-<div class="worksheet-problem" data-id={id}>
+<div class="worksheet-problem" data-id={id} data-number={number} data-distractors={distractorsJson}>
   <div class="problem-header">
     <span class="problem-number">{number}.</span>
     <div class="problem-question">
@@ -25,6 +29,16 @@ const hasDerivation = Astro.slots.has("derivation");
   >
     Show Answer
   </button>
+
+  <!-- Hello Mode MCQ Section -->
+  <div class="hello-mcq hidden">
+    <div class="quiz-options"></div>
+    <div class="hello-buttons">
+      <button type="button" class="check-btn" disabled>Check</button>
+      <button type="button" class="reset-btn">Reset</button>
+    </div>
+    <div class="hello-result hidden"></div>
+  </div>
 
   <div class="answer-section hidden" id={`${id}-answer`}>
     <div class="answer-box">
@@ -180,17 +194,133 @@ const hasDerivation = Astro.slots.has("derivation");
   .derivation-content :global(li) {
     margin-bottom: var(--space-xs);
   }
+
+  /* Hello Mode MCQ Styles */
+  .hello-mcq {
+    margin-top: var(--space-md);
+  }
+
+  .hello-mcq.hidden {
+    display: none;
+  }
+
+  .hello-mcq .quiz-options {
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .hello-buttons {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .hello-mcq .check-btn {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    background: var(--accent, #e97a1e);
+    color: #fff;
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  .hello-mcq .check-btn:hover:not(:disabled) {
+    opacity: 0.85;
+  }
+
+  .hello-mcq .check-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .hello-mcq .reset-btn {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+
+  .hello-mcq .reset-btn:hover {
+    color: var(--text);
+  }
+
+  .hello-result {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .hello-result.hidden {
+    display: none;
+  }
+
+  .hello-result.correct {
+    background: rgba(74, 222, 128, 0.15);
+    color: var(--correct, #4ade80);
+  }
+
+  .hello-result.incorrect {
+    background: rgba(248, 113, 113, 0.15);
+    color: var(--incorrect, #f87171);
+  }
+
+  /* Hide toggle button in hello mode */
+  :global(.hello-mode) .toggle-answer {
+    display: none;
+  }
+
+  :global(.hello-mode) .hello-mcq {
+    display: block;
+  }
+
+  :global(.hello-mode) .hello-mcq.hidden {
+    display: block;
+  }
+
+  .no-mcq {
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+  }
 </style>
 
 <script>
+  import { playCorrect, playIncorrect } from '../lib/audio-feedback';
+
+  function shuffleArray<T>(arr: T[]): T[] {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
   function initWorksheetProblems() {
     document.querySelectorAll<HTMLElement>(".worksheet-problem").forEach((problem) => {
       const btn = problem.querySelector<HTMLButtonElement>(".toggle-answer");
       const answerSection = problem.querySelector<HTMLElement>(".answer-section");
+      const helloMcq = problem.querySelector<HTMLElement>(".hello-mcq");
+      const quizOptions = helloMcq?.querySelector<HTMLElement>(".quiz-options");
+      const checkBtn = helloMcq?.querySelector<HTMLButtonElement>(".check-btn");
+      const resetBtn = helloMcq?.querySelector<HTMLButtonElement>(".reset-btn");
+      const helloResult = helloMcq?.querySelector<HTMLElement>(".hello-result");
 
       if (!btn || !answerSection) return;
 
       let mathRendered = false;
+      let mcqInitialized = false;
+      let selectedIndex: number | null = null;
+      let correctIndex = 0;
+      let submitted = false;
 
       btn.addEventListener("click", () => {
         const isHidden = answerSection.classList.contains("hidden");
@@ -215,6 +345,139 @@ const hasDerivation = Astro.slots.has("derivation");
               });
             },
           );
+        }
+      });
+
+      // Hello Mode MCQ initialization
+      function initMcq() {
+        if (mcqInitialized || !quizOptions) return;
+        mcqInitialized = true;
+
+        // Get the correct answer HTML from this problem
+        const answerContent = answerSection?.querySelector(".answer-content");
+        const correctAnswer = answerContent?.innerHTML.trim() || "";
+
+        // Get distractors from data attribute
+        let distractors: string[] = [];
+        try {
+          distractors = JSON.parse(problem.dataset.distractors || "[]");
+        } catch {
+          distractors = [];
+        }
+
+        // If no distractors provided, show a message
+        if (distractors.length === 0) {
+          quizOptions.innerHTML = '<p class="no-mcq">Multiple choice not available for this problem.</p>';
+          if (checkBtn) checkBtn.style.display = 'none';
+          if (resetBtn) resetBtn.style.display = 'none';
+          return;
+        }
+
+        // Shuffle and pick up to 4 distractors
+        const shuffledDistractors = shuffleArray(distractors).slice(0, 4);
+        
+        // Build options array with correct answer + distractors
+        const options = [correctAnswer, ...shuffledDistractors];
+        const shuffledOptions = shuffleArray(options);
+        correctIndex = shuffledOptions.indexOf(correctAnswer);
+
+        // Render the options
+        quizOptions.innerHTML = shuffledOptions.map((opt, i) => `
+          <label class="quiz-option" data-index="${i}">
+            <span class="quiz-option-key">${String.fromCharCode(65 + i)}</span>
+            <input type="radio" name="hello-${problem.dataset.id}" value="${i}" />
+            <span class="quiz-option-text">${opt}</span>
+          </label>
+        `).join("");
+
+        // Render math in options
+        import("katex/contrib/auto-render").then(
+          ({ default: renderMathInElement }) => {
+            renderMathInElement(quizOptions, {
+              delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+              ],
+              throwOnError: false,
+            });
+          },
+        );
+
+        // Add click handlers to options
+        quizOptions.querySelectorAll<HTMLLabelElement>(".quiz-option").forEach((option, index) => {
+          option.addEventListener("click", (e) => {
+            if (submitted) return;
+            e.preventDefault();
+
+            selectedIndex = index;
+            const input = option.querySelector("input") as HTMLInputElement;
+            if (input) input.checked = true;
+
+            quizOptions.querySelectorAll(".quiz-option").forEach((opt, i) => {
+              opt.classList.toggle("selected", i === index);
+            });
+
+            if (checkBtn) checkBtn.disabled = false;
+          });
+        });
+      }
+
+      // Check button handler
+      checkBtn?.addEventListener("click", () => {
+        if (submitted || selectedIndex === null || !quizOptions) return;
+        submitted = true;
+
+        const isCorrect = selectedIndex === correctIndex;
+        
+        if (isCorrect) {
+          playCorrect();
+        } else {
+          playIncorrect();
+        }
+
+        const options = quizOptions.querySelectorAll<HTMLElement>(".quiz-option");
+        options.forEach((opt) => opt.classList.add("locked"));
+        
+        options.forEach((opt, i) => {
+          opt.classList.remove("selected");
+          if (i === correctIndex) {
+            opt.classList.add("correct");
+          } else if (i === selectedIndex) {
+            opt.classList.add("incorrect");
+          }
+        });
+
+        if (helloResult) {
+          helloResult.classList.remove("hidden", "correct", "incorrect");
+          helloResult.classList.add(isCorrect ? "correct" : "incorrect");
+          helloResult.textContent = isCorrect ? "Correct!" : "Incorrect - try again after reviewing!";
+        }
+      });
+
+      // Reset button handler
+      resetBtn?.addEventListener("click", () => {
+        if (!quizOptions) return;
+        submitted = false;
+        selectedIndex = null;
+
+        quizOptions.querySelectorAll(".quiz-option").forEach((opt) => {
+          opt.classList.remove("selected", "correct", "incorrect", "locked");
+          const input = opt.querySelector("input") as HTMLInputElement;
+          if (input) input.checked = false;
+        });
+
+        if (checkBtn) checkBtn.disabled = true;
+        if (helloResult) {
+          helloResult.classList.add("hidden");
+          helloResult.classList.remove("correct", "incorrect");
+        }
+      });
+
+      // Listen for hello mode toggle
+      document.addEventListener("hello-mode-toggle", (e: Event) => {
+        const detail = (e as CustomEvent).detail;
+        if (detail.active) {
+          initMcq();
         }
       });
     });
