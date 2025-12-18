@@ -128,11 +128,11 @@ Instead of factoring (which gets hard for large numbers), use the **Euclidean Al
 
 **Example:** Find $\gcd(48, 18)$
 
-$$\begin{aligned}
-48 &= 18 \times 2 + 12 \quad &\Rightarrow \gcd(48, 18) &= \gcd(18, 12) \\
-18 &= 12 \times 1 + 6 \quad &\Rightarrow \gcd(18, 12) &= \gcd(12, 6) \\
-12 &= 6 \times 2 + 0 \quad &\Rightarrow \gcd(12, 6) &= 6
-\end{aligned}$$
+| Step | Division | GCD Reduction |
+|------|----------|---------------|
+| 1 | $48 = 18 \times 2 + 12$ | $\gcd(48, 18) = \gcd(18, 12)$ |
+| 2 | $18 = 12 \times 1 + 6$ | $\gcd(18, 12) = \gcd(12, 6)$ |
+| 3 | $12 = 6 \times 2 + 0$ | $\gcd(12, 6) = 6$ |
 
 When the remainder hits 0, the **last non-zero remainder** is your GCD!
 
