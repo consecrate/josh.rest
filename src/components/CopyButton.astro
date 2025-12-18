@@ -46,6 +46,11 @@
     border-color: var(--correct);
   }
 
+  .copy-btn.prompted {
+    color: #a78bfa;
+    border-color: #a78bfa;
+  }
+
   .copy-icon {
     flex-shrink: 0;
   }
@@ -184,26 +189,54 @@
     return parts.join('\n').replace(/\n{3,}/g, '\n\n').trim();
   }
 
+  const AI_QUIZ_PROMPT = `Generate high-quality quiz questions based on the following lesson content. Create a variety of question types (multiple choice, true/false, short answer) that test understanding of key concepts. Ensure questions range from basic recall to application and analysis. Include correct answers and brief explanations.
+
+---
+
+`;
+
   function initCopyButton() {
     const btn = document.getElementById('copy-lesson-btn');
     if (!btn) return;
+
+    let state: 'idle' | 'copied' | 'prompted' = 'idle';
+    let resetTimeout: number | null = null;
+    const textEl = btn.querySelector('.copy-text');
+
+    const resetState = () => {
+      state = 'idle';
+      btn.classList.remove('copied', 'prompted');
+      if (textEl) textEl.textContent = 'Copy';
+      resetTimeout = null;
+    };
 
     btn.addEventListener('click', async () => {
       const content = extractLessonContent();
       
       try {
-        await navigator.clipboard.writeText(content);
-        
-        // Visual feedback
-        btn.classList.add('copied');
-        const textEl = btn.querySelector('.copy-text');
-        const originalText = textEl?.textContent;
-        if (textEl) textEl.textContent = 'Copied!';
-        
-        setTimeout(() => {
+        if (state === 'copied') {
+          // Second click while "Copied!" - add AI prompt
+          await navigator.clipboard.writeText(AI_QUIZ_PROMPT + content);
+          
+          if (resetTimeout) clearTimeout(resetTimeout);
+          state = 'prompted';
           btn.classList.remove('copied');
-          if (textEl && originalText) textEl.textContent = originalText;
-        }, 1500);
+          btn.classList.add('prompted');
+          if (textEl) textEl.textContent = 'Prompt Added';
+          
+          resetTimeout = window.setTimeout(resetState, 1500);
+        } else {
+          // First click or from idle - just copy content
+          await navigator.clipboard.writeText(content);
+          
+          if (resetTimeout) clearTimeout(resetTimeout);
+          state = 'copied';
+          btn.classList.remove('prompted');
+          btn.classList.add('copied');
+          if (textEl) textEl.textContent = 'Copied!';
+          
+          resetTimeout = window.setTimeout(resetState, 2000);
+        }
       } catch (err) {
         console.error('Failed to copy:', err);
       }
