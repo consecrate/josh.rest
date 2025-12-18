@@ -1,38 +1,43 @@
-import { marked } from 'marked';
+import { Marked } from 'marked';
+import markedKatex from 'marked-katex-extension';
 
 /**
- * Converts markdown to HTML using marked.
- * Uses parseInline to process inline elements (bold, italic, code, links)
+ * Configured marked instance with KaTeX math support.
+ * 
+ * Uses marked-katex-extension which is the official, battle-tested
+ * extension for handling LaTeX math in marked. This properly handles:
+ * - Inline math: $...$
+ * - Display math: $$...$$
+ * - Backslash escapes in LaTeX commands (\circ, \{, etc.)
+ */
+const marked = new Marked();
+
+marked.use(
+  markedKatex({
+    throwOnError: false,
+    output: 'html', // Render to HTML (vs 'mathml')
+  })
+);
+
+/**
+ * Converts markdown to HTML using marked with KaTeX math support.
+ * Uses parseInline to process inline elements (bold, italic, code, links, math)
  * without wrapping in paragraph tags.
- *
- * Math content inside $...$ or $$...$$ is preserved and not processed by marked.
  */
 export function inlineMarkdown(text: string): string {
-  // Extract and protect math content from markdown processing
-  const mathBlocks: string[] = [];
-  const placeholder = '\x00MATH\x00';
+  if (!text) return '';
+  
+  // Parse inline markdown with math support
+  const html = marked.parseInline(text, { async: false }) as string;
+  
+  // Convert newlines to <br> for inline display
+  return html.trim().replace(/\n/g, '<br>');
+}
 
-  // Replace $$...$$ (display) and $...$ (inline) with placeholders
-  // Handle $$ first to avoid matching as two $
-  const protected_ = text
-    .replace(/\$\$[\s\S]*?\$\$/g, (match) => {
-      mathBlocks.push(match);
-      return placeholder + (mathBlocks.length - 1) + placeholder;
-    })
-    .replace(/\$[^$\n]+?\$/g, (match) => {
-      mathBlocks.push(match);
-      return placeholder + (mathBlocks.length - 1) + placeholder;
-    });
-
-  // Process only non-math content with marked
-  const html = marked.parseInline(protected_, { async: false }) as string;
-
-  // Restore math blocks
-  const restored = html.replace(
-    new RegExp(placeholder + '(\\d+)' + placeholder, 'g'),
-    (_, idx) => mathBlocks[parseInt(idx)]
-  );
-
-  // Convert newlines to <br> for inline display, trim whitespace
-  return restored.trim().replace(/\n/g, '<br>');
+/**
+ * Converts full markdown (with paragraphs) to HTML with KaTeX math support.
+ */
+export function parseMarkdown(text: string): string {
+  if (!text) return '';
+  return marked.parse(text, { async: false }) as string;
 }

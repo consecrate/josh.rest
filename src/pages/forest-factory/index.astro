@@ -223,13 +223,30 @@ const generatorsJson = JSON.stringify(allGenerators);
   const PACKS_MAP = Object.fromEntries(PACKS.map(p => [p.id, p]));
   const GENERATORS_MAP = Object.fromEntries(ALL_GENERATORS.map(g => [g.type, g]));
 
-  // Simple client-side text processor for quiz content
-  // Handles XSS prevention, basic markdown (bold), and newlines
-  // Leaves $...$ and $$...$$ intact for KaTeX to process
+  // Client-side text processor for quiz content
+  // Protects math content, handles XSS, basic markdown, then restores math
   function formatText(text) {
     if (!text) return '';
-    return text
-      // Escape HTML entities first (XSS prevention)
+    
+    // Step 1: Extract and protect math content from processing
+    const mathBlocks = [];
+    const MATH_PLACEHOLDER = '\x00M\x00';
+    
+    let protected_ = text
+      // Protect display math $$...$$ first (can span lines)
+      .replace(/\$\$[\s\S]*?\$\$/g, (match) => {
+        mathBlocks.push(match);
+        return MATH_PLACEHOLDER + (mathBlocks.length - 1) + MATH_PLACEHOLDER;
+      })
+      // Protect inline math $...$
+      .replace(/\$(?:[^$\\]|\\.)+?\$/g, (match) => {
+        mathBlocks.push(match);
+        return MATH_PLACEHOLDER + (mathBlocks.length - 1) + MATH_PLACEHOLDER;
+      });
+    
+    // Step 2: Process non-math content
+    protected_ = protected_
+      // Escape HTML entities (XSS prevention)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
@@ -237,8 +254,16 @@ const generatorsJson = JSON.stringify(allGenerators);
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
       // Convert *italic* to <em>
       .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-      // Convert \n to <br>
+      // Convert newlines to <br>
       .replace(/\n/g, '<br>');
+    
+    // Step 3: Restore math blocks (they bypass all processing)
+    const restored = protected_.replace(
+      new RegExp(MATH_PLACEHOLDER + '(\\d+)' + MATH_PLACEHOLDER, 'g'),
+      (_, idx) => mathBlocks[parseInt(idx, 10)]
+    );
+    
+    return restored;
   }
 
   // State
