@@ -1,6 +1,7 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed } from './prng';
 import { pickRandom } from './relation-utils';
+import { tex } from './katex-utils';
 
 interface FunctionDef {
   f: string;
@@ -17,8 +18,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(n) = 2n',
     latex: 'f(n) = 2n',
-    domain: 'ℤ',
-    codomain: 'ℤ',
+    domain: '\\mathbb{Z}',
+    codomain: '\\mathbb{Z}',
     injective: true,
     surjective: false,
     reason: 'Injective: 2n₁ = 2n₂ ⟹ n₁ = n₂. Not surjective: odd integers are never reached.',
@@ -26,8 +27,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(n) = n + 1',
     latex: 'f(n) = n + 1',
-    domain: 'ℤ',
-    codomain: 'ℤ',
+    domain: '\\mathbb{Z}',
+    codomain: '\\mathbb{Z}',
     injective: true,
     surjective: true,
     reason: 'Bijection: shift is reversible (inverse n-1).',
@@ -35,8 +36,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(n) = n mod 5',
     latex: 'f(n) = n \\bmod 5',
-    domain: 'ℤ',
-    codomain: '{0, 1, 2, 3, 4}',
+    domain: '\\mathbb{Z}',
+    codomain: '\\{0, 1, 2, 3, 4\\}',
     injective: false,
     surjective: true,
     reason: 'Not injective: many n map to same remainder. Surjective: all remainders possible.',
@@ -44,8 +45,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = |x|',
     latex: 'f(x) = |x|',
-    domain: 'ℤ',
-    codomain: 'ℕ',
+    domain: '\\mathbb{Z}',
+    codomain: '\\mathbb{N}',
     injective: false,
     surjective: true,
     reason: 'Not injective: |-1| = |1|. Surjective: every natural number is |n|.',
@@ -53,8 +54,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'GCD(n, 12)',
     latex: 'f(n) = \\gcd(n, 12)',
-    domain: 'ℤ⁺',
-    codomain: 'ℤ⁺',
+    domain: '\\mathbb{Z}^{+}',
+    codomain: '\\mathbb{Z}^{+}',
     injective: false,
     surjective: false,
     reason: 'Not injective: gcd(1,12)=1, gcd(13,12)=1. Not surjective: outputs only divisors of 12.',
@@ -62,8 +63,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Factorial',
     latex: 'f(n) = n!',
-    domain: 'ℕ',
-    codomain: 'ℕ',
+    domain: '\\mathbb{N}',
+    codomain: '\\mathbb{N}',
     injective: true,
     surjective: false,
     reason: 'Injective (strictly increasing). Not surjective (skips many numbers like 3, 4, 5).',
@@ -73,8 +74,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = x²',
     latex: 'f(x) = x^2',
-    domain: 'ℝ',
-    codomain: 'ℝ',
+    domain: '\\mathbb{R}',
+    codomain: '\\mathbb{R}',
     injective: false,
     surjective: false,
     reason: 'Not injective (±x). Not surjective (negative output impossible).',
@@ -82,8 +83,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = x²',
     latex: 'f(x) = x^2',
-    domain: 'ℝ',
-    codomain: 'ℝ_{\\ge 0}',
+    domain: '\\mathbb{R}',
+    codomain: '\\mathbb{R}_{\\ge 0}',
     injective: false,
     surjective: true,
     reason: 'Not injective (±x). Surjective on non-negative reals.',
@@ -91,8 +92,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = x³',
     latex: 'f(x) = x^3',
-    domain: 'ℝ',
-    codomain: 'ℝ',
+    domain: '\\mathbb{R}',
+    codomain: '\\mathbb{R}',
     injective: true,
     surjective: true,
     reason: 'Strictly increasing bijection.',
@@ -100,8 +101,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = eˣ',
     latex: 'f(x) = e^x',
-    domain: 'ℝ',
-    codomain: 'ℝ',
+    domain: '\\mathbb{R}',
+    codomain: '\\mathbb{R}',
     injective: true,
     surjective: false,
     reason: 'Injective. Not surjective (output always positive).',
@@ -109,8 +110,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = eˣ',
     latex: 'f(x) = e^x',
-    domain: 'ℝ',
-    codomain: 'ℝ^{+}',
+    domain: '\\mathbb{R}',
+    codomain: '\\mathbb{R}^{+}',
     injective: true,
     surjective: true,
     reason: 'Bijection between R and R+.',
@@ -118,8 +119,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = ln(x)',
     latex: 'f(x) = \\ln(x)',
-    domain: 'ℝ^{+}',
-    codomain: 'ℝ',
+    domain: '\\mathbb{R}^{+}',
+    codomain: '\\mathbb{R}',
     injective: true,
     surjective: true,
     reason: 'Bijection (inverse of e^x).',
@@ -127,8 +128,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = 1/x',
     latex: 'f(x) = 1/x',
-    domain: 'ℝ \\setminus \\{0\\}',
-    codomain: 'ℝ \\setminus \\{0\\}',
+    domain: '\\mathbb{R} \\setminus \\{0\\}',
+    codomain: '\\mathbb{R} \\setminus \\{0\\}',
     injective: true,
     surjective: true,
     reason: 'Self-inverse bijection.',
@@ -136,7 +137,7 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'f(x) = sin(x)',
     latex: 'f(x) = \\sin(x)',
-    domain: 'ℝ',
+    domain: '\\mathbb{R}',
     codomain: '[-1, 1]',
     injective: false,
     surjective: true,
@@ -146,7 +147,7 @@ const FUNCTIONS: FunctionDef[] = [
     f: 'f(x) = tan(x)',
     latex: 'f(x) = \\tan(x)',
     domain: '(-\\pi/2, \\pi/2)',
-    codomain: 'ℝ',
+    codomain: '\\mathbb{R}',
     injective: true,
     surjective: true,
     reason: 'Restricted tangent is a bijection.',
@@ -154,8 +155,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Floor',
     latex: 'f(x) = \\lfloor x \\rfloor',
-    domain: 'ℝ',
-    codomain: 'ℤ',
+    domain: '\\mathbb{R}',
+    codomain: '\\mathbb{Z}',
     injective: false,
     surjective: true,
     reason: 'Step function (not injective). Surjective on Integers.',
@@ -163,8 +164,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Ceiling',
     latex: 'f(x) = \\lceil x \\rceil',
-    domain: 'ℝ',
-    codomain: 'ℤ',
+    domain: '\\mathbb{R}',
+    codomain: '\\mathbb{Z}',
     injective: false,
     surjective: true,
     reason: 'Step function (not injective). Surjective on Integers.',
@@ -172,7 +173,7 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Signum',
     latex: 'f(x) = \\text{sgn}(x)',
-    domain: 'ℝ',
+    domain: '\\mathbb{R}',
     codomain: '\\{-1, 0, 1\\}',
     injective: false,
     surjective: true,
@@ -181,7 +182,7 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Logistic',
     latex: 'f(x) = \\frac{1}{1+e^{-x}}',
-    domain: 'ℝ',
+    domain: '\\mathbb{R}',
     codomain: '(0, 1)',
     injective: true,
     surjective: true,
@@ -193,7 +194,7 @@ const FUNCTIONS: FunctionDef[] = [
     f: 'Determinant',
     latex: 'f(A) = \\det(A)',
     domain: 'M_{2 \\times 2}(\\mathbb{R})',
-    codomain: 'ℝ',
+    codomain: '\\mathbb{R}',
     injective: false,
     surjective: true,
     reason: 'Many matrices have same det. Can produce any real value.',
@@ -202,7 +203,7 @@ const FUNCTIONS: FunctionDef[] = [
     f: 'Trace',
     latex: 'f(A) = \\text{tr}(A)',
     domain: 'M_{n \\times n}(\\mathbb{R})',
-    codomain: 'ℝ',
+    codomain: '\\mathbb{R}',
     injective: false,
     surjective: true,
     reason: 'Sum of diagonal elements. Not injective (many matrices same trace).',
@@ -219,8 +220,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Zero Map',
     latex: 'f(v) = 0',
-    domain: 'ℝ^n',
-    codomain: 'ℝ^n',
+    domain: '\\mathbb{R}^n',
+    codomain: '\\mathbb{R}^n',
     injective: false,
     surjective: false,
     reason: 'Collapses all to 0 (not inj). Range is {0} (not surj).',
@@ -237,8 +238,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Projection 2D',
     latex: 'f(x, y) = x',
-    domain: 'ℝ^2',
-    codomain: 'ℝ',
+    domain: '\\mathbb{R}^2',
+    codomain: '\\mathbb{R}',
     injective: false,
     surjective: true,
     reason: 'Collapses y dimension (not inj). Covers all x (surj).',
@@ -246,8 +247,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Vector Norm',
     latex: 'f(v) = \\|v\\|',
-    domain: 'ℝ^n',
-    codomain: 'ℝ_{\\ge 0}',
+    domain: '\\mathbb{R}^n',
+    codomain: '\\mathbb{R}_{\\ge 0}',
     injective: false,
     surjective: true,
     reason: 'Many vectors have same length. Covers all non-negative lengths.',
@@ -258,7 +259,7 @@ const FUNCTIONS: FunctionDef[] = [
     f: 'String Length',
     latex: 'f(s) = |s|',
     domain: '\\Sigma^*',
-    codomain: 'ℕ_0',
+    codomain: '\\mathbb{N}_0',
     injective: false,
     surjective: true,
     reason: 'Many strings have same length. Can make string of any length.',
@@ -275,8 +276,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Bitwise NOT',
     latex: 'f(x) = \\sim x',
-    domain: 'Byte',
-    codomain: 'Byte',
+    domain: '\\text{Byte}',
+    codomain: '\\text{Byte}',
     injective: true,
     surjective: true,
     reason: 'Reversible bit flip.',
@@ -284,8 +285,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Bitwise Left Shift',
     latex: 'f(n) = n \\ll 1',
-    domain: 'ℤ',
-    codomain: 'ℤ',
+    domain: '\\mathbb{Z}',
+    codomain: '\\mathbb{Z}',
     injective: true,
     surjective: false,
     reason: 'Multiplication by 2 (injective). Outputs only even numbers (not surjective).',
@@ -293,7 +294,7 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Hamming Weight',
     latex: 'f(x) = \\text{popcount}(x)',
-    domain: 'Byte',
+    domain: '\\text{Byte}',
     codomain: '\\{0..8\\}',
     injective: false,
     surjective: true,
@@ -314,7 +315,7 @@ const FUNCTIONS: FunctionDef[] = [
     f: 'Power Set Map',
     latex: 'f(x) = \\{x\\}',
     domain: 'S',
-    codomain: '𝒫(S)',
+    codomain: '\\mathcal{P}(S)',
     injective: true,
     surjective: false,
     reason: 'Distinct elements map to distinct singletons. Not all subsets are singletons.',
@@ -322,8 +323,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Cardinality',
     latex: 'f(A) = |A|',
-    domain: 'FiniteSets',
-    codomain: 'ℕ_0',
+    domain: '\\text{FiniteSets}',
+    codomain: '\\mathbb{N}_0',
     injective: false,
     surjective: true,
     reason: 'Many sets have same size. Can construct set of any size.',
@@ -360,8 +361,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Conjugate',
     latex: 'f(z) = \\bar{z}',
-    domain: 'ℂ',
-    codomain: 'ℂ',
+    domain: '\\mathbb{C}',
+    codomain: '\\mathbb{C}',
     injective: true,
     surjective: true,
     reason: 'Reflection over real axis, bijection.',
@@ -369,8 +370,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Modulus',
     latex: 'f(z) = |z|',
-    domain: 'ℂ',
-    codomain: 'ℝ_{\\ge 0}',
+    domain: '\\mathbb{C}',
+    codomain: '\\mathbb{R}_{\\ge 0}',
     injective: false,
     surjective: true,
     reason: 'Many z on same circle. Covers all non-negative reals.',
@@ -378,8 +379,8 @@ const FUNCTIONS: FunctionDef[] = [
   {
     f: 'Real Part',
     latex: 'f(z) = \\text{Re}(z)',
-    domain: 'ℂ',
-    codomain: 'ℝ',
+    domain: '\\mathbb{C}',
+    codomain: '\\mathbb{R}',
     injective: false,
     surjective: true,
     reason: 'Collapses imaginary part.',
@@ -429,10 +430,10 @@ const functionPropertyGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Consider the function $${fn.latex}$ with domain $${fn.domain}$ and codomain $${fn.codomain}$.\n\nIs this function **${property}**?`,
+      question: `Consider the function ${tex(fn.latex)} with domain ${tex(fn.domain)} and codomain ${tex(fn.codomain)}.<br><br>Is this function **${property}**?`,
       options,
       correctIndex,
-      explanation: `**${property.charAt(0).toUpperCase() + property.slice(1)}**: ${definition}\n\n${fn.reason}\n\nInjective: ${fn.injective ? '✓' : '✗'}, Surjective: ${fn.surjective ? '✓' : '✗'}\n\n**Answer:** ${correctAnswer}`,
+      explanation: `**${property.charAt(0).toUpperCase() + property.slice(1)}**: ${definition}<br><br>${fn.reason}<br><br>Injective: ${fn.injective ? '✓' : '✗'}, Surjective: ${fn.surjective ? '✓' : '✗'}<br><br>**Answer:** ${correctAnswer}`,
     };
   },
 };
@@ -468,10 +469,10 @@ const functionClassifyGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(classification);
 
     return {
-      question: `Classify the function $${fn.latex}$\nwith domain $${fn.domain}$ and codomain $${fn.codomain}$:`,
+      question: `Classify the function ${tex(fn.latex)}<br>with domain ${tex(fn.domain)} and codomain ${tex(fn.codomain)}:`,
       options,
       correctIndex,
-      explanation: `${fn.reason}\n\n**Classification:** ${classification}`,
+      explanation: `${fn.reason}<br><br>**Classification:** ${classification}`,
     };
   },
 };

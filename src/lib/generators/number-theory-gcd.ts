@@ -1,5 +1,6 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
+import { tex } from './katex-utils';
 
 /**
  * Compute GCD using Euclidean algorithm
@@ -91,14 +92,14 @@ const basicGcdGenerator: ProblemGenerator = {
 
     const steps = euclideanSteps(a, b);
     const stepsStr = steps.map(
-      (s) => `$${s.dividend} = ${s.divisor} \\times ${s.quotient} + ${s.remainder}$`
-    ).join('\n\n');
+      (s) => tex(`${s.dividend} = ${s.divisor} \\times ${s.quotient} + ${s.remainder}`)
+    ).join('<br><br>');
 
     return {
-      question: `What is $\\gcd(${a}, ${b})$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${tex(`\\gcd(${a}, ${b})`)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Euclidean Algorithm:**\n\n${stepsStr}\n\nWhen the remainder is 0, the last non-zero remainder is the GCD.\n\n**$\\gcd(${a}, ${b}) = ${correct}$**`,
+      explanation: `**Euclidean Algorithm:**<br><br>${stepsStr}<br><br>When the remainder is 0, the last non-zero remainder is the GCD.<br><br>**${tex(`\\gcd(${a}, ${b}) = ${correct}`)}**`,
     };
   },
 };
@@ -122,14 +123,14 @@ const euclideanGcdGenerator: ProblemGenerator = {
 
     const steps = euclideanSteps(a, b);
     const stepsStr = steps.map(
-      (s) => `$${s.dividend} = ${s.divisor} \\times ${s.quotient} + ${s.remainder}$`
-    ).join('\n\n');
+      (s) => tex(`${s.dividend} = ${s.divisor} \\times ${s.quotient} + ${s.remainder}`)
+    ).join('<br><br>');
 
     return {
-      question: `Use the Euclidean Algorithm to find $\\gcd(${a}, ${b})$.`,
-      options: options.map((o) => `$${o}$`),
+      question: `Use the Euclidean Algorithm to find ${tex(`\\gcd(${a}, ${b})`)}.`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Euclidean Algorithm:**\n\n${stepsStr}\n\n**$\\gcd(${a}, ${b}) = ${correct}$**`,
+      explanation: `**Euclidean Algorithm:**<br><br>${stepsStr}<br><br>**${tex(`\\gcd(${a}, ${b}) = ${correct}`)}**`,
     };
   },
 };
@@ -174,10 +175,10 @@ const coprimeCheckGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Are $${a}$ and $${b}$ coprime (relatively prime)?`,
+      question: `Are ${tex(String(a))} and ${tex(String(b))} coprime (relatively prime)?`,
       options,
       correctIndex,
-      explanation: `Two numbers are **coprime** if their GCD is 1.\n\n$\\gcd(${a}, ${b}) = ${g}$\n\n${areCoprime ? `Since the GCD is 1, they **are coprime**.` : `Since the GCD is ${g} ≠ 1, they are **not coprime** (both divisible by ${g}).`}`,
+      explanation: `Two numbers are **coprime** if their GCD is 1.<br><br>${tex(`\\gcd(${a}, ${b}) = ${g}`)}<br><br>${areCoprime ? `Since the GCD is 1, they **are coprime**.` : `Since the GCD is ${g} ≠ 1, they are **not coprime** (both divisible by ${g}).`}`,
     };
   },
 };
@@ -212,10 +213,10 @@ const lcmFromGcdGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `What is $\\text{lcm}(${a}, ${b})$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${tex(`\\text{lcm}(${a}, ${b})`)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Key Formula:** $\\text{lcm}(a, b) = \\frac{a \\times b}{\\gcd(a, b)}$\n\nFirst find: $\\gcd(${a}, ${b}) = ${g}$\n\nThen: $\\text{lcm}(${a}, ${b}) = \\frac{${a} \\times ${b}}{${g}} = \\frac{${a * b}}{${g}} = ${correct}$`,
+      explanation: `**Key Formula:** ${tex(`\\text{lcm}(a, b) = \\frac{a \\times b}{\\gcd(a, b)}`)}<br><br>First find: ${tex(`\\gcd(${a}, ${b}) = ${g}`)}<br><br>Then: ${tex(`\\text{lcm}(${a}, ${b}) = \\frac{${a} \\times ${b}}{${g}} = \\frac{${a * b}}{${g}} = ${correct}`)}`,
     };
   },
 };
@@ -271,14 +272,16 @@ const gcdPrimeFactorGenerator: ProblemGenerator = {
         .join(' \\cdot ') || '1';
     };
 
+    const gcdFactors = primes.filter((p) => Math.min(exp1[p] || 0, exp2[p] || 0) > 0).map((p) => {
+      const minExp = Math.min(exp1[p] || 0, exp2[p] || 0);
+      return minExp === 1 ? `${p}` : `${p}^{${minExp}}`;
+    }).join(' \\cdot ') || '1';
+
     return {
-      question: `Given $${a} = ${formatFactors(exp1)}$ and $${b} = ${formatFactors(exp2)}$, what is $\\gcd(${a}, ${b})$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `Given ${tex(`${a} = ${formatFactors(exp1)}`)} and ${tex(`${b} = ${formatFactors(exp2)}`)}, what is ${tex(`\\gcd(${a}, ${b})`)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**GCD from prime factorization:** Take the minimum exponent of each prime.\n\n$${a} = ${formatFactors(exp1)}$\n$${b} = ${formatFactors(exp2)}$\n\nFor each prime, take $\\min$ of the exponents:\n\n$\\gcd = ${primes.filter((p) => Math.min(exp1[p] || 0, exp2[p] || 0) > 0).map((p) => {
-        const minExp = Math.min(exp1[p] || 0, exp2[p] || 0);
-        return minExp === 1 ? `${p}` : `${p}^{${minExp}}`;
-      }).join(' \\cdot ') || '1'} = ${correct}$`,
+      explanation: `**GCD from prime factorization:** Take the minimum exponent of each prime.<br><br>${tex(`${a} = ${formatFactors(exp1)}`)}<br>${tex(`${b} = ${formatFactors(exp2)}`)}<br><br>For each prime, take ${tex('\\min')} of the exponents:<br><br>${tex(`\\gcd = ${gcdFactors} = ${correct}`)}`,
     };
   },
 };

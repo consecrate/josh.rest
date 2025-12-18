@@ -1,6 +1,7 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
-import { pickRandom, pickRandomN } from './relation-utils';
+import { pickRandom } from './relation-utils';
+import { tex } from './katex-utils';
 
 /** Format set for display */
 function formatSet(elements: (string | number)[]): string {
@@ -42,10 +43,10 @@ const cartesianSizeGenerator: ProblemGenerator = {
     const B = ['a', 'b', 'c', 'd', 'e'].slice(0, sizeB);
 
     return {
-      question: `Let $A = ${formatSet(A)}$ and $B = ${formatSet(B)}$.\n\nWhat is $|A \\times B|$?`,
+      question: `Let ${tex(`A = ${formatSet(A)}`)} and ${tex(`B = ${formatSet(B)}`)}.<br><br>What is ${tex('|A \\times B|')}?`,
       options,
       correctIndex,
-      explanation: `$|A \\times B| = |A| \\cdot |B| = ${sizeA} \\cdot ${sizeB} = ${answer}$\n\nThe Cartesian product contains all ordered pairs $(a, b)$ where $a \\in A$ and $b \\in B$.`,
+      explanation: `${tex(`|A \\times B| = |A| \\cdot |B| = ${sizeA} \\cdot ${sizeB} = ${answer}`)}<br><br>The Cartesian product contains all ordered pairs ${tex('(a, b)')} where ${tex('a \\in A')} and ${tex('b \\in B')}.`,
     };
   },
 };
@@ -86,13 +87,13 @@ const cartesianMembershipGenerator: ProblemGenerator = {
 
     let explanation: string;
     if (isValid) {
-      explanation = `$(${pair[0]}, ${pair[1]}) \\in A \\times B$ because $${pair[0]} \\in A$ and $${pair[1]} \\in B$.`;
+      explanation = `${tex(`(${pair[0]}, ${pair[1]}) \\in A \\times B`)} because ${tex(`${pair[0]} \\in A`)} and ${tex(`${pair[1]} \\in B`)}.`;
     } else {
-      explanation = `$(${pair[0]}, ${pair[1]}) \\notin A \\times B$. Either the first element is not in A, the second is not in B, or the order is wrong.`;
+      explanation = `${tex(`(${pair[0]}, ${pair[1]}) \\notin A \\times B`)}. Either the first element is not in A, the second is not in B, or the order is wrong.`;
     }
 
     return {
-      question: `Let $A = ${formatSet(A)}$ and $B = ${formatSet(B)}$.\n\nIs $(${pair[0]}, ${pair[1]}) \\in A \\times B$?`,
+      question: `Let ${tex(`A = ${formatSet(A)}`)} and ${tex(`B = ${formatSet(B)}`)}.<br><br>Is ${tex(`(${pair[0]}, ${pair[1]}) \\in A \\times B`)}?`,
       options,
       correctIndex,
       explanation,
@@ -114,14 +115,14 @@ const cartesianElementGenerator: ProblemGenerator = {
     // Generate correct answer
     const a = pickRandom(A, rng);
     const b = pickRandom(B, rng);
-    const correctAnswer = `$(${a}, ${b})$`;
+    const correctAnswer = tex(`(${a}, ${b})`);
 
     // Generate distractors
     const distractors: string[] = [
-      `$(${pickRandom(B, rng)}, ${pickRandom(A, rng)})$`, // reversed
-      `$(4, ${pickRandom(B, rng)})$`, // 4 not in A
-      `$(${pickRandom(A, rng)}, z)$`, // z not in B
-      `$\\{${a}, ${b}\\}$`, // set notation instead of tuple
+      tex(`(${pickRandom(B, rng)}, ${pickRandom(A, rng)})`), // reversed
+      tex(`(4, ${pickRandom(B, rng)})`), // 4 not in A
+      tex(`(${pickRandom(A, rng)}, z)`), // z not in B
+      tex(`\\{${a}, ${b}\\}`), // set notation instead of tuple
     ];
 
     const uniqueDistractors = [...new Set(distractors)].filter((d) => d !== correctAnswer).slice(0, 3);
@@ -129,10 +130,10 @@ const cartesianElementGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Let $A = ${formatSet(A)}$ and $B = ${formatSet(B)}$.\n\nWhich of the following is an element of $A \\times B$?`,
+      question: `Let ${tex(`A = ${formatSet(A)}`)} and ${tex(`B = ${formatSet(B)}`)}.<br><br>Which of the following is an element of ${tex('A \\times B')}?`,
       options,
       correctIndex,
-      explanation: `$A \\times B$ consists of ordered pairs $(a, b)$ where $a \\in A$ and $b \\in B$.\n\n${correctAnswer} is valid because ${a} ∈ A and ${b} ∈ B.`,
+      explanation: `${tex('A \\times B')} consists of ordered pairs ${tex('(a, b)')} where ${tex('a \\in A')} and ${tex('b \\in B')}.<br><br>${correctAnswer} is valid because ${a} ∈ A and ${b} ∈ B.`,
     };
   },
 };
@@ -147,32 +148,32 @@ const cartesianPropertiesGenerator: ProblemGenerator = {
 
     const properties = [
       {
-        statement: '$A \\times B = B \\times A$ in general',
+        statement: `${tex('A \\times B = B \\times A')} in general`,
         isTrue: false,
         explanation: 'False. Order matters: (1, a) ≠ (a, 1). Only true if A = B.',
       },
       {
-        statement: '$A \\times \\emptyset = \\emptyset$',
+        statement: tex('A \\times \\emptyset = \\emptyset'),
         isTrue: true,
         explanation: 'True. There are no elements b ∈ ∅ to form pairs with.',
       },
       {
-        statement: '$|A \\times B| = |A| \\cdot |B|$',
+        statement: tex('|A \\times B| = |A| \\cdot |B|'),
         isTrue: true,
         explanation: 'True. This is the fundamental counting principle.',
       },
       {
-        statement: '$A \\times (B \\cup C) = (A \\times B) \\cup (A \\times C)$',
+        statement: tex('A \\times (B \\cup C) = (A \\times B) \\cup (A \\times C)'),
         isTrue: true,
         explanation: 'True. Cartesian product distributes over union.',
       },
       {
-        statement: '$(A \\times B) \\cap (C \\times D) = (A \\cap C) \\times (B \\cap D)$',
+        statement: tex('(A \\times B) \\cap (C \\times D) = (A \\cap C) \\times (B \\cap D)'),
         isTrue: true,
         explanation: 'True. Intersection of Cartesian products.',
       },
       {
-        statement: '$A \\subseteq B$ implies $A \\times A \\subseteq B \\times B$',
+        statement: `${tex('A \\subseteq B')} implies ${tex('A \\times A \\subseteq B \\times B')}`,
         isTrue: true,
         explanation: 'True. If all elements of A are in B, all pairs from A are in B×B.',
       },
@@ -184,7 +185,7 @@ const cartesianPropertiesGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Is the following statement **true** or **false**?\n\n${prop.statement}`,
+      question: `Is the following statement **true** or **false**?<br><br>${prop.statement}`,
       options,
       correctIndex,
       explanation: prop.explanation,

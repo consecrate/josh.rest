@@ -1,5 +1,6 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
+import { tex, displayTex } from './katex-utils';
 
 /**
  * Compute GCD
@@ -102,10 +103,10 @@ const inverseExistsGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Does $${a}$ have a multiplicative inverse in $\\mathbb{Z}_{${n}}$?`,
+      question: `Does ${tex(String(a))} have a multiplicative inverse in ${tex(`\\mathbb{Z}_{${n}}`)}?`,
       options,
       correctIndex,
-      explanation: `**Key theorem:** $a$ has an inverse in $\\mathbb{Z}_n$ if and only if $\\gcd(a, n) = 1$.\n\n$\\gcd(${a}, ${n}) = ${g}$\n\n${hasInverse ? `Since the GCD is 1, **yes**, $${a}$ has an inverse.` : `Since the GCD is ${g} ≠ 1, **no**, $${a}$ does not have an inverse.`}`,
+      explanation: `**Key theorem:** ${tex('a')} has an inverse in ${tex('\\mathbb{Z}_n')} if and only if ${tex('\\gcd(a, n) = 1')}.<br><br>${tex(`\\gcd(${a}, ${n}) = ${g}`)}<br><br>${hasInverse ? `Since the GCD is 1, **yes**, ${tex(String(a))} has an inverse.` : `Since the GCD is ${g} ≠ 1, **no**, ${tex(String(a))} does not have an inverse.`}`,
     };
   },
 };
@@ -140,10 +141,10 @@ const findInverseSmallGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `What is $${a}^{-1}$ in $\\mathbb{Z}_{${n}}$? (Find $x$ such that $${a} \\cdot x \\equiv 1 \\pmod{${n}}$)`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${tex(`${a}^{-1}`)} in ${tex(`\\mathbb{Z}_{${n}}`)}? (Find ${tex('x')} such that ${tex(`${a} \\cdot x \\equiv 1 \\pmod{${n}}`)})`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `We need $${a} \\cdot x \\equiv 1 \\pmod{${n}}$.\n\n**Check:** $${a} \\times ${correct} = ${a * correct}$\n\n$${a * correct} = ${n} \\times ${Math.floor((a * correct) / n)} + ${(a * correct) % n}$\n\nSo $${a} \\times ${correct} \\equiv 1 \\pmod{${n}}$ ✓\n\n**Answer: $${a}^{-1} = ${correct}$**`,
+      explanation: `We need ${tex(`${a} \\cdot x \\equiv 1 \\pmod{${n}}`)}.<br><br>**Check:** ${tex(`${a} \\times ${correct} = ${a * correct}`)}<br><br>${tex(`${a * correct} = ${n} \\times ${Math.floor((a * correct) / n)} + ${(a * correct) % n}`)}<br><br>So ${tex(`${a} \\times ${correct} \\equiv 1 \\pmod{${n}}`)} ✓<br><br>**Answer: ${tex(`${a}^{-1} = ${correct}`)}**`,
     };
   },
 };
@@ -184,10 +185,10 @@ const findInverseEEAGenerator: ProblemGenerator = {
     const rawInverse = steps[steps.length - 1].oldS;
 
     return {
-      question: `Use the Extended Euclidean Algorithm to find $${a}^{-1}$ in $\\mathbb{Z}_{${n}}$.`,
-      options: options.map((o) => `$${o}$`),
+      question: `Use the Extended Euclidean Algorithm to find ${tex(`${a}^{-1}`)} in ${tex(`\\mathbb{Z}_{${n}}`)}.`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Extended Euclidean Algorithm** finds $x, y$ such that $${a} \\cdot x + ${n} \\cdot y = 1$.\n\nThe coefficient $x$ (mod ${n}) is the inverse.\n\nAfter running EEA: $x = ${rawInverse}$\n\n${rawInverse < 0 ? `Convert to positive: $${rawInverse} + ${n} = ${correct}$` : ''}\n\n**Verify:** $${a} \\times ${correct} = ${a * correct} \\equiv ${(a * correct) % n} \\pmod{${n}}$ ✓\n\n**Answer: $${a}^{-1} = ${correct}$**`,
+      explanation: `**Extended Euclidean Algorithm** finds ${tex('x, y')} such that ${tex(`${a} \\cdot x + ${n} \\cdot y = 1`)}.<br><br>The coefficient ${tex('x')} (mod ${n}) is the inverse.<br><br>After running EEA: ${tex(`x = ${rawInverse}`)}<br><br>${rawInverse < 0 ? `Convert to positive: ${tex(`${rawInverse} + ${n} = ${correct}`)}` : ''}<br><br>**Verify:** ${tex(`${a} \\times ${correct} = ${a * correct} \\equiv ${(a * correct) % n} \\pmod{${n}}`)} ✓<br><br>**Answer: ${tex(`${a}^{-1} = ${correct}`)}**`,
     };
   },
 };
@@ -224,10 +225,10 @@ const modularDivisionGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `What is $\\frac{${a}}{${b}}$ in $\\mathbb{Z}_{${n}}$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${tex(`\\frac{${a}}{${b}}`)} in ${tex(`\\mathbb{Z}_{${n}}`)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Modular division** = multiplication by the inverse.\n\n$$\\frac{${a}}{${b}} = ${a} \\times ${b}^{-1} \\pmod{${n}}$$\n\nFirst find $${b}^{-1}$: Check that $${b} \\times ${bInv} = ${b * bInv} \\equiv 1 \\pmod{${n}}$ ✓\n\nSo $${b}^{-1} = ${bInv}$.\n\nNow compute: $${a} \\times ${bInv} = ${a * bInv} \\equiv ${correct} \\pmod{${n}}$\n\n**Answer: ${correct}**`,
+      explanation: `**Modular division** = multiplication by the inverse.<br><br>${displayTex(`\\frac{${a}}{${b}} = ${a} \\times ${b}^{-1} \\pmod{${n}}`)}<br><br>First find ${tex(`${b}^{-1}`)}: Check that ${tex(`${b} \\times ${bInv} = ${b * bInv} \\equiv 1 \\pmod{${n}}`)} ✓<br><br>So ${tex(`${b}^{-1} = ${bInv}`)}.<br><br>Now compute: ${tex(`${a} \\times ${bInv} = ${a * bInv} \\equiv ${correct} \\pmod{${n}}`)}<br><br>**Answer: ${correct}**`,
     };
   },
 };
@@ -264,10 +265,10 @@ const linearCongruenceGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `Solve $${a}x \\equiv ${b} \\pmod{${n}}$ for $x$.`,
-      options: options.map((o) => `$x = ${o}$`),
+      question: `Solve ${tex(`${a}x \\equiv ${b} \\pmod{${n}}`)} for ${tex('x')}.`,
+      options: options.map((o) => tex(`x = ${o}`)),
       correctIndex,
-      explanation: `To solve $${a}x \\equiv ${b} \\pmod{${n}}$:\n\n1. Find $${a}^{-1}$: Since $${a} \\times ${aInv} \\equiv 1 \\pmod{${n}}$, we have $${a}^{-1} = ${aInv}$.\n\n2. Multiply both sides by $${a}^{-1}$:\n$$x \\equiv ${b} \\times ${aInv} \\equiv ${b * aInv} \\equiv ${correct} \\pmod{${n}}$$\n\n**Verify:** $${a} \\times ${correct} = ${a * correct} \\equiv ${(a * correct) % n} \\pmod{${n}}$ ${(a * correct) % n === b ? '✓' : ''}\n\n**Answer: $x = ${correct}$**`,
+      explanation: `To solve ${tex(`${a}x \\equiv ${b} \\pmod{${n}}`)}:<br><br>1. Find ${tex(`${a}^{-1}`)}: Since ${tex(`${a} \\times ${aInv} \\equiv 1 \\pmod{${n}}`)}, we have ${tex(`${a}^{-1} = ${aInv}`)}.<br><br>2. Multiply both sides by ${tex(`${a}^{-1}`)}:<br>${displayTex(`x \\equiv ${b} \\times ${aInv} \\equiv ${b * aInv} \\equiv ${correct} \\pmod{${n}}`)}<br><br>**Verify:** ${tex(`${a} \\times ${correct} = ${a * correct} \\equiv ${(a * correct) % n} \\pmod{${n}}`)} ${(a * correct) % n === b ? '✓' : ''}<br><br>**Answer: ${tex(`x = ${correct}`)}**`,
     };
   },
 };
@@ -310,14 +311,14 @@ const whichInvertibleGenerator: ProblemGenerator = {
 
     const analysis = sample.map((x) => {
       const g = gcd(x, n);
-      return `$\\gcd(${x}, ${n}) = ${g}$ → ${g === 1 ? '**invertible**' : 'not invertible'}`;
-    }).join('\n\n');
+      return `${tex(`\\gcd(${x}, ${n}) = ${g}`)} → ${g === 1 ? '**invertible**' : 'not invertible'}`;
+    }).join('<br><br>');
 
     return {
-      question: `In $\\mathbb{Z}_{${n}}$, how many of the elements $\\{${sample.join(', ')}\\}$ have multiplicative inverses?`,
+      question: `In ${tex(`\\mathbb{Z}_{${n}}`)}, how many of the elements ${tex(`\\{${sample.join(', ')}\\}`)} have multiplicative inverses?`,
       options,
       correctIndex,
-      explanation: `An element $a$ is invertible in $\\mathbb{Z}_n$ iff $\\gcd(a, n) = 1$.\n\n${analysis}\n\n**Count: ${correctCount} element(s) are invertible.**`,
+      explanation: `An element ${tex('a')} is invertible in ${tex('\\mathbb{Z}_n')} iff ${tex('\\gcd(a, n) = 1')}.<br><br>${analysis}<br><br>**Count: ${correctCount} element(s) are invertible.**`,
     };
   },
 };

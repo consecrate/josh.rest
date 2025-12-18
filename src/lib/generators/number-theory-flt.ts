@@ -1,5 +1,6 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
+import { tex, displayTex } from './katex-utils';
 
 /**
  * Compute GCD
@@ -74,13 +75,12 @@ const fltBasicGenerator: ProblemGenerator = {
     const options = shuffleWithSeed([correct, ...[...wrongs].slice(0, 3)], rng);
     const correctIndex = options.indexOf(correct);
 
-    const reducedExp = expRemainder === 0 ? p - 1 : expRemainder;
 
     return {
-      question: `Use Fermat's Little Theorem to compute $${base}^{${exp}} \\pmod{${p}}$.`,
-      options: options.map((o) => `$${o}$`),
+      question: `Use Fermat's Little Theorem to compute ${tex(`${base}^{${exp}} \\pmod{${p}}`)}.`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Fermat's Little Theorem:** If $p$ is prime and $\\gcd(a, p) = 1$, then $a^{p-1} \\equiv 1 \\pmod{p}$.\n\nSince ${p} is prime and $\\gcd(${base}, ${p}) = 1$:\n$$${base}^{${p - 1}} \\equiv 1 \\pmod{${p}}$$\n\n**Reduce the exponent:**\n$${exp} = ${p - 1} \\times ${Math.floor(exp / (p - 1))} + ${exp % (p - 1)}$\n\nSo:\n$$${base}^{${exp}} = (${base}^{${p - 1}})^{${Math.floor(exp / (p - 1))}} \\cdot ${base}^{${exp % (p - 1)}} \\equiv 1 \\cdot ${base}^{${exp % (p - 1)}} \\pmod{${p}}$$\n\nCompute: $${base}^{${exp % (p - 1)}} \\equiv ${correct} \\pmod{${p}}$\n\n**Answer: ${correct}**`,
+      explanation: `**Fermat's Little Theorem:** If ${tex('p')} is prime and ${tex('\\gcd(a, p) = 1')}, then ${tex('a^{p-1} \\equiv 1 \\pmod{p}')}.<br><br>Since ${p} is prime and ${tex(`\\gcd(${base}, ${p}) = 1`)}:<br>${displayTex(`${base}^{${p - 1}} \\equiv 1 \\pmod{${p}}`)}<br><br>**Reduce the exponent:**<br>${tex(`${exp} = ${p - 1} \\times ${Math.floor(exp / (p - 1))} + ${exp % (p - 1)}`)}<br><br>So:<br>${displayTex(`${base}^{${exp}} = (${base}^{${p - 1}})^{${Math.floor(exp / (p - 1))}} \\cdot ${base}^{${exp % (p - 1)}} \\equiv 1 \\cdot ${base}^{${exp % (p - 1)}} \\pmod{${p}}`)}<br><br>Compute: ${tex(`${base}^{${exp % (p - 1)}} \\equiv ${correct} \\pmod{${p}}`)}<br><br>**Answer: ${correct}**`,
     };
   },
 };
@@ -124,25 +124,25 @@ const fltApplicabilityGenerator: ProblemGenerator = {
     const applies = isPrime && gcd(base, n) === 1;
     
     const correctAnswer = applies 
-      ? `Yes, because ${n} is prime and $\\gcd(${base}, ${n}) = 1$`
+      ? `Yes, because ${n} is prime and ${tex(`\\gcd(${base}, ${n}) = 1`)}`
       : !isPrime 
         ? `No, because ${n} is not prime`
-        : `No, because $\\gcd(${base}, ${n}) \\neq 1$`;
+        : `No, because ${tex(`\\gcd(${base}, ${n}) \\neq 1`)}`;
     
     const options = shuffleWithSeed([
-      `Yes, because ${n} is prime and $\\gcd(${base}, ${n}) = 1$`,
+      `Yes, because ${n} is prime and ${tex(`\\gcd(${base}, ${n}) = 1`)}`,
       `No, because ${n} is not prime`,
-      `No, because $\\gcd(${base}, ${n}) \\neq 1$`,
+      `No, because ${tex(`\\gcd(${base}, ${n}) \\neq 1`)}`,
       `Yes, FLT always applies`,
     ], rng);
     
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Can we apply Fermat's Little Theorem to compute $${base}^{100} \\pmod{${n}}$?`,
+      question: `Can we apply Fermat's Little Theorem to compute ${tex(`${base}^{100} \\pmod{${n}}`)}?`,
       options,
       correctIndex,
-      explanation: `**FLT requires two conditions:**\n1. $n$ must be **prime**\n2. $\\gcd(a, n) = 1$ (base coprime to modulus)\n\nCheck:\n- Is ${n} prime? ${isPrime ? 'Yes ✓' : 'No ✗'}\n- $\\gcd(${base}, ${n}) = ${gcd(base, n)}$ ${gcd(base, n) === 1 ? '✓' : '✗'}\n\n${applies ? `Both conditions met! FLT says $${base}^{${n - 1}} \\equiv 1 \\pmod{${n}}$` : `Cannot apply FLT directly. ${!isPrime ? `Use Euler's theorem for composite moduli, or find the cycle length.` : `The base shares a factor with the modulus.`}`}`,
+      explanation: `**FLT requires two conditions:**<br>1. ${tex('n')} must be **prime**<br>2. ${tex('\\gcd(a, n) = 1')} (base coprime to modulus)<br><br>Check:<br>- Is ${n} prime? ${isPrime ? 'Yes ✓' : 'No ✗'}<br>- ${tex(`\\gcd(${base}, ${n}) = ${gcd(base, n)}`)} ${gcd(base, n) === 1 ? '✓' : '✗'}<br><br>${applies ? `Both conditions met! FLT says ${tex(`${base}^{${n - 1}} \\equiv 1 \\pmod{${n}}`)}` : `Cannot apply FLT directly. ${!isPrime ? `Use Euler's theorem for composite moduli, or find the cycle length.` : `The base shares a factor with the modulus.`}`}`,
     };
   },
 };
@@ -196,10 +196,10 @@ const cycleLengthGenerator: ProblemGenerator = {
     }
 
     return {
-      question: `What is the period (cycle length) of powers of $${base}$ modulo $${p}$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is the period (cycle length) of powers of ${tex(String(base))} modulo ${tex(String(p))}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `Compute powers of ${base} mod ${p}:\n\n${cycle.map((v, i) => `$${base}^{${i + 1}} \\equiv ${v} \\pmod{${p}}$`).join(', ')}\n\nThe pattern returns to 1 after **${cycleLen}** steps.\n\n**Note:** FLT guarantees cycle length divides $p - 1 = ${p - 1}$, but the actual cycle may be shorter.`,
+      explanation: `Compute powers of ${base} mod ${p}:<br><br>${cycle.map((v, i) => tex(`${base}^{${i + 1}} \\equiv ${v} \\pmod{${p}}`)).join(', ')}<br><br>The pattern returns to 1 after **${cycleLen}** steps.<br><br>**Note:** FLT guarantees cycle length divides ${tex(`p - 1 = ${p - 1}`)}, but the actual cycle may be shorter.`,
     };
   },
 };
@@ -242,13 +242,13 @@ const fltStepByStepGenerator: ProblemGenerator = {
     const quotient = Math.floor(exp / (p - 1));
 
     return {
-      question: `Compute $${base}^{${exp}} \\pmod{${p}}$ using Fermat's Little Theorem.`,
-      options: options.map((o) => `$${o}$`),
+      question: `Compute ${tex(`${base}^{${exp}} \\pmod{${p}}`)} using Fermat's Little Theorem.`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Step 1:** Apply FLT. Since ${p} is prime and $\\gcd(${base}, ${p}) = 1$:\n$$${base}^{${p - 1}} \\equiv 1 \\pmod{${p}}$$\n\n**Step 2:** Reduce the exponent mod $${p - 1}$:\n$$${exp} = ${p - 1} \\times ${quotient} + ${reducedExp}$$\n\n**Step 3:** Simplify:\n$$${base}^{${exp}} = (${base}^{${p - 1}})^{${quotient}} \\cdot ${base}^{${reducedExp}} \\equiv 1^{${quotient}} \\cdot ${base}^{${reducedExp}} \\pmod{${p}}$$\n\n**Step 4:** Compute $${base}^{${reducedExp}} \\pmod{${p}}$:\n${reducedExp <= 4 
-        ? `$${base}^{${reducedExp}} = ${Math.pow(base, reducedExp)} \\equiv ${modPow(base, reducedExp, p)} \\pmod{${p}}$`
-        : `Using repeated squaring or direct calculation: $${base}^{${reducedExp}} \\equiv ${correct} \\pmod{${p}}$`
-      }\n\n**Answer: ${correct}**`,
+      explanation: `**Step 1:** Apply FLT. Since ${p} is prime and ${tex(`\\gcd(${base}, ${p}) = 1`)}:<br>${displayTex(`${base}^{${p - 1}} \\equiv 1 \\pmod{${p}}`)}<br><br>**Step 2:** Reduce the exponent mod ${tex(`${p - 1}`)}:<br>${displayTex(`${exp} = ${p - 1} \\times ${quotient} + ${reducedExp}`)}<br><br>**Step 3:** Simplify:<br>${displayTex(`${base}^{${exp}} = (${base}^{${p - 1}})^{${quotient}} \\cdot ${base}^{${reducedExp}} \\equiv 1^{${quotient}} \\cdot ${base}^{${reducedExp}} \\pmod{${p}}`)}<br><br>**Step 4:** Compute ${tex(`${base}^{${reducedExp}} \\pmod{${p}}`)}:<br>${reducedExp <= 4 
+        ? tex(`${base}^{${reducedExp}} = ${Math.pow(base, reducedExp)} \\equiv ${modPow(base, reducedExp, p)} \\pmod{${p}}`)
+        : `Using repeated squaring or direct calculation: ${tex(`${base}^{${reducedExp}} \\equiv ${correct} \\pmod{${p}}`)}`
+      }<br><br>**Answer: ${correct}**`,
     };
   },
 };
@@ -283,10 +283,10 @@ const fltInverseGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `Use FLT to find $${a}^{-1} \\pmod{${p}}$.`,
-      options: options.map((o) => `$${o}$`),
+      question: `Use FLT to find ${tex(`${a}^{-1} \\pmod{${p}}`)}.`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**FLT gives us inverses!**\n\nFrom $a^{p-1} \\equiv 1 \\pmod{p}$, we get:\n$$a \\cdot a^{p-2} \\equiv 1 \\pmod{p}$$\n\nSo $a^{-1} \\equiv a^{p-2} \\pmod{p}$.\n\nHere: $${a}^{-1} \\equiv ${a}^{${p - 2}} \\pmod{${p}}$\n\nCompute: $${a}^{${p - 2}} \\equiv ${correct} \\pmod{${p}}$\n\n**Verify:** $${a} \\times ${correct} = ${a * correct} \\equiv ${(a * correct) % p} \\pmod{${p}}$ ✓\n\n**Answer: ${correct}**`,
+      explanation: `**FLT gives us inverses!**<br><br>From ${tex(`a^{p-1} \\equiv 1 \\pmod{p}`)}, we get:<br>${displayTex(`a \\cdot a^{p-2} \\equiv 1 \\pmod{p}`)}<br><br>So ${tex(`a^{-1} \\equiv a^{p-2} \\pmod{p}`)}.<br><br>Here: ${tex(`${a}^{-1} \\equiv ${a}^{${p - 2}} \\pmod{${p}}`)}<br><br>Compute: ${tex(`${a}^{${p - 2}} \\equiv ${correct} \\pmod{${p}}`)}<br><br>**Verify:** ${tex(`${a} \\times ${correct} = ${a * correct} \\equiv ${(a * correct) % p} \\pmod{${p}}`)} ✓<br><br>**Answer: ${correct}**`,
     };
   },
 };
@@ -336,10 +336,10 @@ const eulerTheoremGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `Using Euler's theorem ($a^{\\phi(n)} \\equiv 1$), compute $${base}^{${exp}} \\pmod{${n}}$.\n\n*Given: $\\phi(${n}) = ${phi}$*`,
-      options: options.map((o) => `$${o}$`),
+      question: `Using Euler's theorem (${tex(`a^{\\phi(n)} \\equiv 1`)}), compute ${tex(`${base}^{${exp}} \\pmod{${n}}`)}.<br><br>*Given: ${tex(`\\phi(${n}) = ${phi}`)}*`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Euler's Theorem:** If $\\gcd(a, n) = 1$, then $a^{\\phi(n)} \\equiv 1 \\pmod{n}$.\n\nSince $\\gcd(${base}, ${n}) = 1$ and $\\phi(${n}) = ${phi}$:\n$$${base}^{${phi}} \\equiv 1 \\pmod{${n}}$$\n\n**Reduce exponent mod $\\phi(${n})$:**\n$$${exp} = ${phi} \\times ${mult} + ${rem}$$\n\nSo:\n$$${base}^{${exp}} \\equiv ${base}^{${rem}} \\pmod{${n}}$$\n\nCompute: $${base}^{${rem}} = ${Math.pow(base, rem)} \\equiv ${correct} \\pmod{${n}}$\n\n**Answer: ${correct}**`,
+      explanation: `**Euler's Theorem:** If ${tex('\\gcd(a, n) = 1')}, then ${tex('a^{\\phi(n)} \\equiv 1 \\pmod{n}')}.<br><br>Since ${tex(`\\gcd(${base}, ${n}) = 1`)} and ${tex(`\\phi(${n}) = ${phi}`)}:<br>${displayTex(`${base}^{${phi}} \\equiv 1 \\pmod{${n}}`)}<br><br>**Reduce exponent mod ${tex(`\\phi(${n})`)}:**<br>${displayTex(`${exp} = ${phi} \\times ${mult} + ${rem}`)}<br><br>So:<br>${displayTex(`${base}^{${exp}} \\equiv ${base}^{${rem}} \\pmod{${n}}`)}<br><br>Compute: ${tex(`${base}^{${rem}} = ${Math.pow(base, rem)} \\equiv ${correct} \\pmod{${n}}`)}<br><br>**Answer: ${correct}**`,
     };
   },
 };

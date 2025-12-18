@@ -11,6 +11,7 @@ import {
   symmetricClosure,
   transitiveClosure,
 } from './relation-utils';
+import { tex, displayTex } from './katex-utils';
 
 type PropertyName =
   | 'Reflexive'
@@ -139,10 +140,10 @@ const whichPropertiesGenerator: ProblemGenerator = {
     });
 
     return {
-      question: `Given the relation $R$ on $A = \\{1, 2, ${n === 3 ? '3' : '3, 4'}\\}$ with matrix:\n$$M_R = ${matrixToLatex(matrix)}$$\nWhich properties does $R$ satisfy?`,
+      question: `Given the relation ${tex('R')} on ${tex(`A = \\{1, 2, ${n === 3 ? '3' : '3, 4'}\\}`)} with matrix:<br><br>${displayTex(`M_R = ${matrixToLatex(matrix)}`)}<br><br>Which properties does ${tex('R')} satisfy?`,
       options,
       correctIndex,
-      explanation: `Checking each property:\n\n${explanationParts.join('\n')}\n\n**Answer:** ${correctAnswer}`,
+      explanation: `Checking each property:<br><br>${explanationParts.join('<br>')}<br><br>**Answer:** ${correctAnswer}`,
     };
   },
 };
@@ -166,10 +167,10 @@ const isPropertyGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Is the relation $R$ with matrix\n$$M_R = ${matrixToLatex(matrix)}$$\n**${property.name}**?`,
+      question: `Is the relation ${tex('R')} with matrix<br><br>${displayTex(`M_R = ${matrixToLatex(matrix)}`)}<br><br>**${property.name}**?`,
       options,
       correctIndex,
-      explanation: `**${property.name}**: ${property.definition}\n\nChecking the matrix: ${holds ? 'The property holds ✓' : 'The property does NOT hold ✗'}\n\n**Answer:** ${correctAnswer}`,
+      explanation: `**${property.name}**: ${property.definition}<br><br>Checking the matrix: ${holds ? 'The property holds ✓' : 'The property does NOT hold ✗'}<br><br>**Answer:** ${correctAnswer}`,
     };
   },
 };
@@ -235,10 +236,10 @@ const whichFailsGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Given the relation with matrix:\n$$M_R = ${matrixToLatex(matrix)}$$\nWhich property does this relation **fail**?`,
+      question: `Given the relation with matrix:<br><br>${displayTex(`M_R = ${matrixToLatex(matrix)}`)}<br><br>Which property does this relation **fail**?`,
       options,
       correctIndex,
-      explanation: `Checking each property:\n\n${PROPERTIES.map((p) => `- **${p.name}**: ${p.check(matrix) ? '✓ Holds' : '✗ Fails'}`).join('\n')}\n\n**Answer:** ${correctAnswer} fails.`,
+      explanation: `Checking each property:<br><br>${PROPERTIES.map((p) => `- **${p.name}**: ${p.check(matrix) ? '✓ Holds' : '✗ Fails'}`).join('<br>')}<br><br>**Answer:** ${correctAnswer} fails.`,
     };
   },
 };

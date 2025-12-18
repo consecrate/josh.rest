@@ -1,6 +1,7 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
-import { binomial, factorial, permutation, pickRandom } from './relation-utils';
+import { binomial, factorial, permutation } from './relation-utils';
+import { tex } from './katex-utils';
 
 // Generator 1: Bit strings with weight k
 const bitStringWeightGenerator: ProblemGenerator = {
@@ -35,7 +36,7 @@ const bitStringWeightGenerator: ProblemGenerator = {
       question: `How many bit strings of length **${n}** have exactly **${k}** ones?`,
       options,
       correctIndex,
-      explanation: `Choose ${k} positions out of ${n} for the 1s:\n\n$\\binom{${n}}{${k}} = \\frac{${n}!}{${k}!(${n - k})!} = ${answer}$`,
+      explanation: `Choose ${k} positions out of ${n} for the 1s:<br><br>${tex(`\\binom{${n}}{${k}} = \\frac{${n}!}{${k}!(${n - k})!} = ${answer}`)}`,
     };
   },
 };
@@ -73,7 +74,7 @@ const injectiveFunctionsGenerator: ProblemGenerator = {
       question: `How many **injective** (one-to-one) functions are there from a set A with **${m}** elements to a set B with **${n}** elements?`,
       options,
       correctIndex,
-      explanation: `For an injective function, each element in A maps to a distinct element in B.\n\nFirst element: ${n} choices\nSecond element: ${n - 1} choices\n...\n\n$P(${n}, ${m}) = \\frac{${n}!}{(${n}-${m})!} = ${answer}$`,
+      explanation: `For an injective function, each element in A maps to a distinct element in B.<br><br>First element: ${n} choices<br>Second element: ${n - 1} choices<br>...<br><br>${tex(`P(${n}, ${m}) = \\frac{${n}!}{(${n}-${m})!} = ${answer}`)}`,
     };
   },
 };
@@ -110,7 +111,7 @@ const totalFunctionsGenerator: ProblemGenerator = {
       question: `How many functions are there from a set A with **${m}** elements to a set B with **${n}** elements?`,
       options,
       correctIndex,
-      explanation: `Each of the ${m} elements in A can map to any of the ${n} elements in B.\n\n$${n}^{${m}} = ${answer}$`,
+      explanation: `Each of the ${m} elements in A can map to any of the ${n} elements in B.<br><br>${tex(`${n}^{${m}} = ${answer}`)}`,
     };
   },
 };
@@ -146,7 +147,7 @@ const symmetricRelationsGenerator: ProblemGenerator = {
       question: `How many **symmetric** relations are there on a set with **${n}** elements?`,
       options,
       correctIndex,
-      explanation: `For symmetric relations:\n- Diagonal entries: ${n} free choices\n- Upper triangle: ${(n * (n - 1)) / 2} free choices\n- Lower triangle: determined by upper\n\n$2^{n(n+1)/2} = 2^{${exponent}} = ${answer}$`,
+      explanation: `For symmetric relations:<br>- Diagonal entries: ${n} free choices<br>- Upper triangle: ${(n * (n - 1)) / 2} free choices<br>- Lower triangle: determined by upper<br><br>${tex(`2^{n(n+1)/2} = 2^{${exponent}} = ${answer}`)}`,
     };
   },
 };
@@ -181,10 +182,10 @@ const binomialCoefficientGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Compute $\\binom{${n}}{${k}}$:`,
+      question: `Compute ${tex(`\\binom{${n}}{${k}}`)}:`,
       options,
       correctIndex,
-      explanation: `$\\binom{${n}}{${k}} = \\frac{${n}!}{${k}!(${n - k})!} = ${answer}$\n\nThis counts the number of ways to choose ${k} items from ${n} items.`,
+      explanation: `${tex(`\\binom{${n}}{${k}} = \\frac{${n}!}{${k}!(${n - k})!} = ${answer}`)}<br><br>This counts the number of ways to choose ${k} items from ${n} items.`,
     };
   },
 };
@@ -219,10 +220,10 @@ const permutationGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Compute $P(${n}, ${r})$ (the number of ${r}-permutations of ${n} elements):`,
+      question: `Compute ${tex(`P(${n}, ${r})`)} (the number of ${r}-permutations of ${n} elements):`,
       options,
       correctIndex,
-      explanation: `$P(${n}, ${r}) = \\frac{${n}!}{(${n}-${r})!} = ${n} \\times ${n - 1} \\times \\ldots \\times ${n - r + 1} = ${answer}$\n\nThis counts ordered arrangements of ${r} items from ${n} items.`,
+      explanation: `${tex(`P(${n}, ${r}) = \\frac{${n}!}{(${n}-${r})!} = ${n} \\times ${n - 1} \\times \\ldots \\times ${n - r + 1} = ${answer}`)}<br><br>This counts ordered arrangements of ${r} items from ${n} items.`,
     };
   },
 };

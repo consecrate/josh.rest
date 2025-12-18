@@ -1,7 +1,7 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
 import { binomial, pickRandom } from './relation-utils';
-import { tex, Zn, eqClass, modEq } from './katex-utils';
+import { tex } from './katex-utils';
 
 // Generator 1: Modulo equivalence class representative
 const moduloClassGenerator: ProblemGenerator = {
@@ -43,10 +43,10 @@ const moduloClassGenerator: ProblemGenerator = {
     const quotient = Math.floor(x / n);
     
     return {
-      question: `In ${Zn(n)}, which equivalence class does ${tex(String(x))} belong to?`,
-      options: options.map((o) => eqClass(o)),
+      question: `In ${tex(`\\mathbb{Z}_{${n}}`)}, which equivalence class does ${tex(String(x))} belong to?`,
+      options: options.map((o) => tex(`[${o}]`)),
       correctIndex,
-      explanation: `${tex(`${x} = ${quotient} \\cdot ${n} + ${classRep}`)}, so ${modEq(x, classRep, n)}. Alternatively: ${tex(`${x} + ${n * Math.ceil(Math.abs(x) / n)} = ${classRep + n * Math.ceil(Math.abs(x) / n)}`)}.`,
+      explanation: `${tex(`${x} = ${quotient} \\cdot ${n} + ${classRep}`)}, so ${tex(`${x} \\equiv ${classRep} \\pmod{${n}}`)}. Alternatively: ${tex(`${x} + ${n * Math.ceil(Math.abs(x) / n)} = ${classRep + n * Math.ceil(Math.abs(x) / n)}`)}.`,
     };
   },
 };
@@ -108,7 +108,7 @@ const countEquivalenceClassesGenerator: ProblemGenerator = {
         param: () => randInt(rng, 3, 12),
         count: (n: number) => n,
         explanation: (n: number) =>
-          `${Zn(n)} has exactly ${n} equivalence classes: ${eqClass(0)}, ${eqClass(1)}, …, ${eqClass(n - 1)}`,
+          `${tex(`\\mathbb{Z}_{${n}}`)} has exactly ${n} equivalence classes: ${tex('[0]')}, ${tex('[1]')}, …, ${tex(`[${n - 1}]`)}`,
       },
       {
         description: (n: number) => `parity relation on ${tex(`\\{1, 2, \\ldots, ${n}\\}`)}`,

@@ -1,6 +1,7 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed } from './prng';
 import { pickRandom } from './relation-utils';
+import { tex, displayTex } from './katex-utils';
 
 interface InfiniteRelation {
   name: string;
@@ -381,10 +382,10 @@ const infinitePropertiesGenerator: ProblemGenerator = {
     });
 
     return {
-      question: `Consider the relation "${relation.name}" on **${relation.set}** defined by:\n$$${relation.notation}$$\n\nIs this relation **${PROPERTY_NAMES[property]}**?`,
+      question: `Consider the relation "${relation.name}" on **${relation.set}** defined by:<br><br>${displayTex(relation.notation)}<br><br>Is this relation **${PROPERTY_NAMES[property]}**?`,
       options,
       correctIndex,
-      explanation: `**${relation.name}** ($${relation.notation}$) on ${relation.set}:\n\n${allProps.join('\n')}\n\n${relation.notes ? `_Note: ${relation.notes}_` : ''}\n\n**Answer:** ${correctAnswer}`,
+      explanation: `**${relation.name}** (${tex(relation.notation)}) on ${relation.set}:<br><br>${allProps.join('<br>')}<br><br>${relation.notes ? `_Note: ${relation.notes}_` : ''}<br><br>**Answer:** ${correctAnswer}`,
     };
   },
 };
@@ -420,10 +421,10 @@ const identifyEquivalenceGenerator: ProblemGenerator = {
     ];
 
     return {
-      question: `Is the relation "${relation.name}" on **${relation.set}** (defined by $${relation.notation}$) an **equivalence relation**?`,
+      question: `Is the relation "${relation.name}" on **${relation.set}** (defined by ${tex(relation.notation)}) an **equivalence relation**?`,
       options,
       correctIndex,
-      explanation: `An equivalence relation must be reflexive, symmetric, AND transitive.\n\n${checks.join(', ')}\n\n${isEquivalence ? 'All three properties hold!' : 'Not all three properties hold.'}\n\n**Answer:** ${correctAnswer}`,
+      explanation: `An equivalence relation must be reflexive, symmetric, AND transitive.<br><br>${checks.join(', ')}<br><br>${isEquivalence ? 'All three properties hold!' : 'Not all three properties hold.'}<br><br>**Answer:** ${correctAnswer}`,
     };
   },
 };
@@ -459,10 +460,10 @@ const identifyPartialOrderGenerator: ProblemGenerator = {
     ];
 
     return {
-      question: `Is the relation "${relation.name}" on **${relation.set}** (defined by $${relation.notation}$) a **partial order**?`,
+      question: `Is the relation "${relation.name}" on **${relation.set}** (defined by ${tex(relation.notation)}) a **partial order**?`,
       options,
       correctIndex,
-      explanation: `A partial order must be reflexive, antisymmetric, AND transitive.\n\n${checks.join(', ')}\n\n${isPartialOrder ? 'All three properties hold!' : 'Not all three properties hold.'}\n\n**Answer:** ${correctAnswer}`,
+      explanation: `A partial order must be reflexive, antisymmetric, AND transitive.<br><br>${checks.join(', ')}<br><br>${isPartialOrder ? 'All three properties hold!' : 'Not all three properties hold.'}<br><br>**Answer:** ${correctAnswer}`,
     };
   },
 };
