@@ -236,5 +236,16 @@ const { collapsible = false, id = "sidebar" } = Astro.props;
       width: 24px;
       height: 24px;
     }
+
+    /* Mobile scroll-hide behavior */
+    .mobile-menu-btn {
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .mobile-menu-btn.scroll-hidden {
+      transform: translateY(80px);
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 </style>
