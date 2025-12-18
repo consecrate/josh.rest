@@ -55,6 +55,18 @@ Secure systems use **Multi-Factor Authentication**. This means using **two diffe
 - **Good MFA**: Password (Knowledge) + Phone Code (Possession).
 - **Bad MFA**: Password (Knowledge) + Secret Question (Knowledge). This is just "Two-Step" verification, not "Multi-Factor."
 
+<MultipleChoice
+  question="Bob secures his admin panel with a password and a secret question ('What is your mother's maiden name?'). Is this Multi-Factor Authentication (MFA)?"
+  options={[
+    "Yes, because there are two steps.",
+    "No, because both are 'Knowledge' factors.",
+    "Yes, but it is weak MFA.",
+    "No, because he didn't use a fingerprint."
+  ]}
+  correct={1}
+  explanation="MFA requires **two different categories** of factors (Knowledge, Possession, Inherence). A password and a secret question are BOTH Knowledge. This is 'Two-Step Verification', not MFA."
+/>
+
 <AdaptiveQuiz
   generator="law-auth-factors"
   baseSeed={10}

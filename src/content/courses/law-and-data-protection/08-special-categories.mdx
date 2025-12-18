@@ -46,6 +46,18 @@ If Bob collects "political views," he is processing Article 9 data.
 There is another category: **Criminal Convictions and Offences**.
 This is handled under Article 10. Generally, you cannot process this data unless you are an official authority (like the police) or have specific legal authorization. A background check startup like Bob's "DataVault" can't just scrape criminal records without strict legal grounds.
 
+<MultipleChoice
+  question="Bob wants to store user credit card numbers to process payments. Is this 'Special Category' data (Article 9)?"
+  options={[
+    "Yes, because money is very sensitive.",
+    "Yes, because it can lead to identity theft.",
+    "No, it is 'General' personal data (though it requires high security).",
+    "No, it is not personal data at all."
+  ]}
+  correct={2}
+  explanation="Surprisingly, **Financial Data** is NOT an Article 9 Special Category. It requires high security (Article 32) and often falls under other laws (PCI-DSS), but it does not require the specific legal exceptions of Article 9 like health or political data."
+/>
+
 <AdaptiveQuiz
   generator="law-special-category-detector"
   baseSeed={8}

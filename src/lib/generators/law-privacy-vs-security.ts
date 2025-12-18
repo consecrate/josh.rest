@@ -31,6 +31,24 @@ export const privacyVsSecurity: ProblemGenerator = {
         correct: "Security Failure",
         wrong: ["Privacy Violation (Intentional)", "Software Bug", "Feature Request"],
         explanation: "This is a **Security Failure** (specifically, physical security and access control). It puts data at risk of unauthorized access."
+      },
+      {
+        question: "A company uses facial recognition to track employees' bathroom breaks to dock their pay. The system is 100% accurate and unhackable.",
+        correct: "Privacy Violation",
+        wrong: ["Security Failure", "System Error", "Biometric Failure"],
+        explanation: "The system works perfectly (no Security failure), but it is invasive and likely unlawful (Privacy violation). Perfect security can still be a privacy nightmare."
+      },
+      {
+        question: "A ransomware attack locks the hospital's patient database. No data was stolen, but doctors can't access it.",
+        correct: "Security Failure",
+        wrong: ["Privacy Violation", "Consent Issue", "Profiling"],
+        explanation: "This is a **Security Failure** (Availability). Security includes Confidentiality, Integrity, and *Availability*."
+      },
+      {
+        question: "Bob installs a 'keylogger' on his own computer to remember his passwords. A virus steals the log file.",
+        correct: "Security Failure",
+        wrong: ["Privacy Violation (by Bob)", "GDPR Violation", "Marketing Issue"],
+        explanation: "This is a **Security Failure**. Bob (the user) compromised his own security. It's not necessarily a privacy violation by a company, but a failure of security hygiene."
       }
     ];
 
@@ -39,7 +57,7 @@ export const privacyVsSecurity: ProblemGenerator = {
     const correctIndex = options.indexOf(scenario.correct);
 
     return {
-      question: scenario.question,
+      question: `<strong>Scenario:</strong> ${scenario.question}<br/><br/>Is this primarily a Security Failure or a Privacy Violation?`,
       options,
       correctIndex,
       explanation: scenario.explanation

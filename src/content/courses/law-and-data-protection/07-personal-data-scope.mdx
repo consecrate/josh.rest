@@ -50,6 +50,18 @@ To stop Bob from panicking completely, Alice explains what falls *outside* the s
 2.  **Deceased Persons**: GDPR only protects living individuals. (Note: Some member states have their own laws for the deceased).
 3.  **Legal Persons (Corporations)**: Information about "Acme Corp" (registration number, headquarters) is not personal data. However, `ceo@acme-corp.com` *is* personal data because it identifies the CEO.
 
+<MultipleChoice
+  question="Bob encrypts his user database with AES-256. He loses the USB stick with the database, but he keeps the decryption key safe. Is the data on the USB stick 'Personal Data'?"
+  options={[
+    "No, because it is encrypted and unreadable.",
+    "Yes, it is Pseudonymised Personal Data.",
+    "No, it is Anonymised.",
+    "Yes, but only if the finder is a hacker."
+  ]}
+  correct={1}
+  explanation="It is **Pseudonymised Personal Data**. As long as a key exists *somewhere* to decrypt it, the data is not anonymous. However, because the key wasn't lost, the *risk* is low (and might not even require breach notification), but it is still technically Personal Data."
+/>
+
 <AdaptiveQuiz
   generator="law-personal-data-classifier"
   baseSeed={7}

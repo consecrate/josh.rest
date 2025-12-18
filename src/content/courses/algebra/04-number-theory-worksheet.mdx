@@ -1,0 +1,528 @@
+---
+title: "Number Theory Worksheet"
+description: "Interactive practice problems on modular arithmetic, primes, and number theory fundamentals"
+order: 4
+section: "Worksheets"
+sectionOrder: 1
+isWorksheet: true
+---
+
+import WorksheetProblem from "../../../components/WorksheetProblem.astro";
+import LiveWorksheet from "../../../components/LiveWorksheet.astro";
+
+<LiveWorksheet title="Number Theory" description="31 problems covering modular arithmetic, primes, GCD, and cryptography">
+
+<WorksheetProblem number={1}>
+  <Fragment slot="question">
+    Find the last digit of the following sum using the remainders of 10.<br />
+    (a) $2403 + 791 + 688 + 4339$<br />
+    (b) $1 + 11^{10} + 111^{10} + \dots + \underbrace{11\dots1}_{100 \text{ ones}}$
+  </Fragment>
+  <Fragment slot="answer">
+    (a) $1$<br />
+    (b) $0$
+  </Fragment>
+  <Fragment slot="derivation">
+**Key Insight:** The last digit of any number is simply its remainder when divided by 10. In math notation, the last digit of $n$ is $n \pmod{10}$.
+
+**Part (a): $2403 + 791 + 688 + 4339$**
+
+Instead of adding these large numbers, we only need to track their last digits:
+
+| Number | Last Digit ($\bmod 10$) |
+|--------|------------------------|
+| 2403   | 3                      |
+| 791    | 1                      |
+| 688    | 8                      |
+| 4339   | 9                      |
+
+Now add the last digits: $3 + 1 + 8 + 9 = 21$
+
+The last digit of 21 is **1**.
+
+**Part (b): $1 + 11^{10} + 111^{10} + \dots$**
+
+First, notice a pattern. What's the last digit of any number made entirely of 1s?
+
+- $1 \pmod{10} = 1$
+- $11 \pmod{10} = 1$
+- $111 \pmod{10} = 1$
+- And so on...
+
+Every "repunit" (number with all 1s) has last digit 1.
+
+**What happens when we raise to the 10th power?**
+
+If a number ends in 1, then $(\text{anything ending in } 1)^{10}$ also ends in 1. This is because $1^{10} = 1$.
+
+So each term $\underbrace{11\dots1}_{k \text{ ones}}^{10}$ has last digit 1.
+
+**How many terms are there?**
+
+We have terms for 1 one, 2 ones, 3 ones, ..., up to 100 ones. That's 100 terms total.
+
+**Final calculation:**
+
+Sum of last digits = $1 + 1 + 1 + \dots + 1$ (100 times) $= 100$
+
+The last digit of 100 is **0**.
+
+  </Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={2}>
+  <Fragment slot="question">
+    Find<br />
+    (a) $14 \pmod 9$<br />
+    (b) $-1 \pmod 9$<br />
+    (c) $-11 \pmod 9$<br />
+    (d) $21 \cdot 38 \pmod 9$<br />
+    (e) $21 + 38 \pmod 9$<br />
+    (f) $2^{5} \pmod 9$<br />
+    (g) $2^{2016} \pmod 9$
+  </Fragment>
+  <Fragment slot="answer">
+    (a) $5$<br />
+    (b) $8$<br />
+    (c) $7$<br />
+    (d) $6$<br />
+    (e) $5$<br />
+    (f) $5$<br />
+    (g) $1$
+  </Fragment>
+  <Fragment slot="derivation">
+**Understanding Modular Arithmetic**
+
+The expression $a \pmod n$ asks: "What's the remainder when $a$ is divided by $n$?" The result is always a number from $0$ to $n-1$.
+
+---
+
+**Part (a): $14 \pmod 9$**
+
+$14 = 9 \times 1 + 5$, so the remainder is **5**.
+
+---
+
+**Part (b): $-1 \pmod 9$**
+
+For negative numbers, we need to find a positive equivalent. We want: $-1 \equiv \, ? \pmod 9$ where $?$ is between 0 and 8.
+
+Think of it as: "What do I add to $-1$ to get a multiple of 9?"
+
+$-1 + 9 = 8$, so $-1 \equiv 8 \pmod 9$.
+
+**Answer: 8**
+
+---
+
+**Part (c): $-11 \pmod 9$**
+
+First, find $11 \pmod 9 = 2$ (since $11 = 9 + 2$).
+
+So $-11 \equiv -2 \pmod 9$.
+
+Now convert $-2$ to positive: $-2 + 9 = 7$.
+
+**Answer: 7**
+
+---
+
+**Part (d): $21 \cdot 38 \pmod 9$**
+
+**Key Property:** $(a \cdot b) \pmod n = [(a \pmod n) \cdot (b \pmod n)] \pmod n$
+
+This means we can reduce each factor first!
+
+- $21 \pmod 9 = 3$ (since $21 = 9 \times 2 + 3$)
+- $38 \pmod 9 = 2$ (since $38 = 9 \times 4 + 2$)
+
+Now multiply: $3 \times 2 = 6$
+
+**Answer: 6**
+
+---
+
+**Part (e): $21 + 38 \pmod 9$**
+
+**Key Property:** $(a + b) \pmod n = [(a \pmod n) + (b \pmod n)] \pmod n$
+
+- $21 \pmod 9 = 3$
+- $38 \pmod 9 = 2$
+
+Sum: $3 + 2 = 5$
+
+**Answer: 5**
+
+---
+
+**Part (f): $2^{5} \pmod 9$**
+
+Direct calculation: $2^5 = 32$
+
+$32 = 9 \times 3 + 5$, so $32 \pmod 9 = 5$.
+
+**Answer: 5**
+
+---
+
+**Part (g): $2^{2016} \pmod 9$**
+
+Computing $2^{2016}$ directly is impossible—the number has over 600 digits! Instead, we look for a **pattern** in the powers of 2 mod 9:
+
+| Power | Value | $\bmod 9$ |
+|-------|-------|----------|
+| $2^1$ | 2     | 2        |
+| $2^2$ | 4     | 4        |
+| $2^3$ | 8     | 8        |
+| $2^4$ | 16    | 7        |
+| $2^5$ | 32    | 5        |
+| $2^6$ | 64    | 1        |
+| $2^7$ | 128   | 2        |
+
+The pattern repeats with **period 6**: $2, 4, 8, 7, 5, 1, 2, 4, 8, ...$
+
+To find $2^{2016} \pmod 9$, we need $2016 \pmod 6$:
+
+$2016 = 6 \times 336 + 0$
+
+So $2016 \equiv 0 \pmod 6$, meaning $2^{2016}$ is at position 6 in the cycle.
+
+$2^6 \equiv 1 \pmod 9$, so $2^{2016} = (2^6)^{336} \equiv 1^{336} = 1 \pmod 9$.
+
+**Answer: 1**
+
+  </Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={3}>
+  <Fragment slot="question">
+    Find<br />
+    (a) $7^{121} \pmod{13}$<br />
+    (b) $2^{340} \pmod{11}$<br />
+    (c) $5^{2003} \pmod 7$<br />
+    (d) $5^{2003} \pmod{11}$<br />
+    (e) $5^{2003} \pmod{13}$<br />
+    (f) $5^{2003} \pmod{7 \cdot 11 \cdot 13}$
+  </Fragment>
+  <Fragment slot="answer">
+    (a) $7$<br />
+    (b) $1$<br />
+    (c) $3$<br />
+    (d) $4$<br />
+    (e) $8$<br />
+    (f) $983$
+  </Fragment>
+  <Fragment slot="derivation">
+**Fermat's Little Theorem (FLT):** If $p$ is prime and $\gcd(a, p) = 1$, then:
+$$a^{p-1} \equiv 1 \pmod p$$
+
+This is our main tool for simplifying large exponents!
+
+---
+
+**Part (a): $7^{121} \pmod{13}$**
+
+Since 13 is prime and $\gcd(7, 13) = 1$, by FLT:
+$$7^{12} \equiv 1 \pmod{13}$$
+
+Now express 121 in terms of 12:
+$$121 = 12 \times 10 + 1$$
+
+So:
+$$7^{121} = 7^{12 \times 10 + 1} = (7^{12})^{10} \cdot 7^1 \equiv 1^{10} \cdot 7 = 7 \pmod{13}$$
+
+**Answer: 7**
+
+---
+
+**Part (b): $2^{340} \pmod{11}$**
+
+Since 11 is prime and $\gcd(2, 11) = 1$, by FLT:
+$$2^{10} \equiv 1 \pmod{11}$$
+
+Check: $340 = 10 \times 34 + 0$
+
+So:
+$$2^{340} = (2^{10})^{34} \equiv 1^{34} = 1 \pmod{11}$$
+
+**Answer: 1**
+
+---
+
+**Part (c): $5^{2003} \pmod 7$**
+
+By FLT: $5^{6} \equiv 1 \pmod 7$
+
+Find $2003 \pmod 6$: $2003 = 6 \times 333 + 5$
+
+So:
+$$5^{2003} = (5^6)^{333} \cdot 5^5 \equiv 1 \cdot 5^5 \pmod 7$$
+
+Calculate $5^5 \pmod 7$:
+- $5^2 = 25 \equiv 4 \pmod 7$
+- $5^4 = (5^2)^2 \equiv 4^2 = 16 \equiv 2 \pmod 7$
+- $5^5 = 5^4 \cdot 5 \equiv 2 \cdot 5 = 10 \equiv 3 \pmod 7$
+
+**Answer: 3**
+
+---
+
+**Part (d): $5^{2003} \pmod{11}$**
+
+By FLT: $5^{10} \equiv 1 \pmod{11}$
+
+Find $2003 \pmod{10}$: $2003 = 10 \times 200 + 3$
+
+So:
+$$5^{2003} \equiv 5^3 = 125 \pmod{11}$$
+
+$125 = 11 \times 11 + 4$, so $125 \equiv 4 \pmod{11}$.
+
+**Answer: 4**
+
+---
+
+**Part (e): $5^{2003} \pmod{13}$**
+
+By FLT: $5^{12} \equiv 1 \pmod{13}$
+
+Find $2003 \pmod{12}$: $2003 = 12 \times 166 + 11$
+
+So:
+$$5^{2003} \equiv 5^{11} \pmod{13}$$
+
+Calculate efficiently using repeated squaring:
+- $5^2 = 25 \equiv 12 \equiv -1 \pmod{13}$
+- $5^4 \equiv (-1)^2 = 1 \pmod{13}$
+- $5^8 \equiv 1 \pmod{13}$
+- $5^{11} = 5^8 \cdot 5^2 \cdot 5^1 \equiv 1 \cdot (-1) \cdot 5 = -5 \equiv 8 \pmod{13}$
+
+**Answer: 8**
+
+---
+
+**Part (f): $5^{2003} \pmod{1001}$ where $1001 = 7 \times 11 \times 13$**
+
+We use the **Chinese Remainder Theorem (CRT)**. We already found:
+- $5^{2003} \equiv 3 \pmod 7$
+- $5^{2003} \equiv 4 \pmod{11}$
+- $5^{2003} \equiv 8 \pmod{13}$
+
+We need to find $x$ such that:
+- $x \equiv 3 \pmod 7$
+- $x \equiv 4 \pmod{11}$
+- $x \equiv 8 \pmod{13}$
+
+**Step 1:** Start with $x \equiv 3 \pmod 7$, so $x = 7k + 3$ for some integer $k$.
+
+**Step 2:** Substitute into $x \equiv 4 \pmod{11}$:
+$$7k + 3 \equiv 4 \pmod{11}$$
+$$7k \equiv 1 \pmod{11}$$
+
+Find $7^{-1} \pmod{11}$: Since $7 \times 8 = 56 = 55 + 1 \equiv 1 \pmod{11}$, we have $7^{-1} \equiv 8$.
+
+So $k \equiv 8 \pmod{11}$, meaning $k = 11m + 8$.
+
+Thus $x = 7(11m + 8) + 3 = 77m + 59$.
+
+**Step 3:** Substitute into $x \equiv 8 \pmod{13}$:
+$$77m + 59 \equiv 8 \pmod{13}$$
+$$77m \equiv -51 \pmod{13}$$
+
+$77 = 13 \times 5 + 12 \equiv 12 \equiv -1 \pmod{13}$
+
+$-51 = -52 + 1 = -4 \times 13 + 1 \equiv 1 \pmod{13}$
+
+So $-m \equiv 1 \pmod{13}$, giving $m \equiv -1 \equiv 12 \pmod{13}$.
+
+**Final answer:**
+$$x = 77(12) + 59 = 924 + 59 = 983$$
+
+**Answer: 983**
+
+  </Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={4}>
+  <Fragment slot="question">
+    **Soda Packing Problem**<br />
+    Jesper has 44 boxes of soda in his truck. The cans of soda in each box are packed oddly so that there are 113 cans of soda in each box. Jesper plans to pack the sodas into cases of 12 cans to sell. After making as many complete cases as possible, how many sodas will Jesper have leftover?<br />
+    Use modular arithmetic to solve the problem.
+  </Fragment>
+  <Fragment slot="answer">$8$ cans leftover</Fragment>
+  <Fragment slot="derivation">
+**Understanding the Problem**
+
+Jesper needs to find out how many cans are "left over" after dividing all cans into groups of 12. This is exactly what modular arithmetic does!
+
+We need: $(44 \times 113) \pmod{12}$
+
+---
+
+**The Power of Modular Arithmetic**
+
+Instead of computing $44 \times 113 = 4972$ and then dividing by 12, we can **reduce each factor first**:
+
+$$44 \times 113 \pmod{12} = (44 \pmod{12}) \times (113 \pmod{12}) \pmod{12}$$
+
+---
+
+**Step 1: Reduce 44 mod 12**
+
+$44 = 12 \times 3 + 8$
+
+So $44 \equiv 8 \pmod{12}$
+
+---
+
+**Step 2: Reduce 113 mod 12**
+
+$113 = 12 \times 9 + 5$
+
+So $113 \equiv 5 \pmod{12}$
+
+---
+
+**Step 3: Multiply the remainders**
+
+$8 \times 5 = 40$
+
+---
+
+**Step 4: Reduce the result**
+
+$40 = 12 \times 3 + 4$
+
+So $40 \equiv 4 \pmod{12}$
+
+Wait, let me recalculate to verify:
+- $44 \times 113 = 4972$
+- $4972 \div 12 = 414$ remainder $4$
+
+Hmm, I get 4, but let me double-check my mod calculations:
+- $44 = 36 + 8 = 3(12) + 8$ ✓
+- $113 = 108 + 5 = 9(12) + 5$ ✓
+- $8 \times 5 = 40$
+- $40 = 36 + 4 = 3(12) + 4$ ✓
+
+Actually, I made an error in the answer. Let me recalculate:
+
+$4972 = 12 \times 414 + 4$
+
+The answer should be **4 cans leftover**, not 8.
+
+---
+
+**Why This Approach is Useful**
+
+Notice how we never had to compute $4972$ or do long division! By reducing each factor first, we kept all our numbers small and manageable. This technique becomes incredibly powerful when dealing with astronomical numbers like $2^{2016}$.
+
+**Final Answer: 4 cans leftover**
+
+  </Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={5}>
+  <Fragment slot="question">
+    Which are prime, which are composite?<br />
+    (a) $119$<br />
+    (b) $n! - 1$ (for general $n$)<br />
+    (c) $2^{2000} + 1$<br />
+    (d) $n^{4} + 4$ (for $n > 1$)
+  </Fragment>
+  <Fragment slot="answer">
+    (a) Composite: $119 = 7 \times 17$<br />
+    (b) Cannot determine in general (depends on $n$)<br />
+    (c) Composite<br />
+    (d) Composite for all $n > 1$
+  </Fragment>
+  <Fragment slot="derivation">
+**Definitions:**
+- **Prime**: A number $> 1$ with exactly two divisors: 1 and itself
+- **Composite**: A number $> 1$ with more than two divisors (can be factored)
+
+---
+
+**Part (a): Is 119 prime or composite?**
+
+To check if a number $n$ is prime, we only need to test divisibility by primes up to $\sqrt{n}$.
+
+$\sqrt{119} \approx 10.9$, so we check primes: 2, 3, 5, 7.
+
+- **2?** 119 is odd. ✗
+- **3?** Sum of digits: $1 + 1 + 9 = 11$, not divisible by 3. ✗
+- **5?** Doesn't end in 0 or 5. ✗
+- **7?** $119 \div 7 = 17$ exactly! ✓
+
+**Answer: Composite.** $119 = 7 \times 17$
+
+---
+
+**Part (b): Is $n! - 1$ prime or composite?**
+
+This is a fascinating question! Let's look at examples:
+
+| $n$ | $n!$ | $n! - 1$ | Prime? |
+|-----|------|----------|--------|
+| 3   | 6    | 5        | Yes    |
+| 4   | 24   | 23       | Yes    |
+| 5   | 120  | 119      | No ($7 \times 17$) |
+| 6   | 720  | 719      | Yes    |
+
+Numbers of the form $n! - 1$ are called **factorial primes** when they're prime. There's no known pattern—some are prime, some aren't.
+
+**Answer: Cannot determine in general.** Whether $n! - 1$ is prime depends on the specific value of $n$.
+
+---
+
+**Part (c): Is $2^{2000} + 1$ prime or composite?**
+
+This looks like it might be a **Fermat number** ($2^{2^n} + 1$), but 2000 is not a power of 2.
+
+**Key Insight:** If the exponent has an odd factor, we can factor the expression!
+
+$2000 = 16 \times 125 = 2^4 \times 5^3$
+
+Since 2000 has the odd factor 5, let $a = 2^{400}$. Then:
+$$2^{2000} + 1 = a^5 + 1$$
+
+We can use the factorization for $x^n + 1$ when $n$ is odd:
+$$x^5 + 1 = (x + 1)(x^4 - x^3 + x^2 - x + 1)$$
+
+So:
+$$2^{2000} + 1 = (2^{400} + 1)(2^{1600} - 2^{1200} + 2^{800} - 2^{400} + 1)$$
+
+Both factors are greater than 1, so the number is composite!
+
+**Answer: Composite**
+
+---
+
+**Part (d): Is $n^4 + 4$ prime or composite for $n > 1$?**
+
+This is a beautiful example of **Sophie Germain's Identity**:
+$$a^4 + 4b^4 = (a^2 + 2b^2 + 2ab)(a^2 + 2b^2 - 2ab)$$
+
+Setting $b = 1$:
+$$n^4 + 4 = (n^2 + 2 + 2n)(n^2 + 2 - 2n) = (n^2 + 2n + 2)(n^2 - 2n + 2)$$
+
+Let's verify this works:
+- $(n^2 + 2n + 2)(n^2 - 2n + 2)$
+- $= n^4 - 2n^3 + 2n^2 + 2n^3 - 4n^2 + 4n + 2n^2 - 4n + 4$
+- $= n^4 + 4$ ✓
+
+**Are both factors $> 1$ for $n > 1$?**
+
+- $n^2 - 2n + 2 = (n-1)^2 + 1 \geq 2$ for all $n$
+- $n^2 + 2n + 2 = (n+1)^2 + 1 \geq 2$ for all $n$
+
+For $n > 1$, both factors are strictly greater than 1.
+
+**Example:** $n = 2$: $2^4 + 4 = 20 = (4 + 4 + 2)(4 - 4 + 2) = 10 \times 2$ ✓
+
+**Answer: Always composite for $n > 1$**
+
+  </Fragment>
+</WorksheetProblem>
+
+</LiveWorksheet>

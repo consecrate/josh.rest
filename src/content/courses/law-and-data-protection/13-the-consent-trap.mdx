@@ -54,6 +54,18 @@ Consent requires a clear affirmative action.
 If it took one click to join, it must take one click to leave. You cannot make them call a phone number or send a fax to unsubscribe.
 
 <MultipleChoice
+  question="Bob's gym requires members to scan their fingerprint to enter 'for security'. Is this valid Consent?"
+  options={[
+    "Yes, if they sign a form.",
+    "No, because the imbalance of power implies it's not 'Freely Given' if they have no other way to enter.",
+    "Yes, because it's a private club.",
+    "No, fingerprints are illegal."
+  ]}
+  correct={1}
+  explanation="If the user *must* consent to access the service, and the data (fingerprint) isn't strictly necessary (a keycard would work), the consent is not **Freely Given** and is invalid."
+/>
+
+<MultipleChoice
   question="Which of these is a valid example of GDPR consent?"
   options={[
     "A pre-ticked box saying 'Send me offers'.",

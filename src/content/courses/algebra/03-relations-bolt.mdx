@@ -1,0 +1,151 @@
+---
+title: "Relations Bolt"
+description: "Master relation properties with visual intuition and infinite practice."
+order: 3
+section: "Bolts"
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import ContentBlock from "../../../components/ContentBlock.astro";
+
+# The Matrix View
+
+We can represent any relation $R$ on a finite set $A$ as a **boolean matrix** $M$.
+If $A = \{1, 2, 3\}$, then $M_{ij} = 1$ if $(i, j) \in R$, and $0$ otherwise.
+
+$$
+M = \begin{pmatrix}
+1 & 0 & 1 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{pmatrix}
+$$
+
+This matrix allows us to spot properties visually.
+
+---
+
+## Reflexive: The Diagonal
+
+A relation is **Reflexive** if every element relates to itself ($\forall a, (a,a) \in R$).
+In the matrix, this means the **main diagonal** is all 1s.
+
+$$
+\begin{pmatrix}
+\mathbf{1} & 0 & 1 \\
+0 & \mathbf{1} & 0 \\
+0 & 0 & \mathbf{1}
+\end{pmatrix}
+$$
+
+<MultipleChoice
+  question="Is the relation with matrix $$ \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} $$ reflexive?"
+  options={[
+    "Yes, the top-left is 1",
+    "No, the entry (2,2) is 0",
+    "No, it is not symmetric"
+  ]}
+  correct={1}
+  explanation="Reflexive requires ALL diagonal entries to be 1. Here, the bottom-right diagonal entry is 0."
+/>
+
+---
+
+## Symmetric: The Fold
+
+A relation is **Symmetric** if $(a,b) \in R \implies (b,a) \in R$.
+In the matrix, this means it is a mirror image across the main diagonal. If you **fold** the matrix along the diagonal, the 1s must match up.
+
+$$
+\begin{pmatrix}
+1 & \mathbf{1} & 0 \\
+\mathbf{1} & 0 & 0 \\
+0 & 0 & 1
+\end{pmatrix}
+$$
+
+<MultipleChoice
+  question="Is the relation with matrix $$ \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} $$ symmetric?"
+  options={[
+    "Yes, it looks simple",
+    "No, (1,2) is 1 but (2,1) is 0",
+    "No, the diagonal is 0"
+  ]}
+  correct={1}
+  explanation="Symmetry requires that for every 1 off the diagonal, its mirror image must also be 1. Here (1,2) has no matching pair at (2,1)."
+/>
+
+---
+
+## Antisymmetric: One-Way Streets
+
+A relation is **Antisymmetric** if you never have traffic going BOTH ways between distinct nodes.
+In the matrix: If $M_{ij} = 1$ (where $i \neq j$), then $M_{ji}$ MUST be 0.
+
+You can have 1s on the diagonal. You can have 0s on both sides. But you cannot have 1s on both sides.
+
+$$
+\begin{pmatrix}
+1 & \mathbf{1} & 0 \\
+\mathbf{0} & 1 & 1 \\
+0 & 0 & 1
+\end{pmatrix}
+$$
+
+<MultipleChoice
+  question="Is the relation with matrix $$ \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix} $$ antisymmetric?"
+  options={[
+    "Yes, it is full",
+    "No, (1,2) and (2,1) are both 1",
+    "No, the diagonal has 1s"
+  ]}
+  correct={1}
+  explanation="Antisymmetry FORBIDS having 1s at both (1,2) and (2,1). Since both are 1, it fails."
+/>
+
+---
+
+## Transitive: The Shortcut
+
+A relation is **Transitive** if $(a,b) \in R$ and $(b,c) \in R \implies (a,c) \in R$.
+Visually: If you can get from $i$ to $k$ in two steps ($i \to j \to k$), there must be a direct flight ($i \to k$).
+
+<MultipleChoice
+  question="Is the relation with matrix $$ \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix} $$ transitive?"
+  options={[
+    "Yes, it has no cycles",
+    "No, (1,2) and (2,3) exist, but (1,3) is missing",
+    "No, the diagonal is 0"
+  ]}
+  correct={1}
+  explanation="We have a path 1 -> 2 -> 3. Transitivity requires the shortcut 1 -> 3 to exist. It does not (entry is 0), so it fails."
+/>
+
+---
+
+## Classifications
+
+Combining these properties gives us two major structures:
+
+1.  **Equivalence Relation**: Reflexive + Symmetric + Transitive.
+    *   Examples: "Is equal to", "Has same color as", "Is congruent to".
+    *   Think: Partitions the set into groups.
+
+2.  **Partial Order**: Reflexive + Antisymmetric + Transitive.
+    *   Examples: $\leq$, $\subseteq$, "Is an ancestor of".
+    *   Think: Hierarchy or ordering.
+
+---
+
+# Infinite Drill
+
+Identify the properties of the generated relations. Look for the diagonal, the fold, the one-way streets, and the shortcuts!
+
+<AdaptiveQuiz
+  generator="relation-properties-which"
+  baseSeed={12345}
+  initialCount={5}
+  appendCount={2}
+  maxQuestions={20}
+/>

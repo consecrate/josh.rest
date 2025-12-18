@@ -42,6 +42,18 @@ Alice counters, "But can you guarantee that no one can ever link this data back?
 
 If there is a "reasonable means" to re-identify the user—even by combining it with outside data—it is not anonymous. It is pseudonymous.
 
+<MultipleChoice
+  question="Bob hashes all email addresses with SHA-256 and deletes the original emails. He thinks this makes the data anonymous. Is he right?"
+  options={[
+    "Yes, hashing is irreversible so it's anonymous.",
+    "No, hashing without a salt or key management is prone to brute-force attacks (Rainbow Tables), so it is Pseudonymisation.",
+    "Yes, but only if he uses MD5.",
+    "No, because he didn't ask for permission first."
+  ]}
+  correct={1}
+  explanation="Simple hashing of low-entropy data (like emails) is **Pseudonymisation**. Attackers can easily generate hashes of all common emails and match them. It is not anonymous."
+/>
+
 <AdaptiveQuiz
   generator="law-anon-vs-pseudo"
   baseSeed={9}

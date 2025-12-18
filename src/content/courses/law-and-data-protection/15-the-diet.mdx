@@ -58,6 +58,18 @@ GDPR says: "If you don't have a specific use case *right now*, do not collect it
   explanation="A Weather App actually *needs* your location to function (to show local weather). That is adequate and relevant. A Calculator does not. Profile picture uploads should only access the specific photo selected, not the whole library."
 />
 
+<MultipleChoice
+  question="Bob adds a 'Gender' field to the signup form because 'Marketing might want to target ads later'. The Marketing team currently has no specific plan to use it. Is this allowed?"
+  options={[
+    "Yes, it's better to have it and not need it.",
+    "No, this violates Data Minimization (Necessity).",
+    "Yes, if the field is optional.",
+    "No, gender is banned."
+  ]}
+  correct={1}
+  explanation="You cannot collect data for hypothetical future purposes ('just in case'). If you don't have a specific, immediate purpose, you cannot collect it."
+/>
+
 ## Practice: The Schema Audit
 
 Review these data collection forms. Identify the field that violates Data Minimization.

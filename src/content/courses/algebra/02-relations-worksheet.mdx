@@ -472,15 +472,72 @@ The original set plus the three new pairs we added.
   <Fragment slot="question">Is similarity of matrices an equivalence relation?</Fragment>
   <Fragment slot="answer">Yes.</Fragment>
   <Fragment slot="derivation">
-(See Problem 10 for the detailed proof).
+**Definition:** Two $n \times n$ matrices $A$ and $B$ are **similar** if there exists an invertible matrix $P$ such that $A = PBP^{-1}$.
 
-In short:
+This relates to Linear Algebra: similar matrices represent the same linear transformation viewed from different bases (coordinate systems).
 
-1.  **Reflexive:** Any matrix is similar to itself (via Identity matrix).
-2.  **Symmetric:** If A is similar to B, B is similar to A (via Inverse matrix).
-3.  **Transitive:** Similarity chains together (via Matrix Multiplication).
+Let's verify all three properties of an equivalence relation:
 
-Yes, it is a classic example of an equivalence relation in Linear Algebra.
+---
+
+**1. Reflexive: Is every matrix similar to itself?**
+
+We need to show: $A = PAP^{-1}$ for some invertible $P$.
+
+Choose $P = I$ (the identity matrix):
+$$IAI^{-1} = IAI = A \quad \checkmark$$
+
+Since the identity matrix is invertible and satisfies the equation, every matrix is similar to itself. **Reflexive property holds.**
+
+---
+
+**2. Symmetric: If $A$ is similar to $B$, is $B$ similar to $A$?**
+
+**Given:** $A = PBP^{-1}$ for some invertible $P$.
+
+**Goal:** Show $B = QAQ^{-1}$ for some invertible $Q$.
+
+Starting from $A = PBP^{-1}$, we solve for $B$:
+- Multiply both sides on the left by $P^{-1}$: $\quad P^{-1}A = BP^{-1}$
+- Multiply both sides on the right by $P$: $\quad P^{-1}AP = B$
+
+Rearranging: $B = P^{-1}AP = P^{-1}A(P^{-1})^{-1}$
+
+This is exactly the similarity form with $Q = P^{-1}$ (which is invertible since $P$ is invertible).
+
+**Symmetric property holds.**
+
+---
+
+**3. Transitive: If $A \sim B$ and $B \sim C$, is $A \sim C$?**
+
+**Given:**
+- $A = PBP^{-1}$ for some invertible $P$
+- $B = QCQ^{-1}$ for some invertible $Q$
+
+**Goal:** Show $A = RCR^{-1}$ for some invertible $R$.
+
+Substitute the second equation into the first:
+$$A = P(QCQ^{-1})P^{-1}$$
+
+Using associativity of matrix multiplication:
+$$A = (PQ)C(Q^{-1}P^{-1})$$
+
+Recall that $(PQ)^{-1} = Q^{-1}P^{-1}$, so:
+$$A = (PQ)C(PQ)^{-1}$$
+
+Let $R = PQ$. Since $P$ and $Q$ are both invertible, their product $R$ is also invertible.
+
+Thus $A = RCR^{-1}$, which means $A \sim C$.
+
+**Transitive property holds.**
+
+---
+
+**Conclusion:**
+Since similarity satisfies reflexivity, symmetry, and transitivity, it is an **equivalence relation** on the set of $n \times n$ matrices.
+
+This is a fundamental result in Linear Algebra: the equivalence classes partition matrices into groups that share the same eigenvalues, determinant, trace, and rank.
 
 </Fragment>
 </WorksheetProblem>
@@ -591,39 +648,141 @@ $$M_{R_3} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$$
 </WorksheetProblem>
 
 <WorksheetProblem number={28}>
-  <Fragment slot="question">Draw the Hasse diagram for divisibility on $\{2,4,5,10,12,20,25\}$.</Fragment>
-  <Fragment slot="answer">See derivation for the diagram edges.</Fragment>
+  <Fragment slot="question">Draw the Hasse diagram for divisibility on $A = \{2,4,5,10,12,20,25\}$.</Fragment>
+  <Fragment slot="answer">Layered structure with 2 and 5 at the bottom.</Fragment>
   <Fragment slot="derivation">
 A **Hasse Diagram** is a clean way to draw a Partial Order.
-Rules:
-1.  Higher numbers go above lower numbers.
+
+**Rules:**
+1.  Larger elements go above smaller ones.
 2.  Don't draw loops (reflexivity is implied).
-3.  Don't draw "shortcut" lines if a path already exists (transitivity is implied). e.g., if $2 \to 4$ and $4 \to 12$, don't draw $2 \to 12$.
+3.  Don't draw "shortcut" lines if a path already exists (transitivity is implied).
+4.  Only draw edges for **covering relations** (immediate successors).
+
+---
+
+The relation is $a \mid b$ (a divides b).
 
 **Step-by-Step Construction:**
 
-1.  **Start at the bottom (numbers that nothing divides):**
-    2 and 5 are the "roots".
+1.  **Start at the bottom (minimal elements — nothing in the set divides them):**
+    $2$ and $5$ are the "roots" (no other element in the set divides them).
 
 2.  **Level 2 (What do 2 and 5 divide directly?):**
-
     - $2$ divides $4$ and $10$.
     - $5$ divides $10$ and $25$.
-    - (Draw lines $2\to4, 2\to10, 5\to10, 5\to25$)
+    - Draw edges: $2 \to 4$, $2 \to 10$, $5 \to 10$, $5 \to 25$
 
 3.  **Level 3 (What do 4, 10, 25 divide?):**
     - $4$ divides $12$ and $20$.
     - $10$ divides $20$.
     - $25$ divides nothing else in the set.
-    - (Draw lines $4\to12, 4\to20, 10\to20$)
+    - Draw edges: $4 \to 12$, $4 \to 20$, $10 \to 20$
 
 **Final Structure:**
+```
+      12      20      25
+       |     / \      |
+       |    /   \     |
+       4   /     10   |
+        \ /       \  /
+         2         5
+```
 
-- 2 connects up to 4 and 10.
-- 5 connects up to 10 and 25.
-- 4 connects up to 12 and 20.
-- 10 connects up to 20.
-- 12, 20, 25 are at the top.
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={29}>
+  <Fragment slot="question">Draw the Hasse diagram for the power set $B = 2^{\{a,b,c\}}$ with the containment relation ($\subseteq$).</Fragment>
+  <Fragment slot="answer">Cube-shaped Boolean lattice with $\emptyset$ at bottom and $\{a,b,c\}$ at top.</Fragment>
+  <Fragment slot="derivation">
+**Step 1: List all elements of the power set.**
+
+$2^{\{a,b,c\}}$ has $2^3 = 8$ elements:
+- **Level 0 (size 0):** $\emptyset$
+- **Level 1 (size 1):** $\{a\}$, $\{b\}$, $\{c\}$
+- **Level 2 (size 2):** $\{a,b\}$, $\{a,c\}$, $\{b,c\}$
+- **Level 3 (size 3):** $\{a,b,c\}$
+
+**Step 2: Find covering relations.**
+
+A set $X$ covers $Y$ if $Y \subset X$ and $|X| = |Y| + 1$ (adding exactly one element).
+
+- From $\emptyset$: $\emptyset \to \{a\}$, $\emptyset \to \{b\}$, $\emptyset \to \{c\}$
+- From $\{a\}$: $\{a\} \to \{a,b\}$, $\{a\} \to \{a,c\}$
+- From $\{b\}$: $\{b\} \to \{a,b\}$, $\{b\} \to \{b,c\}$
+- From $\{c\}$: $\{c\} \to \{a,c\}$, $\{c\} \to \{b,c\}$
+- From pairs: $\{a,b\} \to \{a,b,c\}$, $\{a,c\} \to \{a,b,c\}$, $\{b,c\} \to \{a,b,c\}$
+
+**Final Structure (a 3-dimensional cube):**
+```
+                {a,b,c}
+               /   |   \
+              /    |    \
+           {a,b} {a,c} {b,c}
+            /\     /\    /\
+           /  \   /  \  /  \
+         {a}   {b}    {c}
+           \    |    /
+            \   |   /
+               ∅
+```
+
+This forms a **Boolean lattice** — the classic cube structure where each level represents sets of the same size.
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={30}>
+  <Fragment slot="question">Draw the Hasse diagram for $C = \{0, 01, 11, 001, 010, 011, 0001, 0101\}$ with the lexicographic ordering relation.</Fragment>
+  <Fragment slot="answer">A linear chain (total order).</Fragment>
+  <Fragment slot="derivation">
+**Step 1: Understand lexicographic order.**
+
+Compare strings character by character from left to right:
+- The first difference determines the order ($0 < 1$).
+- If one string is a prefix of another, the shorter one comes first.
+
+**Step 2: Sort all elements.**
+
+Let's compare systematically:
+
+| Comparison | Reasoning | Result |
+|------------|-----------|--------|
+| $0$ vs $0001$ | "0" is prefix of "0001" | $0 < 0001$ |
+| $0001$ vs $001$ | Position 2: $0 < 1$ | $0001 < 001$ |
+| $001$ vs $01$ | Position 1: $0 < 1$ | $001 < 01$ |
+| $01$ vs $010$ | "01" is prefix of "010" | $01 < 010$ |
+| $010$ vs $0101$ | "010" is prefix of "0101" | $010 < 0101$ |
+| $0101$ vs $011$ | Position 2: $0 < 1$ | $0101 < 011$ |
+| $011$ vs $11$ | Position 0: $0 < 1$ | $011 < 11$ |
+
+**Complete ordering:**
+$$0 < 0001 < 001 < 01 < 010 < 0101 < 011 < 11$$
+
+**Step 3: Draw the Hasse diagram.**
+
+Since lexicographic order on these strings gives a **total order** (every pair is comparable), the Hasse diagram is simply a **chain**:
+
+```
+   11
+    |
+  011
+    |
+ 0101
+    |
+  010
+    |
+   01
+    |
+  001
+    |
+ 0001
+    |
+   0
+```
+
+**Key Insight:** Unlike problems 28 and 29 which had "branching" structures, lexicographic ordering produces a linear chain because it's a total order — any two strings can be compared.
 
 </Fragment>
 </WorksheetProblem>

@@ -9,38 +9,54 @@ export const anonVsPseudo: ProblemGenerator = {
 
     const scenarios = [
       {
-        text: "Replacing names with 'User_123' but keeping a secret key in a safe that links 'User_123' back to 'John Doe'.",
+        text: "Replacing names with 'User_123' but keeping a lookup table in a secure vault.",
         type: "Pseudonymisation",
-        reason: "Because a key exists to re-identify the person, the data is only pseudonymised, not anonymous. GDPR still applies."
+        reason: "If a key (lookup table) exists to re-identify the person, it is **Pseudonymisation**. The data is still Personal Data."
       },
       {
-        text: "Hashing email addresses without a salt (or with a known salt), allowing a hacker to potentially brute-force the original emails.",
+        text: "Encrypting the database with AES-256. The key is stored on a separate server.",
         type: "Pseudonymisation",
-        reason: "If re-identification is reasonably possible (e.g. rainbow tables), it is at best pseudonymisation."
+        reason: "Encryption is the gold standard of **Pseudonymisation**. Because the original data can be recovered with the key, it is not anonymous."
       },
       {
-        text: "Deleting all identifiers and aggregating data so that no individual can be singled out or inferred (e.g., 'Total website visitors: 5000').",
+        text: "Hashing email addresses using a secret 'salt' key.",
+        type: "Pseudonymisation",
+        reason: "Keyed hashing (HMAC) allows the holder of the key to verify or re-link data. It is **Pseudonymisation**."
+      },
+      {
+        text: "Deleting the original dataset and retaining only 'Average Age: 34' and 'Total Users: 5000'.",
         type: "Anonymisation",
-        reason: "If the process is irreversible and individuals can no longer be identified, it is anonymous. GDPR does not apply."
+        reason: "Aggregation that prevents singling out is **Anonymisation**. This data is no longer Personal Data."
       },
       {
-        text: "Encrypting a database where the decryption key is held by the CTO.",
-        type: "Pseudonymisation",
-        reason: "Encryption is a form of pseudonymisation. The data can be restored to its original state using the key."
-      },
-      {
-        text: "Blurring faces in a video so effectively that even with advanced software, the original faces cannot be recovered.",
+        text: "Blurring faces in a video so effectively that they cannot be reversed, and deleting the original raw video.",
         type: "Anonymisation",
-        reason: "If the blurring is irreversible and effective, the data may be considered anonymous."
+        reason: "If the process is irreversible and identification is impossible by reasonable means, it is **Anonymisation**."
+      },
+      {
+        text: "Removing names but keeping 'Date of Birth', 'Zip Code', and 'Gender' for a small town.",
+        type: "Pseudonymisation (Ineffective)",
+        reason: "This fails 'k-anonymity'. A specific person can likely be singled out by combining these traits. It is effectively still **Personal Data** (Pseudonymised at best)."
+      },
+      {
+        text: "Tokenization: Replacing credit card numbers with a random token, where the mapping is held by the payment processor.",
+        type: "Pseudonymisation",
+        reason: "Tokenization is a form of **Pseudonymisation** because the mapping allows re-identification."
       }
     ];
 
     const scenario = scenarios[Math.floor(rng() * scenarios.length)];
-    const options = shuffleWithSeed(["Pseudonymisation", "Anonymisation"], rng);
-    const correctIndex = options.indexOf(scenario.type);
+    const options = shuffleWithSeed(["Pseudonymisation", "Anonymisation", "Encryption", "Deletion"], rng);
+    
+    // We map the type to the simplified options
+    let correctOption = "";
+    if (scenario.type.includes("Pseudonymisation")) correctOption = "Pseudonymisation";
+    else correctOption = "Anonymisation";
+    
+    const correctIndex = options.indexOf(correctOption);
 
     return {
-      question: `**Scenario**: ${scenario.text}\n\nIs this Anonymisation or Pseudonymisation?`,
+      question: `<strong>Scenario</strong>: ${scenario.text}<br/><br/>Is this Anonymisation or Pseudonymisation?`,
       options,
       correctIndex,
       explanation: scenario.reason

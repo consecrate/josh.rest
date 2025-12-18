@@ -59,6 +59,18 @@ The GDPR says you must implement **"Technical and Organizational Measures" (TOMs
   explanation="Encryption, Firewalls, and HTTPS are Technical measures (software/hardware). Training is an Organizational measure (people/processes). You need both."
 />
 
+<MultipleChoice
+  question="Bob's server has perfect encryption, but he uses 'password123' as the admin password. Which principle is compromised?"
+  options={[
+    "Confidentiality (due to weak access control)",
+    "Integrity",
+    "Availability",
+    "Transparency"
+  ]}
+  correct={0}
+  explanation="Weak passwords allow unauthorized access, compromising **Confidentiality**. Security is only as strong as its weakest link."
+/>
+
 ## Practice: CIA Triad
 
 Identify which security pillar has been compromised in these scenarios.

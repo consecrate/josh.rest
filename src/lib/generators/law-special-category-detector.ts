@@ -8,57 +8,95 @@ export const specialCategoryDetector: ProblemGenerator = {
     const rng = mulberry32(seed);
 
     const items = [
+      // True Special Categories (Article 9)
       {
         text: "User's political party affiliation",
-        isSpecial: true,
-        reason: "Political opinions are explicitly listed in Article 9 as special category data."
+        type: "Special Category (Article 9)",
+        reason: "Political opinions are explicitly listed in Article 9. Processing is prohibited unless an exception applies."
       },
       {
-        text: "Medical history or blood type",
-        isSpecial: true,
-        reason: "Health data is a special category under Article 9."
+        text: "Medical history (e.g., 'Patient has diabetes')",
+        type: "Special Category (Article 9)",
+        reason: "Data concerning health is a Special Category."
       },
       {
-        text: "Fingerprint data used for ID verification",
-        isSpecial: true,
-        reason: "Biometric data used for identification is a special category."
-      },
-      {
-        text: "User's salary or credit score",
-        isSpecial: false,
-        reason: "Financial data is sensitive and personal, but strictly speaking, it is *not* an Article 9 'Special Category'."
+        text: "Fingerprint data used for ID verification (TouchID)",
+        type: "Special Category (Article 9)",
+        reason: "Biometric data *for the purpose of uniquely identifying a natural person* is Special Category."
       },
       {
         text: "Trade union membership status",
-        isSpecial: true,
-        reason: "Trade union membership is a special category under Article 9."
+        type: "Special Category (Article 9)",
+        reason: "Trade union membership is explicitly listed in Article 9."
       },
       {
-        text: "User's home address",
-        isSpecial: false,
-        reason: "Address is personal data, but not a special category."
+        text: "Religious or philosophical beliefs",
+        type: "Special Category (Article 9)",
+        reason: "Religious beliefs are Special Category data."
       },
       {
-        text: "Religious beliefs",
-        isSpecial: true,
-        reason: "Religious or philosophical beliefs are special category data."
+        text: "Genetic data (DNA sequence)",
+        type: "Special Category (Article 9)",
+        reason: "Genetic data is Special Category data."
       },
       {
-        text: "Social Security Number / ID Number",
-        isSpecial: false,
-        reason: "National IDs are highly sensitive personal data, but they are generally not Article 9 data (though they have their own specific rules)."
+        text: "Sexual orientation or sex life",
+        type: "Special Category (Article 9)",
+        reason: "Data concerning a person's sex life or sexual orientation is Special Category."
+      },
+
+      // High Risk / Sensitive BUT NOT Article 9
+      {
+        text: "User's credit card number and salary",
+        type: "General Personal Data (High Risk)",
+        reason: "Financial data is highly sensitive and risky, but it is **NOT** an Article 9 Special Category. It doesn't require Article 9 exceptions (like explicit consent) but does require high security."
+      },
+      {
+        text: "Social Security Number / National ID",
+        type: "General Personal Data (National Law)",
+        reason: "National IDs are not Article 9 data in the GDPR itself, though Member States often have specific rules for them (Article 87)."
+      },
+      {
+        text: "A photograph of a user's face (stored on a profile page)",
+        type: "General Personal Data",
+        reason: "Photos are only Biometric (Special Category) if processed through specific technical means to **identify** someone (e.g., facial recognition). A standard profile pic is just Personal Data."
+      },
+      {
+        text: "Location data (GPS history)",
+        type: "General Personal Data (High Risk)",
+        reason: "Location data is very intrusive, but it is not listed in Article 9. It is General Personal Data (though ePrivacy Directive may apply)."
+      },
+      
+      // Article 10 (Criminal)
+      {
+        text: "Criminal conviction record",
+        type: "Criminal Conviction Data (Article 10)",
+        reason: "Criminal data is handled under **Article 10**, not Article 9. It can only be processed under official authority or specific EU/Member State law."
       }
     ];
 
     const item = items[Math.floor(rng() * items.length)];
-    const correct = item.isSpecial ? "Yes (Article 9 Special Category)" : "No (General Personal Data)";
-    const wrong = item.isSpecial ? "No (General Personal Data)" : "Yes (Article 9 Special Category)";
     
-    const options = shuffleWithSeed([correct, wrong], rng);
+    // We want the user to distinguish between "Special" and "General" primarily.
+    // But adding "Criminal" as a distractor is good.
+    
+    let correct = "";
+    if (item.type.includes("Special")) correct = "Yes, Special Category (Art. 9)";
+    else if (item.type.includes("Criminal")) correct = "Criminal Data (Art. 10)";
+    else correct = "No, General Personal Data";
+
+    const allOptions = [
+      "Yes, Special Category (Art. 9)",
+      "No, General Personal Data",
+      "Criminal Data (Art. 10)",
+      "No, it is not Personal Data"
+    ];
+
+    const options = shuffleWithSeed(allOptions, rng);
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `Is **"${item.text}"** considered a **Special Category** (Article 9) of data?`,
+      question: `Is **"${item.text}"** considered a **Special Category** of data under GDPR Article 9?`,
       options,
       correctIndex,
       explanation: item.reason

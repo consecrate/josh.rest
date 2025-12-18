@@ -48,6 +48,18 @@ To decide, ask:
 The GDPR loves science. Processing for **archiving in the public interest, scientific or historical research, or statistical purposes** is *always* considered compatible (Article 5(1)(b)), provided you have safeguards (like anonymization).
 
 <MultipleChoice
+  question="DataVault wants to use its user logs to train a Machine Learning model to detect general hacking patterns. They anonymize the data first. Is this 'Function Creep'?"
+  options={[
+    "Yes, it's a new purpose.",
+    "No, statistical/scientific research is considered 'Compatible' (with safeguards).",
+    "Yes, unless every user agrees.",
+    "No, ML is always allowed."
+  ]}
+  correct={1}
+  explanation="GDPR explicitly creates an exception for statistical and research purposes (Article 5(1)(b)). As long as safeguards (like anonymization/pseudonymization) are used, this is generally **Compatible**."
+/>
+
+<MultipleChoice
   question="You collected email addresses to send receipts. Can you now sell them to a partner company?"
   options={[
     "Yes, data is an asset.",

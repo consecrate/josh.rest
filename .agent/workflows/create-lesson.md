@@ -4,6 +4,14 @@ description: Generate interactive lessons with quizzes and problem generators
 
 # Create Interactive Lesson Workflow
 
+## What are Bolts?
+**Bolts** are high-impact, focused lessons designed to solidify a specific concept through "infinite" practice. Unlike standard lessons that mix theory and examples, a Bolt consists of:
+1.  **Intuitive Visual Explanations**: Mental models (like "The Diagonal" for Reflexive) over formal definitions.
+2.  **Immediate Interactive Checks**: Tiny quizzes right after each concept.
+3.  **The Infinite Drill**: A final `<AdaptiveQuiz>` that generates endless variations of problems to master the skill.
+
+When creating a Bolt, focus on *recognition* and *fluency*.
+
 When asked to create a lesson on a topic, follow this exact process:
 
 ## 1. Analyze the Reference Lessons
