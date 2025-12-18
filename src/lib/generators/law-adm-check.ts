@@ -32,6 +32,21 @@ const scenarios: Scenario[] = [
     situation: "Bob's AI automatically filters out job applicants based on keywords. 90% are rejected without human review.",
     violation: true,
     explanation: "<strong>Violation.</strong> E-recruiting without human intervention can have a significant effect (denying employment). It falls under Article 22 protection."
+  },
+  {
+    situation: "Bob's AI automatically schedules meeting rooms based on calendar availability. No human approves the bookings.",
+    violation: false,
+    explanation: "<strong>No Violation.</strong> Meeting room scheduling does not have legal or similarly significant effects on individuals' rights."
+  },
+  {
+    situation: "An insurance company's AI automatically sets your premium tier based on your driving data. You cannot appeal.",
+    violation: true,
+    explanation: "<strong>Violation.</strong> Insurance pricing decisions can have significant financial effects. Without human oversight or appeal rights, this likely violates Article 22."
+  },
+  {
+    situation: "A social media AI automatically removes posts that violate community guidelines. Appeals go to human moderators.",
+    violation: false,
+    explanation: "<strong>No Violation (likely).</strong> There is human intervention in the appeal process. Also, content moderation may not reach the 'significant effect' threshold (though this is debated for de-platforming)."
   }
 ];
 

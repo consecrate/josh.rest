@@ -37,6 +37,36 @@ export const businessCase: ProblemGenerator = {
           "Let's vote on it."
         ],
         explanation: "**Risk Mitigation** is critical. A slightly slower secure app is viable; a fast, leaky app is a liability."
+      },
+      {
+        text: "Sales VP: 'Let's buy that email list from DataBrokerX. Millions of leads for just $500!'",
+        correct: "Purchased lists have no valid consent. We'd violate GDPR and spam laws, risking fines and blacklisting our domain.",
+        wrong: [
+          "Great deal! Send the emails tonight.",
+          "GDPR only applies to EU companies, we're fine.",
+          "If we didn't collect it, it's not our problem."
+        ],
+        explanation: "**Consent Transfer** doesn't work that way. Data subjects consented to DataBrokerX, not to you. You become liable for unlawful processing."
+      },
+      {
+        text: "CEO: 'Our competitor got hacked last month. What's the chance it happens to us?'",
+        correct: "100% of internet-facing systems are probed daily. The question isn't if, but when—and whether we're prepared.",
+        wrong: [
+          "Very low. Hackers target big companies.",
+          "Zero. We use Apple computers.",
+          "Depends on the weather."
+        ],
+        explanation: "**Security Realism**: Attackers use automated scanners that hit everyone. Preparedness (detection, response, backups) matters more than hoping you're invisible."
+      },
+      {
+        text: "Product Manager: 'Can we just add a 'I agree' checkbox and collect whatever data we want?'",
+        correct: "No. Consent must be specific, informed, and proportionate. A blanket checkbox doesn't override data minimization principles.",
+        wrong: [
+          "Yes, that's exactly how GDPR works.",
+          "Only if the checkbox is green.",
+          "Sure, just make the font really small."
+        ],
+        explanation: "**Consent is not a magic wand**. You still need a lawful basis, purpose limitation, and data minimization. Consent doesn't let you collect everything."
       }
     ];
 

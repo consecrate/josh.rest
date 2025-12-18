@@ -95,9 +95,9 @@ const scenarios: Scenario[] = [
 
   // Consent
   {
-    text: "A blog asks: 'Subscribe to our newsletter?' with an unchecked box.",
+    text: "A visitor to a tech blog signs up to receive weekly digest emails by entering their email and clicking 'Subscribe'.",
     basis: 'Consent',
-    explanation: "Marketing to non-customers usually requires **Consent**."
+    explanation: "Marketing to non-customers (no existing relationship) typically requires **Consent** as the lawful basis."
   },
   {
     text: "A mobile flashlight app asks for your GPS location.",

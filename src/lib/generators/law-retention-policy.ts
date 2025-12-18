@@ -53,6 +53,21 @@ const scenarios: Scenario[] = [
     policy: "Session duration",
     action: 'Delete',
     explanation: "Session cookies should disappear when the session ends."
+  },
+  {
+    recordType: "Chat Support Transcript",
+    age: "2 years old",
+    policy: "Keep for 1 year",
+    context: "Customer has filed a formal complaint that is still being reviewed.",
+    action: 'Keep',
+    explanation: "Active complaints or disputes override standard retention. You must keep relevant records until the matter is resolved."
+  },
+  {
+    recordType: "Marketing Consent Record",
+    age: "User withdrew consent 3 months ago",
+    policy: "Delete consent data when withdrawn",
+    action: 'Keep',
+    explanation: "You must **keep proof that consent was withdrawn** for accountability. Delete the marketing data, but retain evidence of the withdrawal."
   }
 ];
 

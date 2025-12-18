@@ -32,6 +32,21 @@ const scenarios: Scenario[] = [
     objection: "I object to you keeping my server logs for security purposes.",
     outcome: "BALANCE",
     explanation: "<strong>BALANCING TEST REQUIRED.</strong> Security is usually a compelling legitimate ground. Bob likely wins this balance, but he must still perform the test."
+  },
+  {
+    objection: "Stop using my data for credit scoring. I don't want you profiling my finances.",
+    outcome: "BALANCE",
+    explanation: "<strong>BALANCING TEST REQUIRED.</strong> Credit scoring for legitimate lending purposes is typically a compelling legitimate interest, but Bob must document the balancing test."
+  },
+  {
+    objection: "I don't want my photo used in your company's promotional brochure anymore.",
+    outcome: "STOP",
+    explanation: "<strong>STOP IMMEDIATELY.</strong> Using someone's image for marketing materials typically relies on Consent. Once withdrawn, you must stop—and remove it from future prints."
+  },
+  {
+    objection: "Stop sharing my order history with your analytics partner for 'product improvement'.",
+    outcome: "BALANCE",
+    explanation: "<strong>BALANCING TEST REQUIRED.</strong> Sharing with third parties for analytics may be Legitimate Interest, but Bob must weigh whether the data sharing is truly necessary and proportionate."
   }
 ];
 
