@@ -1,0 +1,272 @@
+---
+title: "Relation Closures Bolt"
+description: "Master closures with the 'minimal fix' mental model and Warshall's algorithm."
+order: 7
+section: "Bolts"
+sectionOrder: 2
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+import ContentBlock from "../../../components/ContentBlock.astro";
+
+# The Minimal Fix Mental Model
+
+A **closure** is the smallest extension of a relation that gains a desired property. Think of it as the **minimal fix** — add the bare minimum to make something true.
+
+$$
+R \quad \xrightarrow{\text{closure}} \quad R^+ \text{ (has property, minimal)}
+$$
+
+**Key insight:** The closure $R^+$ satisfies:
+1. $R \subseteq R^+$ (contains the original)
+2. $R^+$ has the desired property
+3. $R^+$ is the *smallest* such relation
+
+---
+
+## Reflexive Closure: Add the Diagonal
+
+**Problem:** Make every element relate to itself.
+
+**Fix:** Add all pairs $(a, a)$ — the **diagonal** $\Delta$.
+
+$$r(R) = R \cup \Delta = R \cup \{(a, a) \mid a \in A\}$$
+
+**Matrix Operation:** Set all diagonal entries to **1**.
+
+$$
+\begin{pmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+0 & 0 & 0
+\end{pmatrix}
+\xrightarrow{\text{reflexive closure}}
+\begin{pmatrix}
+\mathbf{1} & 1 & 0 \\
+0 & \mathbf{1} & 1 \\
+0 & 0 & \mathbf{1}
+\end{pmatrix}
+$$
+
+<MultipleChoice
+  question="What is the reflexive closure of $R = \\{(1,2), (2,3)\\}$ on $A = \\{1, 2, 3\\}$?"
+  options={[
+    "$\\{(1,1), (2,2), (3,3)\\}$",
+    "$\\{(1,2), (2,3), (1,1), (2,2), (3,3)\\}$",
+    "$\\{(1,2), (2,3), (2,1), (3,2)\\}$",
+    "$\\{(1,2), (2,3), (1,3)\\}$"
+  ]}
+  correct={1}
+  explanation="Keep the original pairs AND add the diagonal: $(1,1), (2,2), (3,3)$. Don't remove anything, just add!"
+/>
+
+---
+
+## Symmetric Closure: Add the Mirrors
+
+**Problem:** Make every connection two-way.
+
+**Fix:** For each $(a, b)$, add $(b, a)$ — the **transpose**.
+
+$$s(R) = R \cup R^{-1}$$
+
+**Matrix Operation:** $M' = M \lor M^T$ (OR with transpose).
+
+$$
+\begin{pmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+0 & 0 & 0
+\end{pmatrix}
+\xrightarrow{\text{symmetric closure}}
+\begin{pmatrix}
+0 & \mathbf{1} & 0 \\
+\mathbf{1} & 0 & \mathbf{1} \\
+0 & \mathbf{1} & 0
+\end{pmatrix}
+$$
+
+<MultipleChoice
+  question="What is the symmetric closure of $R = \\{(1,2), (2,3), (3,1)\\}$?"
+  options={[
+    "$\\{(1,2), (2,3), (3,1), (2,1), (3,2), (1,3)\\}$",
+    "$\\{(1,2), (2,3), (3,1), (1,1), (2,2), (3,3)\\}$",
+    "$\\{(2,1), (3,2), (1,3)\\}$",
+    "$\\{(1,2), (2,3), (3,1)\\}$ — already symmetric"
+  ]}
+  correct={0}
+  explanation="Add the reverse of each pair: $(2,1)$ for $(1,2)$, $(3,2)$ for $(2,3)$, and $(1,3)$ for $(3,1)$. The original is NOT symmetric — $(1,2) \\in R$ but $(2,1) \\notin R$."
+/>
+
+---
+
+## Transitive Closure: Add All Shortcuts
+
+**Problem:** If you can get from $a$ to $c$ via a path, add a direct connection.
+
+**Fix:** Add $(a, c)$ whenever there's a path $a \to \cdots \to c$.
+
+$$t(R) = R \cup R^2 \cup R^3 \cup \cdots = \bigcup_{n=1}^{\infty} R^n$$
+
+This is **reachability**: $(a, c) \in t(R)$ iff you can reach $c$ from $a$ in the original relation.
+
+<MultipleChoice
+  question="What is the transitive closure of $R = \\{(1,2), (2,3)\\}$ on $\\{1, 2, 3\\}$?"
+  options={[
+    "$\\{(1,2), (2,3)\\}$",
+    "$\\{(1,2), (2,3), (1,3)\\}$",
+    "$\\{(1,2), (2,3), (1,3), (1,1), (2,2), (3,3)\\}$",
+    "$\\{(1,3)\\}$"
+  ]}
+  correct={1}
+  explanation="There's a path $1 \\to 2 \\to 3$, so we add the shortcut $(1,3)$. No other new pairs are needed."
+/>
+
+---
+
+## Warshall's Algorithm: Transitive Closure in O(n³)
+
+Computing transitive closure naively (finding all paths) is slow. **Warshall's algorithm** is elegant and efficient:
+
+### The Idea
+
+Build up reachability using intermediate nodes:
+- $W_0$: Original matrix (direct edges only)
+- $W_1$: Can reach via node 1
+- $W_2$: Can reach via nodes 1 or 2
+- $W_n$: Full transitive closure
+
+### The Formula
+
+$$W_k[i][j] = W_{k-1}[i][j] \lor (W_{k-1}[i][k] \land W_{k-1}[k][j])$$
+
+**English:** "Can I get from $i$ to $j$ either directly (without $k$), OR by going through $k$?"
+
+### Example
+
+$$
+W_0 = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}
+$$
+
+After processing node 2 ($k=2$):
+- Can we reach from 1 to 3 via 2? Yes: $W[1][2]=1$ and $W[2][3]=1$
+- Add the entry $(1,3)$!
+
+$$
+W_2 = \begin{pmatrix} 0 & 1 & \mathbf{1} \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}
+$$
+
+<MultipleChoice
+  question="In Warshall's algorithm, when processing node $k$, we check:"
+  options={[
+    "If there's a direct edge from $i$ to $k$",
+    "If we can go $i \\to k \\to j$ using node $k$ as intermediate",
+    "If $k$ is reachable from all other nodes",
+    "If $k$ is on the diagonal"
+  ]}
+  correct={1}
+  explanation="The core of Warshall: at step $k$, we check if routing through node $k$ creates a new path $i \\to k \\to j$."
+/>
+
+<MultipleChoice
+  question="What is the time complexity of Warshall's algorithm on an $n \\times n$ matrix?"
+  options={[
+    "$O(n^2)$",
+    "$O(n^3)$",
+    "$O(n^4)$",
+    "$O(2^n)$"
+  ]}
+  correct={1}
+  explanation="Three nested loops, each running $n$ times: $O(n \\times n \\times n) = O(n^3)$."
+/>
+
+---
+
+## Combining Closures
+
+Sometimes you need multiple closures. The order can matter!
+
+### Reflexive-Transitive Closure
+
+Common combination: $r(t(R))$ or $t(r(R))$ — same result!
+
+This gives "reachability including staying put."
+
+### Reflexive-Symmetric-Transitive Closure
+
+This creates an **equivalence relation** — the smallest one containing $R$.
+
+**Warning:** Order matters here!
+- $t(s(R))$ ≠ $s(t(R))$ in general
+- Correct order: $t(s(r(R)))$ or compute them iteratively
+
+<MultipleChoice
+  question="To find the smallest equivalence relation containing $R$, we compute:"
+  options={[
+    "Just $s(R)$ (symmetric closure)",
+    "$r(s(R))$ (reflexive then symmetric)",
+    "$t(s(r(R)))$ (all three closures)",
+    "$s(t(r(R)))$ (different order)"
+  ]}
+  correct={2}
+  explanation="We need reflexive + symmetric + transitive. The safe order is reflexive → symmetric → transitive. The transitive closure must come last to 'close up' any chains created by symmetry."
+/>
+
+---
+
+## Quick Reference
+
+| Closure | Add | Matrix Operation | Cost |
+|---------|-----|------------------|------|
+| Reflexive | Diagonal $\Delta$ | Set diagonal to 1 | $O(n)$ |
+| Symmetric | Transpose $R^{-1}$ | $M \lor M^T$ | $O(n^2)$ |
+| Transitive | All paths | Warshall | $O(n^3)$ |
+
+<MultipleChoice
+  question="If $R$ has $m$ pairs and we compute its symmetric closure, at most how many pairs are in $s(R)$?"
+  options={[
+    "$m$",
+    "$2m$",
+    "$m^2$",
+    "$n^2$ (where $n = |A|$)"
+  ]}
+  correct={1}
+  explanation="Each pair $(a,b)$ might add its reverse $(b,a)$ if not already present. At most doubles: $2m$ pairs. (Could be less if some pairs are already symmetric.)"
+/>
+
+---
+
+# Infinite Drill: Find the Closure
+
+<AdaptiveQuiz
+  generator="relation-closure-result"
+  baseSeed={33333}
+  initialCount={5}
+  appendCount={2}
+  maxQuestions={20}
+/>
+
+---
+
+## Bonus: Which Pairs to Add?
+
+<AdaptiveQuiz
+  generator="relation-closure-pairs"
+  baseSeed={44444}
+  initialCount={5}
+  appendCount={2}
+  maxQuestions={15}
+/>
+
+---
+
+## Bonus: Warshall Step-by-Step
+
+<AdaptiveQuiz
+  generator="warshall-entry-change"
+  baseSeed={55555}
+  initialCount={4}
+  appendCount={2}
+  maxQuestions={12}
+/>
