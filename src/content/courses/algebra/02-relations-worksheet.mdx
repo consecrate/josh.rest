@@ -12,7 +12,12 @@ import LiveWorksheet from "../../../components/LiveWorksheet.astro";
 
 <LiveWorksheet title="Relations & Functions" description="28 problems with detailed derivations">
 
-<WorksheetProblem number={1}>
+<WorksheetProblem number={1} distractors={[
+  "The set of all integers multiplied together.",
+  "The set of all positive integer pairs.",
+  "The set of pairs where the first element equals the second.",
+  "The union of two copies of the integers."
+]}>
   <Fragment slot="question">Describe $\mathbb{Z} \times \mathbb{Z}$</Fragment>
   <Fragment slot="answer">The set of all possible ordered pairs where both the first and second elements are integers.</Fragment>
   <Fragment slot="derivation">
@@ -28,7 +33,12 @@ If you imagine a 2D graph, this set represents all the "grid points" — the poi
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={2}>
+<WorksheetProblem number={2} distractors={[
+  "$mn$",
+  "$m + n$",
+  "$m^n$",
+  "$2^{m+n}$"
+]}>
   <Fragment slot="question">How many relations are there from set $A$ to set $B$ where $|A|=m, |B|=n$?</Fragment>
   <Fragment slot="answer">$2^{mn}$</Fragment>
   <Fragment slot="derivation">
@@ -49,7 +59,12 @@ Since our "set of pairs" has size $mn$, the number of possible subsets—and thu
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={3}>
+<WorksheetProblem number={3} distractors={[
+  "No, it's not defined at $x = -1$.",
+  "No, it's not surjective.",
+  "No, multiple inputs give the same output.",
+  "Only for positive $x$."
+]}>
   <Fragment slot="question">Is $f(x) = \frac{x}{x+1}$ invertible?</Fragment>
   <Fragment slot="answer">Yes.</Fragment>
   <Fragment slot="derivation">
@@ -75,7 +90,12 @@ Since assuming $f(a)=f(b)$ leads directly to $a=b$, the function is injective. I
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={4}>
+<WorksheetProblem number={4} distractors={[
+  "$a > 0$. Inverse: $f^{-1}(y) = ay$.",
+  "All $a \\in \\mathbb{R}$. Inverse: $f^{-1}(y) = \\frac{y}{a}$.",
+  "$a \\neq 0$. Inverse: $f^{-1}(y) = ay$.",
+  "$a = 1$. Inverse: $f^{-1}(y) = y$."
+]}>
   <Fragment slot="question">For which $a \in \mathbb{R}$ is $f(x)=ax$ invertible? Find $f^{-1}$.</Fragment>
   <Fragment slot="answer">$a \neq 0$. Inverse: $f^{-1}(y) = \frac{y}{a}$.</Fragment>
   <Fragment slot="derivation">
@@ -99,7 +119,12 @@ So, $f^{-1}(x) = \frac{x}{a}$.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={5}>
+<WorksheetProblem number={5} distractors={[
+  "Partial Order (Reflexive, Antisymmetric, Transitive).",
+  "Only Reflexive and Symmetric.",
+  "Only Symmetric and Transitive.",
+  "Not an equivalence relation (fails transitivity)."
+]}>
   <Fragment slot="question">Investigate properties of $R_5$ on $\mathbb{Z}$: $(x,y) \in R_5 \iff 5 \mid (x-y)$.</Fragment>
   <Fragment slot="answer">Equivalence Relation (Reflexive, Symmetric, Transitive).</Fragment>
   <Fragment slot="derivation">
@@ -131,7 +156,12 @@ Since it satisfies all three, it is an **Equivalence Relation**.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={6}>
+<WorksheetProblem number={6} distractors={[
+  "No, it's a partial order.",
+  "No, it fails symmetry.",
+  "No, it fails transitivity.",
+  "Only on finite sets."
+]}>
   <Fragment slot="question">Is $=$ an equivalence relation?</Fragment>
   <Fragment slot="answer">Yes.</Fragment>
   <Fragment slot="derivation">
@@ -146,7 +176,12 @@ Therefore, it is an equivalence relation.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={7}>
+<WorksheetProblem number={7} distractors={[
+  "Yes, it's transitive.",
+  "Yes, on positive numbers.",
+  "Yes, it partitions numbers.",
+  "No, but it's a total order."
+]}>
   <Fragment slot="question">Is $>$ an equivalence relation?</Fragment>
   <Fragment slot="answer">No.</Fragment>
   <Fragment slot="derivation">
@@ -161,7 +196,12 @@ We can stop right there. Since it fails the first test, it cannot be an equivale
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={8}>
+<WorksheetProblem number={8} distractors={[
+  "Yes, it's reflexive and transitive.",
+  "Yes, it includes equality.",
+  "Yes, on the real numbers.",
+  "No, but it's an equivalence on integers."
+]}>
   <Fragment slot="question">Is $\geq$ an equivalence relation?</Fragment>
   <Fragment slot="answer">No.</Fragment>
   <Fragment slot="derivation">
@@ -179,7 +219,12 @@ Since it fails symmetry, it is **not** an equivalence relation.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={9}>
+<WorksheetProblem number={9} distractors={[
+  "(a) $A = \\{1, 2, ..., 30\\}$. (b) $B \\cap C = \\emptyset$.",
+  "(a) $A = \\{2, 4, ..., 30\\}$. (b) $B \\cap C = \\{6, 8\\}$.",
+  "(a) $A = \\{2, 4, ..., 28\\}$. (b) $B \\cup C = \\{24\\}$.",
+  "(a) $A = \\{0, 2, 4, ..., 30\\}$. (b) $B \\cap C = \\{48\\}$."
+]}>
   <Fragment slot="question">$A = \{x \in \mathbb{Z}^+ \mid 2 \mid x, x \le 30\}$. (a) Find $A$. (b) Let $B = \{x \in A \mid 6 \mid x\}$, $C = \{x \in A \mid 8 \mid x\}$. Find $B \cup C$ and $B \cap C$.</Fragment>
   <Fragment slot="answer">(a) $A = \{2, 4, ..., 30\}$.<br />(b) Union and Intersection details below.</Fragment>
   <Fragment slot="derivation">
@@ -205,7 +250,12 @@ $A = \{2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30\}$
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={10}>
+<WorksheetProblem number={10} distractors={[
+  "No, it fails reflexivity.",
+  "No, it fails symmetry.",
+  "No, it's a partial order.",
+  "Only for invertible matrices."
+]}>
   <Fragment slot="question">$R$ on $M_{n \times n}$: $(A,B) \in R \iff A = PBP^{-1}$ (Similarity). Is $R$ an equivalence relation?</Fragment>
   <Fragment slot="answer">Yes.</Fragment>
   <Fragment slot="derivation">
@@ -237,7 +287,12 @@ Let's check the properties formally:
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={11}>
+<WorksheetProblem number={11} distractors={[
+  "Equivalence Relation (Reflexive, Symmetric, Transitive).",
+  "Symmetric and Transitive only.",
+  "Partial Order (Reflexive, Antisymmetric, Transitive).",
+  "Only Symmetric."
+]}>
   <Fragment slot="question">$A = \text{webpages}$, $(a,b) \in R \iff \exists$ common link. What are the properties of $R$?</Fragment>
   <Fragment slot="answer">Reflexive and Symmetric. Not Transitive.</Fragment>
   <Fragment slot="derivation">
@@ -264,7 +319,12 @@ Let's translate "common link": Two pages are related if they both link to the sa
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={12}>
+<WorksheetProblem number={12} distractors={[
+  "(a) Identity matrix. (b) Equivalence Relation.",
+  "(a) All 1s matrix. (b) Universal Relation.",
+  "(a) See derivation. (b) Only Reflexive.",
+  "(a) See derivation. (b) Equivalence Relation."
+]}>
   <Fragment slot="question">$A=\{1,2\}$, $R$ on $2^A$: $(B,C) \in R \iff B \subseteq C$. (a) Write the matrix $M_R$. (b) What are the properties?</Fragment>
   <Fragment slot="answer">(a) See derivation for matrix.<br />(b) Partial Order.</Fragment>
   <Fragment slot="derivation">
@@ -292,7 +352,12 @@ A relation with these three properties is called a **Partial Order**.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={13}>
+<WorksheetProblem number={13} distractors={[
+  "(a) $R^{-1} = \\overline{R}$. (b) Same as $R$. (c) Empty relation.",
+  "(a) $R^{-1} \\neq R$. (b) Identity. (c) $R$.",
+  "(a) $R^{-1} = R$. (b) Universal. (c) Empty relation.",
+  "(a) $R^{-1} = R^2$. (b) Complement details below. (c) $R$."
+]}>
   <Fragment slot="question">$A=\{a,b,c\}$ with given matrix $M_R = \begin{pmatrix} 0 & 1 & 1 \\ 1 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$<br /><br />Find:<br />(a) $R^{-1}$<br />(b) $\overline{R}$<br />(c) $R^2$</Fragment>
   <Fragment slot="answer">(a) $R^{-1} = R$.<br />(b) Complement details below.<br />(c) Universal relation.</Fragment>
   <Fragment slot="derivation">
@@ -319,7 +384,12 @@ Thus, the result is a matrix of all 1s (the **Universal Relation**).
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={14}>
+<WorksheetProblem number={14} distractors={[
+  "$R_1$: Yes. $R_2$: No.",
+  "$R_1$: Yes. $R_2$: Yes.",
+  "$R_1$: No. $R_2$: No.",
+  "Both are partial orders."
+]}>
   <Fragment slot="question">Determine if $R_1$ and $R_2$ are equivalence relations given their matrices.</Fragment>
   <Fragment slot="answer">$R_1$: No. $R_2$: Yes.</Fragment>
   <Fragment slot="derivation">
@@ -345,7 +415,12 @@ Since it fails symmetry, it is **not** an equivalence relation.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={15}>
+<WorksheetProblem number={15} distractors={[
+  "$R^2$: 2 stopovers. $R^3$: 3 stopovers. $R^{-1}$: Cancelled flights.",
+  "$R^2$: Round trips. $R^3$: Triple booking. $R^{-1}$: Delayed flights.",
+  "$R^2$: Direct flights. $R^3$: 1 stopover. $R^{-1}$: Same as $R$.",
+  "$R^2$: 1 stopover. $R^3$: 2 stopovers. $R^{-1}$: No flights."
+]}>
   <Fragment slot="question">$R$: Direct flights between cities. What do $R^2$, $R^3$, and $R^{-1}$ represent?</Fragment>
   <Fragment slot="answer">$R^2$: 1 stopover. $R^3$: 2 stopovers. $R^{-1}$: Return flights.</Fragment>
   <Fragment slot="derivation">
@@ -367,7 +442,12 @@ This represents the **return flight**.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={16}>
+<WorksheetProblem number={16} distractors={[
+  "The empty relation.",
+  "The identity relation $\\{(a,a) \\mid a \\in \\mathbb{Z}\\}$.",
+  "$R$ itself (already reflexive).",
+  "The relation $\\{(a,b) \\mid a \\leq b\\}$."
+]}>
   <Fragment slot="question">Find the reflexive closure of $R = \{(a,b) \in \mathbb{Z}^2 \mid a \neq b\}$.</Fragment>
   <Fragment slot="answer">The universal relation $\mathbb{Z} \times \mathbb{Z}$.</Fragment>
   <Fragment slot="derivation">
@@ -388,7 +468,12 @@ The result is the full Cartesian product $\mathbb{Z} \times \mathbb{Z}$.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={17}>
+<WorksheetProblem number={17} distractors={[
+  "$\\{(a,b) \\mid a \\mid b \\land b \\mid a\\}$",
+  "$R$ itself (already symmetric).",
+  "The universal relation.",
+  "$\\{(a,b) \\mid \\gcd(a,b) = 1\\}$"
+]}>
   <Fragment slot="question">Find the symmetric closure of $R = \{(a,b) \in \mathbb{Z}^2 \mid a \mid b\}$.</Fragment>
   <Fragment slot="answer">$\{(a,b) \mid a \mid b \lor b \mid a\}$</Fragment>
   <Fragment slot="derivation">
@@ -408,7 +493,12 @@ This doesn't simplify to a neat name, so we describe it as the set of pairs wher
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={18}>
+<WorksheetProblem number={18} distractors={[
+  "Students who share exactly two classes.",
+  "Students who have never met.",
+  "Students in the same class as the professor.",
+  "Students who share all classes."
+]}>
   <Fragment slot="question">$R$: Students who share at least one class. What does $R^2$ represent?</Fragment>
   <Fragment slot="answer">Students connected by a common classmate.</Fragment>
   <Fragment slot="derivation">
@@ -423,7 +513,12 @@ $R^2$ represents the relationship "We have a friend-of-a-friend (classmate-wise)
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={19}>
+<WorksheetProblem number={19} distractors={[
+  "Only nodes 1 and 2 become connected.",
+  "No change (already transitive).",
+  "All nodes become isolated.",
+  "The empty relation."
+]}>
   <Fragment slot="question">Find the transitive closure $R^*$ using Warshall's algorithm.</Fragment>
   <Fragment slot="answer">Nodes 1, 2, 3 become fully connected.</Fragment>
   <Fragment slot="derivation">
@@ -451,7 +546,12 @@ Row 4 will be all 0s (4 can't go anywhere).
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={20}>
+<WorksheetProblem number={20} distractors={[
+  "$\\{(1,2), (2,1), (2,3), (3,4), (4,1)\\}$ (no change needed)",
+  "$\\{(1,1), (2,2), (3,3), (4,4)\\}$",
+  "$\\{(1,2), (2,3), (3,4), (4,1)\\}$",
+  "The universal relation on $\\{1,2,3,4\\}$"
+]}>
   <Fragment slot="question">$R = \{(1,2), (2,1), (2,3), (3,4), (4,1)\}$. Find the symmetric closure.</Fragment>
   <Fragment slot="answer">$\{(1,2), (2,1), (2,3), (3,2), (3,4), (4,3), (4,1), (1,4)\}$</Fragment>
   <Fragment slot="derivation">
@@ -468,7 +568,12 @@ The original set plus the three new pairs we added.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={21}>
+<WorksheetProblem number={21} distractors={[
+  "No, it fails reflexivity.",
+  "No, it fails transitivity.",
+  "Only for square matrices.",
+  "Only for invertible matrices."
+]}>
   <Fragment slot="question">Is similarity of matrices an equivalence relation?</Fragment>
   <Fragment slot="answer">Yes.</Fragment>
   <Fragment slot="derivation">
@@ -542,7 +647,12 @@ This is a fundamental result in Linear Algebra: the equivalence classes partitio
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={22}>
+<WorksheetProblem number={22} distractors={[
+  "(a) No, fails transitivity. (b) $n^2$.",
+  "(a) Yes. (b) $2^n$.",
+  "(a) Yes. (b) $n!$.",
+  "(a) No, fails symmetry. (b) $\\frac{n(n-1)}{2}$."
+]}>
   <Fragment slot="question">Bit strings: $s \sim t \iff \#_1(s) = \#_1(t)$ (same number of 1s). (a) Is this an equivalence relation? <br/> (b) How many strings of length $n$ have exactly two 1s?</Fragment>
   <Fragment slot="answer">(a) Yes.<br />(b) $\frac{n(n-1)}{2}$.</Fragment>
   <Fragment slot="derivation">
@@ -567,7 +677,12 @@ Formula: $\binom{n}{2} = \frac{n(n-1)}{2}$.
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={24}>
+<WorksheetProblem number={24} distractors={[
+  "No, it fails reflexivity.",
+  "No, it fails transitivity.",
+  "Only when $b, d \\neq 0$.",
+  "No, it's a partial order."
+]}>
   <Fragment slot="question">Rationals: $(a,b) \sim (c,d) \iff ad = bc$. Is this an equivalence relation?</Fragment>
   <Fragment slot="answer">Yes.</Fragment>
   <Fragment slot="derivation">
@@ -587,7 +702,12 @@ We can verify technically:
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={25}>
+<WorksheetProblem number={25} distractors={[
+  "(a) Yes. (b) No. (c) Yes.",
+  "(a) No. (b) No. (c) No.",
+  "(a) Yes. (b) Yes. (c) No.",
+  "(a) No. (b) Yes. (c) No."
+]}>
   <Fragment slot="question">Given matrix representation for relations on $A = \{a, b, c\}$. Determine if the relations are partial ordering relations or not.<br /><br />(a) $M_{R_1} = \begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$<br /><br />(b) $M_{R_2} = \begin{pmatrix} 1 & 1 & 1 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$<br /><br />(c) $M_{R_3} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$</Fragment>
   <Fragment slot="answer">(a) No.<br />(b) Yes.<br />(c) Yes.</Fragment>
   <Fragment slot="derivation">
@@ -647,7 +767,12 @@ $$M_{R_3} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$$
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={28}>
+<WorksheetProblem number={28} distractors={[
+  "Single chain from 2 to 25.",
+  "All elements on the same level.",
+  "Tree with 10 at the root.",
+  "Two disconnected components."
+]}>
   <Fragment slot="question">Draw the Hasse diagram for divisibility on $A = \{2,4,5,10,12,20,25\}$.</Fragment>
   <Fragment slot="answer">Layered structure with 2 and 5 at the bottom.</Fragment>
   <Fragment slot="derivation">
@@ -692,7 +817,12 @@ The relation is $a \mid b$ (a divides b).
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={29}>
+<WorksheetProblem number={29} distractors={[
+  "Linear chain from $\\emptyset$ to $\\{a,b,c\\}$.",
+  "Three disconnected chains.",
+  "Flat structure with all 8 elements at same level.",
+  "Binary tree with $\\{a,b,c\\}$ as root."
+]}>
   <Fragment slot="question">Draw the Hasse diagram for the power set $B = 2^{\{a,b,c\}}$ with the containment relation ($\subseteq$).</Fragment>
   <Fragment slot="answer">Cube-shaped Boolean lattice with $\emptyset$ at bottom and $\{a,b,c\}$ at top.</Fragment>
   <Fragment slot="derivation">
@@ -733,7 +863,12 @@ This forms a **Boolean lattice** — the classic cube structure where each level
 </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={30}>
+<WorksheetProblem number={30} distractors={[
+  "A tree structure with 0 at root.",
+  "Two parallel chains.",
+  "A diamond-shaped lattice.",
+  "Multiple incomparable elements."
+]}>
   <Fragment slot="question">Draw the Hasse diagram for $C = \{0, 01, 11, 001, 010, 011, 0001, 0101\}$ with the lexicographic ordering relation.</Fragment>
   <Fragment slot="answer">A linear chain (total order).</Fragment>
   <Fragment slot="derivation">

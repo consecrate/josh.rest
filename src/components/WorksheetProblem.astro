@@ -3,15 +3,17 @@ import "../styles/quiz.css";
 
 interface Props {
   number: number;
+  distractors?: string[];
 }
 
-const { number } = Astro.props;
+const { number, distractors = [] } = Astro.props;
 const id = `ws-${number}-${Math.random().toString(36).slice(2, 9)}`;
 
 const hasDerivation = Astro.slots.has("derivation");
+const distractorsJson = JSON.stringify(distractors);
 ---
 
-<div class="worksheet-problem" data-id={id} data-number={number}>
+<div class="worksheet-problem" data-id={id} data-number={number} data-distractors={distractorsJson}>
   <div class="problem-header">
     <span class="problem-number">{number}.</span>
     <div class="problem-question">
@@ -282,6 +284,12 @@ const hasDerivation = Astro.slots.has("derivation");
   :global(.hello-mode) .hello-mcq.hidden {
     display: block;
   }
+
+  .no-mcq {
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+  }
 </style>
 
 <script>
@@ -349,18 +357,21 @@ const hasDerivation = Astro.slots.has("derivation");
         const answerContent = answerSection?.querySelector(".answer-content");
         const correctAnswer = answerContent?.innerHTML.trim() || "";
 
-        // Get all sibling problems' answers as distractors
-        const worksheet = problem.closest(".live-worksheet");
-        const allProblems = worksheet?.querySelectorAll<HTMLElement>(".worksheet-problem") || [];
-        const distractors: string[] = [];
-        
-        allProblems.forEach((p) => {
-          if (p === problem) return;
-          const pAnswer = p.querySelector(".answer-content")?.innerHTML.trim();
-          if (pAnswer && pAnswer !== correctAnswer) {
-            distractors.push(pAnswer);
-          }
-        });
+        // Get distractors from data attribute
+        let distractors: string[] = [];
+        try {
+          distractors = JSON.parse(problem.dataset.distractors || "[]");
+        } catch {
+          distractors = [];
+        }
+
+        // If no distractors provided, show a message
+        if (distractors.length === 0) {
+          quizOptions.innerHTML = '<p class="no-mcq">Multiple choice not available for this problem.</p>';
+          if (checkBtn) checkBtn.style.display = 'none';
+          if (resetBtn) resetBtn.style.display = 'none';
+          return;
+        }
 
         // Shuffle and pick up to 4 distractors
         const shuffledDistractors = shuffleArray(distractors).slice(0, 4);

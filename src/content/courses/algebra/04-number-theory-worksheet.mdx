@@ -12,7 +12,12 @@ import LiveWorksheet from "../../../components/LiveWorksheet.astro";
 
 <LiveWorksheet title="Number Theory" description="31 problems covering modular arithmetic, primes, GCD, and cryptography">
 
-<WorksheetProblem number={1}>
+<WorksheetProblem number={1} distractors={[
+  "(a) $3$ (b) $1$",
+  "(a) $1$ (b) $1$",
+  "(a) $0$ (b) $0$",
+  "(a) $9$ (b) $10$"
+]}>
   <Fragment slot="question">
     Find the last digit of the following sum using the remainders of 10.<br />
     (a) $2403 + 791 + 688 + 4339$<br />
@@ -70,7 +75,12 @@ The last digit of 100 is **0**.
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={2}>
+<WorksheetProblem number={2} distractors={[
+  "(a) $5$ (b) $-1$ (c) $-2$ (d) $0$ (e) $5$ (f) $5$ (g) $2$",
+  "(a) $4$ (b) $8$ (c) $7$ (d) $6$ (e) $5$ (f) $5$ (g) $1$",
+  "(a) $5$ (b) $8$ (c) $7$ (d) $6$ (e) $0$ (f) $32$ (g) $1$",
+  "(a) $5$ (b) $8$ (c) $2$ (d) $0$ (e) $5$ (f) $5$ (g) $4$"
+]}>
   <Fragment slot="question">
     Find<br />
     (a) $14 \pmod 9$<br />
@@ -194,7 +204,12 @@ $2^6 \equiv 1 \pmod 9$, so $2^{2016} = (2^6)^{336} \equiv 1^{336} = 1 \pmod 9$.
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={3}>
+<WorksheetProblem number={3} distractors={[
+  "(a) $1$ (b) $1$ (c) $5$ (d) $5$ (e) $5$ (f) $125$",
+  "(a) $7$ (b) $2$ (c) $3$ (d) $4$ (e) $8$ (f) $1001$",
+  "(a) $0$ (b) $1$ (c) $3$ (d) $4$ (e) $8$ (f) $983$",
+  "(a) $7$ (b) $1$ (c) $1$ (d) $1$ (e) $1$ (f) $1$"
+]}>
   <Fragment slot="question">
     Find<br />
     (a) $7^{121} \pmod{13}$<br />
@@ -343,7 +358,12 @@ $$x = 77(12) + 59 = 924 + 59 = 983$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={4}>
+<WorksheetProblem number={4} distractors={[
+  "$4$ cans leftover",
+  "$0$ cans leftover",
+  "$12$ cans leftover",
+  "$6$ cans leftover"
+]}>
   <Fragment slot="question">
     **Soda Packing Problem**<br />
     Jesper has 44 boxes of soda in his truck. The cans of soda in each box are packed oddly so that there are 113 cans of soda in each box. Jesper plans to pack the sodas into cases of 12 cans to sell. After making as many complete cases as possible, how many sodas will Jesper have leftover?<br />
@@ -422,7 +442,12 @@ Notice how we never had to compute $4972$ or do long division! By reducing each 
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={5}>
+<WorksheetProblem number={5} distractors={[
+  "(a) Prime (b) Always prime (c) Prime (d) Prime",
+  "(a) Composite (b) Always composite (c) Prime (d) Composite",
+  "(a) Prime (b) Cannot determine (c) Composite (d) Composite",
+  "(a) Composite (b) Always prime (c) Composite (d) Prime"
+]}>
   <Fragment slot="question">
     Which are prime, which are composite?<br />
     (a) $119$<br />
@@ -525,7 +550,12 @@ For $n > 1$, both factors are strictly greater than 1.
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={6}>
+<WorksheetProblem number={6} distractors={[
+  "Proof by induction on $n$.",
+  "Direct proof using Fermat's Little Theorem.",
+  "The statement is false; $n$ can be composite.",
+  "Proof by contradiction assuming $n$ is even."
+]}>
   <Fragment slot="question">
     **Proof**<br />
     Show that if $2^{n} - 1$ is prime, then $n$ is prime.
@@ -589,7 +619,12 @@ Primes of the form $2^p - 1$ (where $p$ is prime) are called **Mersenne primes**
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={7}>
+<WorksheetProblem number={7} distractors={[
+  "(a) No (b) Yes (c) Yes",
+  "(a) Yes (b) Yes (c) No",
+  "(a) No (b) No (c) Yes",
+  "(a) Yes (b) No (c) Yes"
+]}>
   <Fragment slot="question">
     Determine whether the integers in each of these sets are pairwise relatively prime:<br />
     (a) $7, 8, 9, 11$<br />
@@ -666,7 +701,12 @@ This follows from the Euclidean algorithm property: $2^a - 1$ divides $2^{ka} - 
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={8}>
+<WorksheetProblem number={8} distractors={[
+  "(a) $\\phi(4) = 4$, $\\phi(10) = 5$, $\\phi(13) = 13$",
+  "(a) $\\phi(4) = 2$, $\\phi(10) = 4$, $\\phi(13) = 12$ but (b) $\\phi(p^k) = p^k$",
+  "(a) $\\phi(4) = 3$, $\\phi(10) = 4$, $\\phi(13) = 12$",
+  "(c) $\\phi(pq) = pq - 1$"
+]}>
   <Fragment slot="question">
     **Euler Phi Function**<br />
     The value of the Euler function at a positive integer $n$ is defined to be the number of positive integers less than or equal to $n$ that are relatively prime to $n$. Find the following:<br />
@@ -757,7 +797,12 @@ Verify: Numbers coprime to 12: 1, 5, 7, 11. Count = 4 ✓
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={9}>
+<WorksheetProblem number={9} distractors={[
+  "(b) gcd = $25$, lcm = $625000$ (d) gcd = $0$, lcm = $1111$",
+  "(c) gcd = $15$, lcm = $2^{12} \\cdot 3^{13} \\cdot 5^{17} \\cdot 7^{21}$",
+  "(a) gcd = $3^9 \\cdot 5^3$, lcm = $3^7 \\cdot 5^2$",
+  "(b) gcd = $125$, lcm = $625$ (d) gcd = $1$, lcm = undefined"
+]}>
   <Fragment slot="question">
     What are the greatest common divisors and the least common multiples of these pairs of integers?<br />
     (a) $3^{7} \cdot 5^{3} \cdot 7^{3}$ and $3^{9} \cdot 5^{2} \cdot 11^{2}$<br />
@@ -841,7 +886,12 @@ $$\text{lcm}(1111, 0) = 0$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={10}>
+<WorksheetProblem number={10} distractors={[
+  "(a) $6$ (b) $6$ (c) $3$ (d) $42$ (e) $40$ (f) $9$ (g) $15$ (h) $3$",
+  "(a) $6$ (b) $6$ (c) $1$ (d) $42$ (e) $40$ (f) $3$ (g) $15$ (h) $3$",
+  "(a) $2$ (b) $6$ (c) $3$ (d) $42$ (e) $40$ (f) $3$ (g) $15$ (h) $3$",
+  "(a) $6$ (b) $6$ (c) $3$ (d) $21$ (e) $8$ (f) $3$ (g) $15$ (h) $3$"
+]}>
   <Fragment slot="question">
     Find the greatest common divisors of the following pairs using Euclid's algorithm and prime factorization theorem.<br />
     (a) $\gcd(12, 18)$<br />
