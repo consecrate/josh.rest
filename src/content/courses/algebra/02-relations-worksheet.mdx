@@ -181,7 +181,7 @@ Since it fails symmetry, it is **not** an equivalence relation.
 
 <WorksheetProblem number={9}>
   <Fragment slot="question">$A = \{x \in \mathbb{Z}^+ \mid 2 \mid x, x \le 30\}$. (a) Find $A$. (b) Let $B = \{x \in A \mid 6 \mid x\}$, $C = \{x \in A \mid 8 \mid x\}$. Find $B \cup C$ and $B \cap C$.</Fragment>
-  <Fragment slot="answer">(a) $A = \{2, 4, ..., 30\}$. (b) Union and Intersection details below.</Fragment>
+  <Fragment slot="answer">(a) $A = \{2, 4, ..., 30\}$.<br />(b) Union and Intersection details below.</Fragment>
   <Fragment slot="derivation">
 **(a) Constructing Set A**
 We need positive integers up to 30 that are divisible by 2 (even numbers).
@@ -250,10 +250,11 @@ Let's translate "common link": Two pages are related if they both link to the sa
     Yes, obviously. "Sharing" is mutual.
 
 3.  **Transitive:** This is the tricky one.
+
     - Page $A$ links to Google.
     - Page $B$ links to Google AND Facebook.
     - Page $C$ links to Facebook.
-    
+
     $A$ and $B$ relate (share Google).
     $B$ and $C$ relate (share Facebook).
     **BUT** $A$ and $C$ share nothing!
@@ -265,7 +266,7 @@ Let's translate "common link": Two pages are related if they both link to the sa
 
 <WorksheetProblem number={12}>
   <Fragment slot="question">$A=\{1,2\}$, $R$ on $2^A$: $(B,C) \in R \iff B \subseteq C$. (a) Write the matrix $M_R$. (b) What are the properties?</Fragment>
-  <Fragment slot="answer">(a) See derivation for matrix. (b) Partial Order.</Fragment>
+  <Fragment slot="answer">(a) See derivation for matrix.<br />(b) Partial Order.</Fragment>
   <Fragment slot="derivation">
 **(a) Constructing the Matrix**
 First, list all elements of the power set $2^A$ (all subsets of $\{1,2\}$):
@@ -292,8 +293,8 @@ A relation with these three properties is called a **Partial Order**.
 </WorksheetProblem>
 
 <WorksheetProblem number={13}>
-  <Fragment slot="question">$A=\{a,b,c\}$ with given matrix $M_R$. Find: (a) $R^{-1}$, (b) $\overline{R}$, (c) $R^2$.</Fragment>
-  <Fragment slot="answer">(a) $R^{-1} = R$. (b) Complement details below. (c) Universal relation.</Fragment>
+  <Fragment slot="question">$A=\{a,b,c\}$ with given matrix $M_R = \begin{pmatrix} 0 & 1 & 1 \\ 1 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$<br /><br />Find:<br />(a) $R^{-1}$<br />(b) $\overline{R}$<br />(c) $R^2$</Fragment>
+  <Fragment slot="answer">(a) $R^{-1} = R$.<br />(b) Complement details below.<br />(c) Universal relation.</Fragment>
   <Fragment slot="derivation">
 Given Matrix:
 $$M_R = \begin{pmatrix} 0 & 1 & 1 \\ 1 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$$
@@ -485,8 +486,8 @@ Yes, it is a classic example of an equivalence relation in Linear Algebra.
 </WorksheetProblem>
 
 <WorksheetProblem number={22}>
-  <Fragment slot="question">Bit strings: $s \sim t \iff \#_1(s) = \#_1(t)$ (same number of 1s). (a) Is this an equivalence relation? (b) How many strings of length $n$ have exactly two 1s?</Fragment>
-  <Fragment slot="answer">(a) Yes. (b) $\frac{n(n-1)}{2}$.</Fragment>
+  <Fragment slot="question">Bit strings: $s \sim t \iff \#_1(s) = \#_1(t)$ (same number of 1s). (a) Is this an equivalence relation? <br/> (b) How many strings of length $n$ have exactly two 1s?</Fragment>
+  <Fragment slot="answer">(a) Yes.<br />(b) $\frac{n(n-1)}{2}$.</Fragment>
   <Fragment slot="derivation">
 **(a) Equivalence Check**
 Think about what this relation does: it groups strings into buckets based on "how many 1s they have".
@@ -530,19 +531,61 @@ We can verify technically:
 </WorksheetProblem>
 
 <WorksheetProblem number={25}>
-  <Fragment slot="question">Determine which of the given matrices represent partial orderings.</Fragment>
-  <Fragment slot="answer">Matrix (b) and (c).</Fragment>
+  <Fragment slot="question">Given matrix representation for relations on $A = \{a, b, c\}$. Determine if the relations are partial ordering relations or not.<br /><br />(a) $M_{R_1} = \begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$<br /><br />(b) $M_{R_2} = \begin{pmatrix} 1 & 1 & 1 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$<br /><br />(c) $M_{R_3} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$</Fragment>
+  <Fragment slot="answer">(a) No.<br />(b) Yes.<br />(c) Yes.</Fragment>
   <Fragment slot="derivation">
 **Recall: Partial Order Properties**
+A relation is a partial ordering if and only if it satisfies:
 1.  **Reflexive:** Diagonal must be all 1s.
 2.  **Antisymmetric:** If $m_{ij}=1$ (where $i \neq j$), then $m_{ji}$ MUST be 0. No two-way streets off the diagonal.
 3.  **Transitive:** If $i \to j$ and $j \to k$, then $i \to k$.
 
-**Analysis:**
+---
 
-- **Matrix (a):** Has $1$ at $(1,2)$ and $1$ at $(2,1)$. This violates Antisymmetry. **No.**
-- **Matrix (b):** Diagonal is 1s. It is "Upper Triangular" (all 1s are above diagonal), which guarantees Antisymmetry automatically. It also checks out for transitivity. **Yes.**
-- **Matrix (c):** Diagonal is 1s. No symmetric entries. Transitivity holds. **Yes.**
+**Analysis of $R_1$:**
+$$M_{R_1} = \begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$$
+
+- **Reflexive:** Diagonal is $(1, 1, 1)$. ✓
+- **Antisymmetric:** Check position $(1,2)$ and $(2,1)$:
+  - $m_{12} = 1$ and $m_{21} = 1$ with $a \neq b$
+  - This means $(a,b) \in R_1$ AND $(b,a) \in R_1$ but $a \neq b$
+  - **Violates antisymmetry!** ✗
+
+**Conclusion: $R_1$ is NOT a partial ordering.**
+
+---
+
+**Analysis of $R_2$:**
+$$M_{R_2} = \begin{pmatrix} 1 & 1 & 1 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$$
+
+- **Reflexive:** Diagonal is $(1, 1, 1)$. ✓
+- **Antisymmetric:** This is an upper triangular matrix. All entries below the diagonal are 0, so there are no two-way connections. ✓
+- **Transitive:** Let's verify:
+  - $(a,b) \land (b,b) \Rightarrow (a,b)$ ✓
+  - $(a,c) \land (c,c) \Rightarrow (a,c)$ ✓
+  - $(a,a) \land (a,b) \Rightarrow (a,b)$ ✓
+  - $(a,a) \land (a,c) \Rightarrow (a,c)$ ✓
+  - No violations found. ✓
+
+**Conclusion: $R_2$ IS a partial ordering.**
+
+---
+
+**Analysis of $R_3$:**
+$$M_{R_3} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$$
+
+- **Reflexive:** Diagonal is $(1, 1, 1)$. ✓
+- **Antisymmetric:** Check all off-diagonal pairs:
+  - $m_{13} = 0$, $m_{31} = 1$ — only one direction, OK ✓
+  - $m_{12} = 0$, $m_{21} = 0$ — neither direction, OK ✓
+  - $m_{23} = 0$, $m_{32} = 0$ — neither direction, OK ✓
+  - No symmetric pairs exist off the diagonal. ✓
+- **Transitive:** The relation is $\{(a,a), (b,b), (c,a), (c,c)\}$
+  - $(c,a) \land (a,a) \Rightarrow (c,a)$ ✓
+  - $(c,c) \land (c,a) \Rightarrow (c,a)$ ✓
+  - No violations found. ✓
+
+**Conclusion: $R_3$ IS a partial ordering.**
 
 </Fragment>
 </WorksheetProblem>

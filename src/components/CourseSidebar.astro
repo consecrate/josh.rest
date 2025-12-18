@@ -1,4 +1,5 @@
 ---
+import BaseSidebar from "./BaseSidebar.astro";
 import type { CourseSection } from "../lib/courses";
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 const { sections, currentSlug } = Astro.props;
 ---
 
-<nav class="course-sidebar" id="course-sidebar">
+<BaseSidebar collapsible id="course-sidebar">
   <div class="sidebar-content">
     {
       sections.map((section) => (
@@ -52,24 +53,11 @@ const { sections, currentSlug } = Astro.props;
       ))
     }
   </div>
-</nav>
+</BaseSidebar>
 
 <style>
-  .course-sidebar {
-    width: 300px;
-    flex-shrink: 0;
-    background: #1b1912;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow: hidden;
-  }
-
   .sidebar-content {
     padding: var(--space-md) 0;
-    overflow-y: auto;
-    height: 100%;
   }
 
   .section {
@@ -77,11 +65,9 @@ const { sections, currentSlug } = Astro.props;
   }
 
   .section-title {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
     margin-bottom: var(--space-sm);
     padding: 0 var(--space-lg);
   }
@@ -115,12 +101,5 @@ const { sections, currentSlug } = Astro.props;
   .lesson-link.disabled {
     color: rgba(136, 136, 136, 0.4);
     cursor: not-allowed;
-  }
-
-  /* Responsive */
-  @media (max-width: 900px) {
-    .course-sidebar {
-      display: none;
-    }
   }
 </style>

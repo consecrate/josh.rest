@@ -39,9 +39,10 @@ The core component for individual problems.
 ```typescript
 interface Props {
   number: number;          // Problem number (1, 2, 3...)
-  question: string;        // The question text (supports LaTeX)
-  answer: string;          // The short answer
-  derivation?: string;     // Optional detailed derivation/explanation
+  // Slots:
+  // - question: The question text (supports LaTeX and <br />)
+  // - answer: The short answer (supports LaTeX and <br />)
+  // - derivation: Detailed step-by-step explanation
 }
 ```
 
@@ -56,16 +57,17 @@ interface Props {
 
 **Example Usage:**
 ```mdx
-<WorksheetProblem
-  number={1}
-  question="Solve for $x$: $2x + 5 = 13$"
-  answer="$x = 4$"
-  derivation={`Subtract 5 from both sides:
-$$2x = 8$$
+<WorksheetProblem number={1}>
+  <Fragment slot="question">Solve for $x$: $2x + 5 = 13$</Fragment>
+  <Fragment slot="answer">$x = 4$</Fragment>
+  <Fragment slot="derivation">
+    Subtract 5 from both sides:
+    $$2x = 8$$
 
-Divide both sides by 2:
-$$x = 4$$`}
-/>
+    Divide both sides by 2:
+    $$x = 4$$
+  </Fragment>
+</WorksheetProblem>
 ```
 
 ### 2. `LiveWorksheet.astro`
@@ -90,8 +92,8 @@ interface Props {
 ```mdx
 <LiveWorksheet title="Algebra Practice" description="10 problems on linear equations">
 
-<WorksheetProblem number={1} ... />
-<WorksheetProblem number={2} ... />
+<WorksheetProblem number={1}>...</WorksheetProblem>
+<WorksheetProblem number={2}>...</WorksheetProblem>
 ...
 
 </LiveWorksheet>
@@ -99,16 +101,18 @@ interface Props {
 
 ## Creating a Live Worksheet Lesson
 
-### Step 1: Prepare the Source Material
+### Step 1: Read the Source Material
 
-Gather your problems with:
-- Clear question statements
-- Concise answers
-- Detailed step-by-step derivations/explanations
+If the source material is a PDF (e.g., a textbook chapter or worksheet):
+1.  **Use the PDF MCP tool** (`pdf-reader`) to read the file.
+2.  Extract the questions and any provided solutions.
+3.  **Check for attached solutions:** If the user has provided or pointed to a separate solution key, ensure you read and incorporate those solutions as well to verify accuracy.
 
 ### Step 2: Create the MDX File
 
-Create a file in `src/content/courses/{course-name}/{order}-{slug}.mdx`:
+Create a file in `src/content/courses/{course-name}/{order}-{slug}.mdx`.
+
+Follow this structure exactly (reference `@src/content/courses/algebra/02-relations-worksheet.mdx`):
 
 ```mdx
 ---
@@ -117,35 +121,69 @@ description: "Interactive practice problems on relations, functions, and equival
 order: 2
 section: "Fundamentals"
 sectionOrder: 1
+isWorksheet: true
 ---
 
 import WorksheetProblem from "../../../components/WorksheetProblem.astro";
 import LiveWorksheet from "../../../components/LiveWorksheet.astro";
 
-Brief introduction to the worksheet...
-
 <LiveWorksheet title="Relations & Functions" description="28 problems with detailed derivations">
 
-<WorksheetProblem
-  number={1}
-  question="Describe $\\mathbb{Z} \\times \\mathbb{Z}$"
-  answer="The set of all ordered pairs of integers."
-  derivation={`The Cartesian product $A \\times B$ is defined as...`}
-/>
+<WorksheetProblem number={1}>
+  <Fragment slot="question">
+    Describe $\mathbb{Z} \times \mathbb{Z}$
+  </Fragment>
+  <Fragment slot="answer">
+    The set of all ordered pairs of integers.
+  </Fragment>
+  <Fragment slot="derivation">
+    The **Cartesian product** $A \times B$ is defined as...
+    
+    Detailed educational content goes here...
+  </Fragment>
+</WorksheetProblem>
 
-<WorksheetProblem
-  number={2}
-  ...
-/>
+...
 
 </LiveWorksheet>
-
-## Summary
-
-Optional summary of topics covered...
 ```
 
-### Step 3: LaTeX Formatting
+### Step 3: Content Guidelines
+
+#### Formatting Lists and Multi-part Questions
+When a question or answer has multiple parts (e.g., a., b., c.), **you MUST use `<br />` tags** to force new lines. Markdown newlines alone often collapse in these slots.
+
+**Correct:**
+```mdx
+<Fragment slot="question">
+  Find the following:<br />
+  (a) The domain<br />
+  (b) The range
+</Fragment>
+<Fragment slot="answer">
+  (a) $[0, \infty)$<br />
+  (b) $(-\infty, \infty)$
+</Fragment>
+```
+
+**Incorrect:**
+```mdx
+<Fragment slot="question">
+  Find the following:
+  (a) The domain
+  (b) The range
+</Fragment>
+```
+
+#### High-Quality Educational Answers
+Do not just provide the final answer. The goal is to teach.
+1.  **Explanation over brevity:** In the `derivation` slot, write detailed, step-by-step explanations.
+2.  **Educational Tone:** Explain *why* a step is taken, not just *what* the step is. Use bolding for key terms.
+3.  **Visual Intuition:** If applicable, describe the visual or geometric intuition behind the problem.
+4.  **Step-by-Step:** Break down complex problems into numbered steps or logical chunks.
+5.  **Definitions:** Briefly recap relevant definitions if they are crucial to solving the problem.
+
+### Step 4: LaTeX Formatting
 
 **Important LaTeX Notes:**
 - Use **double backslashes** in MDX strings: `\\mathbb{Z}` not `\mathbb{Z}`
@@ -153,24 +191,6 @@ Optional summary of topics covered...
 - Display math: `$$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$`
 - Multi-line derivations use template literals with backticks
 - KaTeX is automatically rendered on page load and when answers are revealed
-
-**Example with complex math:**
-```mdx
-<WorksheetProblem
-  number={5}
-  question="Prove that $R_5$ on $\\mathbb{Z}$ is transitive."
-  answer="Transitive (see derivation)"
-  derivation={`Assume $x-y = 5k$ and $y-z = 5j$.
-
-Add equations:
-$$(x-y) + (y-z) = 5k + 5j$$
-
-Simplify:
-$$x - z = 5(k+j)$$
-
-Thus $5 \\mid (x-z)$. ∎`}
-/>
-```
 
 ## Styling and Design
 
@@ -186,7 +206,7 @@ The components follow the existing design system:
 The components include proper accessibility features:
 - `aria-expanded` attribute on toggle buttons
 - `aria-controls` linking buttons to answer sections
-- Semantic HTML structure
+- `Semantic HTML` structure
 - Keyboard navigation support
 
 ## Technical Implementation
@@ -217,42 +237,12 @@ import("katex/contrib/auto-render").then(({ default: renderMathInElement }) => {
 
 This ensures math in hidden content renders correctly when shown.
 
-## Example: Complete Worksheet
-
-See `src/content/courses/algebra/02-relations-worksheet.mdx` for a full example with 25+ problems covering:
-- Cartesian products
-- Function invertibility
-- Equivalence relations
-- Relation matrices
-- Closures
-- Partial orders and Hasse diagrams
-
 ## Best Practices
 
-1. **Problem Numbering**: Use sequential numbers (1, 2, 3...) for clarity
-2. **Answer Brevity**: Keep answers concise; save details for derivations
-3. **Derivation Structure**: Use clear headings, step labels, and formatting
-4. **LaTeX Escaping**: Always double-escape backslashes in MDX strings
-5. **Grouping**: Use `LiveWorksheet` container for 3+ problems
-6. **Standalone Problems**: You can use `WorksheetProblem` alone for 1-2 problems
-7. **Testing**: Always preview to ensure LaTeX renders correctly
-
-## Comparison with Other Interactive Elements
-
-| Feature | Live Worksheet | AdaptiveQuiz | MultipleChoice |
-|---------|----------------|--------------|----------------|
-| Problem Count | Fixed set | Dynamic (generates on demand) | Single question |
-| Answer Format | Free-form text with LaTeX | Multiple choice | Multiple choice |
-| Feedback | Show/hide toggle | Immediate right/wrong | Immediate right/wrong |
-| Adaptivity | None | Adds questions on errors | None |
-| Use Case | Curated problem sets | Practice drills | Comprehension checks |
-| Derivations | Detailed step-by-step | Brief explanations | Brief explanations |
-
-## Future Enhancements
-
-Potential improvements:
-- Progress tracking (how many problems attempted)
-- Export answers to PDF
-- Hint system (show partial derivation)
-- Student notes/annotations
-- Difficulty ratings per problem
+1.  **Problem Numbering**: Use sequential numbers (1, 2, 3...) for clarity
+2.  **Answer Brevity**: Keep answers concise; save details for derivations
+3.  **Derivation Structure**: Use clear headings, step labels, and formatting
+4.  **LaTeX Escaping**: Always double-escape backslashes in MDX strings
+5.  **Grouping**: Use `LiveWorksheet` container for 3+ problems
+6.  **Standalone Problems**: You can use `WorksheetProblem` alone for 1-2 problems
+7.  **Testing**: Always preview to ensure LaTeX renders correctly

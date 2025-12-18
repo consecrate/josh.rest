@@ -1,0 +1,1689 @@
+---
+import Base from "../../layouts/Base.astro";
+import BaseSidebar from "../../components/BaseSidebar.astro";
+import { listPacks, listAllGenerators, getCategory } from "../../lib/forest-factory";
+import "../../styles/quiz.css";
+
+const packs = listPacks();
+const allGenerators = listAllGenerators();
+const generatorsByCategory = new Map<string, typeof allGenerators>();
+
+for (const gen of allGenerators) {
+  const list = generatorsByCategory.get(gen.category) ?? [];
+  list.push(gen);
+  generatorsByCategory.set(gen.category, list);
+}
+
+// Serialize data for client-side
+const packsJson = JSON.stringify(packs);
+const generatorsJson = JSON.stringify(allGenerators);
+---
+
+<Base title="Forest Factory — josh.rest" description="Generate infinite practice tests from problem packs" fullWidth>
+  <div class="factory-layout">
+    <BaseSidebar collapsible id="factory-sidebar">
+      <div class="sidebar-content">
+        <div class="sidebar-header">
+          <h2>🌲 Forest Factory</h2>
+        </div>
+        <p class="sidebar-description">Generate infinite practice quizzes</p>
+        
+        <!-- Pack Selector -->
+        <section class="section" id="packs-section">
+          <h3 class="section-title">Select Pack</h3>
+          <div class="pack-dropdown" id="pack-dropdown">
+            <button class="pack-dropdown-trigger" id="pack-dropdown-trigger" type="button">
+              <span class="pack-dropdown-text" id="pack-dropdown-text">Select a pack...</span>
+              <svg class="pack-dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+            <div class="pack-dropdown-menu" id="pack-dropdown-menu">
+              {packs.map((pack) => (
+                <button 
+                  class="pack-dropdown-item"
+                  type="button"
+                  data-pack-id={pack.id}
+                  data-pack-name={pack.name}
+                  data-generators={JSON.stringify(pack.generators)}
+                >
+                  <div class="pack-dropdown-item-content">
+                    <span class="pack-dropdown-item-name">{pack.name}</span>
+                    <span class="pack-dropdown-item-desc">{pack.description}</span>
+                  </div>
+                  <svg class="pack-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+                    <path d="M5 12l5 5L20 7"/>
+                  </svg>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        <!-- Generator List (hidden until pack is selected) -->
+        <section class="section" id="generators-section" style="display: none;">
+          <h3 class="section-title">
+            Generators
+            <span class="generator-count" id="gen-count">(0)</span>
+          </h3>
+          <div class="generator-list" id="generator-list"></div>
+          <button class="add-btn" id="add-generator-btn">Add</button>
+        </section>
+        
+        <!-- Settings -->
+        <section class="section" id="settings-section">
+          <h3 class="section-title">Settings</h3>
+          <div class="setting-row">
+            <label for="question-count">Questions</label>
+            <select id="question-count">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label for="time-limit">Time Limit</label>
+            <select id="time-limit">
+              <option value="">None</option>
+              <option value="5">5 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+              <option value="60">60 min</option>
+            </select>
+          </div>
+        </section>
+        
+        <!-- Factorize Button -->
+        <button class="factorize-btn" id="factorize-btn" disabled>
+          Factorize!
+        </button>
+      </div>
+    </BaseSidebar>
+    
+    <main class="factory-content" id="quiz-panel">
+      <!-- Top progress bar (shows during quiz) -->
+      <div class="top-progress-bar" id="top-progress-bar" style="display: none;">
+        <div class="top-progress-fill" id="progress-fill" style="width: 0%"></div>
+      </div>
+      
+      <!-- Empty State -->
+      <div class="empty-state" id="empty-state">
+        <span class="forest-logo">🌲</span>
+        <p>Select a pack and Factorize!</p>
+      </div>
+      
+      <!-- Quiz Active State (hidden initially) -->
+      <div class="quiz-container" id="quiz-container" style="display: none;">
+        
+        <div class="quiz-header">
+          <div class="quiz-info">
+            <span class="quiz-pack" id="quiz-pack-name"></span>
+            <span class="quiz-progress" id="quiz-progress">Q1 of 10</span>
+          </div>
+          <div class="quiz-actions">
+            <span class="timer" id="timer" style="display: none;">00:00</span>
+            <button class="share-btn" id="share-btn" title="Share this quiz">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="question-card" id="question-card">
+          <div class="quiz-question-text" id="question-text"></div>
+          <div class="quiz-options" id="options-list"></div>
+          <div class="quiz-explanation" id="question-explanation" style="display: none;">
+            <div class="explanation-header">EXPLANATION</div>
+            <div class="explanation-content" id="explanation-content"></div>
+          </div>
+        </div>
+        
+        <div class="quiz-nav">
+          <button class="nav-btn secondary" id="prev-btn">Previous</button>
+          <button class="nav-btn primary" id="next-btn">Next</button>
+          <button class="nav-btn primary" id="submit-btn" style="display: none;">Submit</button>
+        </div>
+      </div>
+      
+      <!-- Results Panel (hidden initially) -->
+      <div class="results-container" id="results-container" style="display: none;">
+        <h2 class="results-title">You did it! Quiz Complete.</h2>
+        
+        <div class="results-cards">
+          <div class="stat-card">
+            <span class="stat-label">Score</span>
+            <span class="stat-value" id="score-value">0 / 10</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value" id="score-percent">0%</span>
+          </div>
+          <div class="stat-card stat-breakdown">
+            <div class="stat-row"><span>Right</span><span id="right-count">0</span></div>
+            <div class="stat-row"><span>Wrong</span><span id="wrong-count">0</span></div>
+            <div class="stat-row"><span>Skipped</span><span id="skipped-count">0</span></div>
+          </div>
+        </div>
+        
+        <div class="results-actions">
+          <button class="action-btn" id="try-again-btn">Try Again</button>
+          <button class="action-btn" id="new-quiz-btn">New Quiz</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Add Generator Modal -->
+  <div class="modal-overlay" id="modal-overlay" style="display: none;">
+    <div class="modal" id="add-generator-modal">
+      <div class="modal-header">
+        <h3>Add Generator</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <input type="text" class="modal-search" id="generator-search" placeholder="Search generators...">
+      <div class="modal-content" id="modal-generator-list">
+        {[...generatorsByCategory.entries()].map(([category, gens]) => (
+          <div class="generator-category">
+            <h4>{category}</h4>
+            {gens.map((gen) => (
+              <button class="generator-item" data-type={gen.type} data-name={gen.displayName}>
+                {gen.displayName}
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+  
+  <!-- Time's Up Modal -->
+  <div class="modal-overlay" id="timesup-overlay" style="display: none;">
+    <div class="modal timesup-modal">
+      <div class="timesup-icon">⏰</div>
+      <h3>Time's Up!</h3>
+      <p id="timesup-message">You answered 0 of 10 questions</p>
+      <button class="action-btn" id="view-results-btn">View Results</button>
+    </div>
+  </div>
+  
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+</Base>
+
+<script define:vars={{ packsJson, generatorsJson }}>
+  // Parse server-side data
+  const PACKS = JSON.parse(packsJson);
+  const ALL_GENERATORS = JSON.parse(generatorsJson);
+  const PACKS_MAP = Object.fromEntries(PACKS.map(p => [p.id, p]));
+  const GENERATORS_MAP = Object.fromEntries(ALL_GENERATORS.map(g => [g.type, g]));
+
+  // Minimal client-side markdown processor (fallback when API unavailable)
+  function inlineMarkdown(text) {
+    // Process list blocks: consecutive lines starting with "- "
+    const processBlock = (block) => {
+      const lines = block.split('\n');
+      const result = [];
+      let listItems = [];
+      
+      for (const line of lines) {
+        if (line.startsWith('- ')) {
+          listItems.push(line.slice(2));
+        } else {
+          if (listItems.length) {
+            result.push(`<ul>${listItems.map(li => `<li>${li}</li>`).join('')}</ul>`);
+            listItems = [];
+          }
+          result.push(line);
+        }
+      }
+      if (listItems.length) {
+        result.push(`<ul>${listItems.map(li => `<li>${li}</li>`).join('')}</ul>`);
+      }
+      return result.join('<br>');
+    };
+    
+    return text
+      .split(/\n\n/)
+      .map(processBlock)
+      .join('<br><br>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>');
+  }
+
+  // State
+  const state = {
+    selectedPackId: null,
+    activeGenerators: [],
+    questionCount: 10,
+    timeLimitMinutes: null,
+    quiz: null,
+    phase: 'config',
+    timerInterval: null,
+  };
+
+  // DOM Elements
+  const $ = (id) => document.getElementById(id);
+  const emptyState = $('empty-state');
+  const quizContainer = $('quiz-container');
+  const resultsContainer = $('results-container');
+  const generatorList = $('generator-list');
+  const genCount = $('gen-count');
+  const factorizeBtn = $('factorize-btn');
+  const addGeneratorBtn = $('add-generator-btn');
+  const modalOverlay = $('modal-overlay');
+  const timesupOverlay = $('timesup-overlay');
+  const toast = $('toast');
+  const timer = $('timer');
+  const questionText = $('question-text');
+  const optionsList = $('options-list');
+  const progressFill = $('progress-fill');
+  const quizProgress = $('quiz-progress');
+  const prevBtn = $('prev-btn');
+  const nextBtn = $('next-btn');
+  const submitBtn = $('submit-btn');
+  const topProgressBar = $('top-progress-bar');
+
+  // Initialize
+  function init() {
+    loadFromUrl();
+    setupEventListeners();
+    renderGeneratorList();
+    updateFactorizeButton();
+  }
+
+  // URL Parameter Loading
+  function loadFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const packId = params.get('pack');
+    const seed = params.get('seed');
+    const questionCount = params.get('q');
+    const timeLimit = params.get('t');
+
+    if (packId && PACKS_MAP[packId]) {
+      state.selectedPackId = packId;
+      state.activeGenerators = [...PACKS_MAP[packId].generators];
+      
+      // Update dropdown UI
+      const packItem = document.querySelector(`.pack-dropdown-item[data-pack-id="${packId}"]`);
+      if (packItem) {
+        $('pack-dropdown-text').textContent = PACKS_MAP[packId].name;
+        document.querySelectorAll('.pack-dropdown-item').forEach(i => i.classList.remove('selected'));
+        packItem.classList.add('selected');
+      }
+      
+      // Show generators section
+      $('generators-section').style.display = '';
+      
+      renderGeneratorList();
+      updateFactorizeButton();
+    }
+
+    if (questionCount) {
+      state.questionCount = parseInt(questionCount, 10) || 10;
+      $('question-count').value = state.questionCount;
+    }
+
+    if (timeLimit) {
+      state.timeLimitMinutes = parseInt(timeLimit, 10) || null;
+      $('time-limit').value = timeLimit;
+    }
+
+    // If we have a seed, auto-start the quiz
+    if (seed && packId) {
+      setTimeout(() => factorize(parseInt(seed, 10)), 100);
+    }
+  }
+
+  // Event Listeners
+  function setupEventListeners() {
+    // Pack dropdown
+    const packDropdown = $('pack-dropdown');
+    const packTrigger = $('pack-dropdown-trigger');
+    const packMenu = $('pack-dropdown-menu');
+    const packText = $('pack-dropdown-text');
+    
+    packTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      packDropdown.classList.toggle('open');
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!packDropdown.contains(e.target)) {
+        packDropdown.classList.remove('open');
+      }
+    });
+    
+    // Pack item selection
+    document.querySelectorAll('.pack-dropdown-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const packId = item.dataset.packId;
+        const packName = item.dataset.packName;
+        
+        // Update UI
+        packText.textContent = packName;
+        packDropdown.classList.remove('open');
+        
+        // Update selected state
+        document.querySelectorAll('.pack-dropdown-item').forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        
+        selectPack(packId);
+      });
+    });
+
+    // Settings
+    $('question-count').addEventListener('change', (e) => {
+      state.questionCount = parseInt(e.target.value, 10);
+    });
+
+    $('time-limit').addEventListener('change', (e) => {
+      state.timeLimitMinutes = e.target.value ? parseInt(e.target.value, 10) : null;
+    });
+
+    // Factorize
+    factorizeBtn.addEventListener('click', () => factorize());
+
+    // Add generator modal
+    addGeneratorBtn.addEventListener('click', openModal);
+    $('modal-close').addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    // Modal search
+    $('generator-search').addEventListener('input', (e) => {
+      filterGenerators(e.target.value);
+    });
+
+    // Generator items in modal
+    document.querySelectorAll('.generator-item').forEach(item => {
+      item.addEventListener('click', () => {
+        addGenerator(item.dataset.type);
+        closeModal();
+      });
+    });
+
+    // Quiz navigation
+    prevBtn.addEventListener('click', () => navigateQuestion(-1));
+    nextBtn.addEventListener('click', () => navigateQuestion(1));
+    submitBtn.addEventListener('click', submitQuiz);
+
+    // Share
+    $('share-btn').addEventListener('click', copyShareLink);
+
+    // Results actions
+    $('try-again-btn').addEventListener('click', tryAgain);
+    $('new-quiz-btn').addEventListener('click', newQuiz);
+    $('view-results-btn').addEventListener('click', () => {
+      timesupOverlay.style.display = 'none';
+      submitQuiz();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', handleKeydown);
+  }
+
+  function handleKeydown(e) {
+    if (state.phase !== 'quiz' || !state.quiz) return;
+    
+    if (e.key === 'ArrowLeft') {
+      navigateQuestion(-1);
+    } else if (e.key === 'ArrowRight') {
+      navigateQuestion(1);
+    } else if (e.key >= '1' && e.key <= '4') {
+      const index = parseInt(e.key, 10) - 1;
+      if (index < state.quiz.questions[state.quiz.currentIndex].options.length) {
+        selectAnswer(index);
+      }
+    }
+  }
+
+  // Pack Selection
+  function selectPack(packId) {
+    state.selectedPackId = packId;
+    const pack = PACKS_MAP[packId];
+    state.activeGenerators = [...pack.generators];
+    
+    // Show generators section
+    $('generators-section').style.display = '';
+    
+    renderGeneratorList();
+    updateFactorizeButton();
+  }
+
+  // Generator List Rendering
+  function renderGeneratorList() {
+    genCount.textContent = `(${state.activeGenerators.length})`;
+    
+    if (state.activeGenerators.length === 0) {
+      generatorList.innerHTML = '<p class="placeholder-text">No generators selected</p>';
+      return;
+    }
+
+    generatorList.innerHTML = state.activeGenerators.map(type => {
+      const gen = GENERATORS_MAP[type];
+      const name = gen?.displayName || type;
+      return `<button class="generator-item-simple" data-type="${type}">${name}</button>`;
+    }).join('');
+
+    // Add click listener to remove generator
+    generatorList.querySelectorAll('.generator-item-simple').forEach(item => {
+      item.addEventListener('click', () => {
+        removeGenerator(item.dataset.type);
+      });
+    });
+  }
+
+  function removeGenerator(type) {
+    state.activeGenerators = state.activeGenerators.filter(t => t !== type);
+    renderGeneratorList();
+    updateFactorizeButton();
+  }
+
+  function addGenerator(type) {
+    if (!state.activeGenerators.includes(type)) {
+      state.activeGenerators.push(type);
+      renderGeneratorList();
+      updateFactorizeButton();
+    }
+  }
+
+  function updateFactorizeButton() {
+    factorizeBtn.disabled = state.activeGenerators.length === 0;
+  }
+
+  // Modal
+  function openModal() {
+    modalOverlay.style.display = 'flex';
+    $('generator-search').value = '';
+    $('generator-search').focus();
+    filterGenerators('');
+    
+    // Highlight already-added generators
+    document.querySelectorAll('.generator-item').forEach(item => {
+      item.classList.toggle('added', state.activeGenerators.includes(item.dataset.type));
+    });
+  }
+
+  function closeModal() {
+    modalOverlay.style.display = 'none';
+  }
+
+  function filterGenerators(query) {
+    const lower = query.toLowerCase();
+    document.querySelectorAll('.generator-item').forEach(item => {
+      const matches = item.dataset.name.toLowerCase().includes(lower) ||
+                      item.dataset.type.toLowerCase().includes(lower);
+      item.style.display = matches ? '' : 'none';
+    });
+
+    // Hide empty categories
+    document.querySelectorAll('.generator-category').forEach(cat => {
+      const hasVisible = [...cat.querySelectorAll('.generator-item')].some(
+        item => item.style.display !== 'none'
+      );
+      cat.style.display = hasVisible ? '' : 'none';
+    });
+  }
+
+  // Quiz Generation (uses inline PRNG)
+  function mulberry32(seed) {
+    let s = seed | 0;
+    return () => {
+      let t = (s += 0x6d2b79f5);
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function shuffleWithSeed(arr, rng) {
+    const result = [...arr];
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+
+  // Client-side quiz generation using the server API
+  async function factorize(providedSeed = null) {
+    if (state.activeGenerators.length === 0) return;
+
+    const seed = providedSeed ?? Date.now();
+    
+    // Fetch quiz from server API or generate client-side
+    try {
+      const response = await fetch('/api/forest-factory/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          generators: state.activeGenerators,
+          seed,
+          count: state.questionCount
+        })
+      });
+      
+      if (response.ok) {
+        const quiz = await response.json();
+        startQuiz(quiz, seed);
+        return;
+      }
+    } catch {
+      // Fallback to showing error
+    }
+    
+    // If API fails, generate client-side placeholder
+    showToast('Using client-side generation');
+    const questions = generateClientSideQuiz(seed);
+    startQuiz({ questions }, seed);
+  }
+
+  function generateClientSideQuiz(seed) {
+    // Minimal client-side fallback - just uses placeholders
+    const rng = mulberry32(seed);
+    const questions = [];
+    
+    for (let i = 0; i < state.questionCount; i++) {
+      const typeIndex = Math.floor(rng() * state.activeGenerators.length);
+      const type = state.activeGenerators[typeIndex];
+      const gen = GENERATORS_MAP[type];
+      
+      questions.push({
+        question: inlineMarkdown(`Question ${i + 1}: ${gen?.displayName || type}`),
+        options: ['Option A', 'Option B', 'Option C', 'Option D'],
+        correctIndex: Math.floor(rng() * 4),
+        explanation: inlineMarkdown('This is a client-side generated placeholder.')
+      });
+    }
+    
+    return questions;
+  }
+
+  function startQuiz(quiz, seed) {
+    state.quiz = {
+      seed,
+      questions: quiz.questions,
+      answers: new Array(quiz.questions.length).fill(null),
+      locked: new Array(quiz.questions.length).fill(false),
+      currentIndex: 0,
+      startedAt: Date.now(),
+      submittedAt: null
+    };
+    state.phase = 'quiz';
+
+    // Update URL without reloading
+    const url = new URL(window.location);
+    url.searchParams.set('pack', state.selectedPackId);
+    url.searchParams.set('seed', seed);
+    url.searchParams.set('q', state.questionCount);
+    if (state.timeLimitMinutes) {
+      url.searchParams.set('t', state.timeLimitMinutes);
+    } else {
+      url.searchParams.delete('t');
+    }
+    window.history.replaceState({}, '', url);
+
+    // Show quiz UI
+    emptyState.style.display = 'none';
+    resultsContainer.style.display = 'none';
+    quizContainer.style.display = 'block';
+    topProgressBar.style.display = 'block';
+    
+    $('quiz-pack-name').textContent = PACKS_MAP[state.selectedPackId]?.name || 'Quiz';
+    
+    renderQuestion();
+    startTimer();
+  }
+
+  function renderQuestion() {
+    if (!state.quiz) return;
+
+    const { questions, currentIndex, answers } = state.quiz;
+    const question = questions[currentIndex];
+    
+    // Update progress
+    quizProgress.textContent = `Q${currentIndex + 1} of ${questions.length}`;
+    progressFill.style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+    
+    // Render question text
+    questionText.innerHTML = question.question;
+    
+    // Render options
+    const isLocked = state.quiz.locked[currentIndex];
+    const correctIndex = question.correctIndex;
+    const userAnswer = answers[currentIndex];
+
+    optionsList.innerHTML = question.options.map((opt, i) => {
+      let classes = 'quiz-option';
+      
+      if (isLocked) {
+        classes += ' locked';
+        if (i === correctIndex) {
+          classes += ' correct';
+        } else if (i === userAnswer) {
+          classes += ' incorrect';
+        }
+      } else if (userAnswer === i) {
+        classes += ' selected';
+      }
+      
+      return `
+        <button class="${classes}" data-index="${i}">
+          <span class="quiz-option-key">${String.fromCharCode(65 + i)}</span>
+          <span class="quiz-option-text">${opt}</span>
+        </button>
+      `;
+    }).join('');
+
+    // Handle explanation
+    const explanationEl = $('question-explanation');
+    const explanationContent = $('explanation-content');
+    if (isLocked && question.explanation) {
+      explanationContent.innerHTML = question.explanation;
+      explanationEl.style.display = '';
+    } else {
+      explanationEl.style.display = 'none';
+    }
+
+    // Add click handlers
+    optionsList.querySelectorAll('.quiz-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        selectAnswer(parseInt(opt.dataset.index, 10));
+      });
+    });
+
+    // Update navigation
+    prevBtn.style.display = currentIndex === 0 ? 'none' : '';
+    nextBtn.style.display = currentIndex === questions.length - 1 ? 'none' : '';
+    submitBtn.style.display = currentIndex === questions.length - 1 ? '' : 'none';
+
+    // Re-render KaTeX
+    if (window.renderMathInElement) {
+      window.renderMathInElement(quizContainer, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+        throwOnError: false,
+      });
+    }
+  }
+
+  function selectAnswer(index) {
+    if (!state.quiz) return;
+    const currentIndex = state.quiz.currentIndex;
+    
+    // If already locked, ignore subsequent clicks
+    if (state.quiz.locked[currentIndex]) return;
+    
+    state.quiz.answers[currentIndex] = index;
+    state.quiz.locked[currentIndex] = true;
+    
+    // Play audio feedback
+    const isCorrect = index === state.quiz.questions[currentIndex].correctIndex;
+    if (isCorrect) {
+      new Audio(`/sounds/correct-${Math.floor(Math.random() * 5) + 1}.mp3`).play().catch(() => {});
+    } else {
+      new Audio('/sounds/incorrect.mp3').play().catch(() => {});
+    }
+    
+    renderQuestion();
+    saveToLocalStorage();
+  }
+
+  function navigateQuestion(delta) {
+    if (!state.quiz) return;
+    const newIndex = state.quiz.currentIndex + delta;
+    if (newIndex >= 0 && newIndex < state.quiz.questions.length) {
+      state.quiz.currentIndex = newIndex;
+      renderQuestion();
+    }
+  }
+
+  // Timer
+  function startTimer() {
+    if (!state.timeLimitMinutes) {
+      timer.style.display = 'none';
+      return;
+    }
+
+    timer.style.display = '';
+    updateTimerDisplay(state.timeLimitMinutes * 60);
+
+    state.timerInterval = setInterval(() => {
+      const elapsed = (Date.now() - state.quiz.startedAt) / 1000;
+      const remaining = state.timeLimitMinutes * 60 - elapsed;
+
+      if (remaining <= 0) {
+        clearInterval(state.timerInterval);
+        state.timerInterval = null;
+        showTimesUp();
+      } else {
+        updateTimerDisplay(remaining);
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    
+    if (seconds >= 3600) {
+      const hrs = Math.floor(seconds / 3600);
+      timer.textContent = `${hrs}:${String(mins % 60).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    } else {
+      timer.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Color states
+    timer.classList.toggle('warning', seconds < 60 && seconds >= 10);
+    timer.classList.toggle('critical', seconds < 10);
+  }
+
+  function showTimesUp() {
+    const answered = state.quiz.answers.filter(a => a !== null).length;
+    $('timesup-message').textContent = `You answered ${answered} of ${state.quiz.questions.length} questions`;
+    timesupOverlay.style.display = 'flex';
+  }
+
+  // Submit
+  function submitQuiz() {
+    if (!state.quiz) return;
+    
+    if (state.timerInterval) {
+      clearInterval(state.timerInterval);
+      state.timerInterval = null;
+    }
+
+    state.quiz.submittedAt = Date.now();
+    state.phase = 'results';
+
+    quizContainer.style.display = 'none';
+    topProgressBar.style.display = 'none';
+    resultsContainer.style.display = 'block';
+
+    renderResults();
+  }
+
+  function renderResults() {
+    if (!state.quiz) return;
+
+    const { questions, answers } = state.quiz;
+    
+    // Calculate stats
+    let right = 0;
+    let wrong = 0;
+    let skipped = 0;
+    
+    questions.forEach((q, i) => {
+      if (answers[i] === null) {
+        skipped++;
+      } else if (answers[i] === q.correctIndex) {
+        right++;
+      } else {
+        wrong++;
+      }
+    });
+    
+    const percent = Math.round((right / questions.length) * 100);
+    
+    // Update UI
+    $('score-value').textContent = `${right} / ${questions.length}`;
+    $('score-percent').textContent = `${percent}%`;
+    $('right-count').textContent = right;
+    $('wrong-count').textContent = wrong;
+    $('skipped-count').textContent = skipped;
+  }
+
+  // Actions
+  function tryAgain() {
+    if (!state.quiz) return;
+    factorize(state.quiz.seed);
+  }
+
+  function newQuiz() {
+    state.quiz = null;
+    state.phase = 'config';
+    resultsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';
+    topProgressBar.style.display = 'none';
+    emptyState.style.display = '';
+    
+    // Clear URL params
+    const url = new URL(window.location);
+    url.searchParams.delete('seed');
+    window.history.replaceState({}, '', url);
+  }
+
+  // Sharing
+  function copyShareLink() {
+    if (!state.quiz && !state.selectedPackId) return;
+    
+    const url = new URL(window.location);
+    url.searchParams.set('pack', state.selectedPackId);
+    if (state.quiz) {
+      url.searchParams.set('seed', state.quiz.seed);
+    }
+    url.searchParams.set('q', state.questionCount);
+    if (state.timeLimitMinutes) {
+      url.searchParams.set('t', state.timeLimitMinutes);
+    }
+    
+    navigator.clipboard.writeText(url.toString()).then(() => {
+      showToast('Link copied! Share with classmates 🌲');
+    }).catch(() => {
+      showToast('Failed to copy link');
+    });
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  // LocalStorage
+  function saveToLocalStorage() {
+    if (!state.quiz) return;
+    try {
+      localStorage.setItem('forest-factory-quiz', JSON.stringify({
+        quiz: state.quiz,
+        packId: state.selectedPackId,
+        generators: state.activeGenerators,
+        questionCount: state.questionCount,
+        timeLimitMinutes: state.timeLimitMinutes
+      }));
+    } catch {
+      // Ignore localStorage errors
+    }
+  }
+
+  // Initialize on load
+  init();
+</script>
+
+<style>
+  /* Layout */
+  .factory-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .sidebar-content {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 0;
+  }
+
+  .sidebar-header h2 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--heading);
+    letter-spacing: -0.01em;
+  }
+
+  .sidebar-description {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 4px 0 20px 0;
+    font-weight: 400;
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .generator-count {
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Pack Dropdown */
+  .pack-dropdown {
+    position: relative;
+  }
+
+  .pack-dropdown-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+  }
+
+  .pack-dropdown-trigger:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .pack-dropdown.open .pack-dropdown-trigger {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .pack-dropdown-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pack-dropdown-chevron {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.4);
+    transition: transform 0.2s ease;
+  }
+
+  .pack-dropdown.open .pack-dropdown-chevron {
+    transform: rotate(180deg);
+  }
+
+  .pack-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #1f1d18;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 4px;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.15s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  .pack-dropdown.open .pack-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .pack-dropdown-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s ease;
+    text-align: left;
+  }
+
+  .pack-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .pack-dropdown-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .pack-dropdown-item-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.35;
+  }
+
+  .pack-dropdown-item.selected .pack-dropdown-item-name {
+    color: #fff;
+  }
+
+  .pack-dropdown-item-desc {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pack-dropdown-check {
+    flex-shrink: 0;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+
+  .pack-dropdown-item.selected .pack-dropdown-check {
+    opacity: 1;
+  }
+
+  /* Generator List */
+  .generator-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 8px;
+  }
+
+  .placeholder-text {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-style: normal;
+    margin: 0;
+  }
+
+  /* Use :global() for dynamically generated elements */
+  :global(.generator-item-simple) {
+    display: block;
+    width: 100%;
+    padding: 5px 0;
+    background: none !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.1s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  :global(.generator-item-simple:hover) {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  :global(.generator-item-simple:focus) {
+    outline: none;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Add Button (styled like generator list items) */
+  .add-btn {
+    display: block;
+    width: 100%;
+    padding: 5px 0;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.1s ease;
+  }
+
+  .add-btn:hover {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Settings */
+  .setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+  }
+
+  .setting-row label {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 400;
+  }
+
+  .setting-row select {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 5px 8px;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .setting-row select:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .setting-row select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  /* Factorize Button */
+  .factorize-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    letter-spacing: -0.005em;
+  }
+
+  .factorize-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .factorize-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* Main Content */
+  .factory-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Top Progress Bar (upper border of content area) */
+  .top-progress-bar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .top-progress-fill {
+    height: 100%;
+    background: #fb923c;
+    transition: width 0.3s ease;
+  }
+
+  /* Empty State */
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+  }
+
+  .forest-logo {
+    font-size: 6rem;
+    opacity: 0.15;
+    user-select: none;
+    filter: grayscale(1);
+  }
+
+  .empty-state p {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* Quiz Container */
+  .quiz-container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 3px); /* Account for progress bar */
+    position: relative;
+  }
+
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .quiz-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quiz-pack {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .quiz-progress {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--heading);
+  }
+
+  .quiz-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .timer {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    color: var(--heading);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--surface);
+    border-radius: 4px;
+  }
+
+  .timer.warning {
+    color: #fbbf24;
+  }
+
+  .timer.critical {
+    color: #ef4444;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .share-btn {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s ease;
+  }
+
+  .share-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* Question Card */
+  .question-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Quiz Navigation */
+  .quiz-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-sm);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-btn.secondary {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 10px 16px;
+  }
+
+  .nav-btn.secondary:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .nav-btn.primary {
+    background: #5865F2;
+    border: none;
+    color: white;
+  }
+
+  .nav-btn.primary:hover {
+    background: #4752C4;
+  }
+
+  /* Results Container */
+  .results-container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 3px);
+  }
+
+  .results-title {
+    font-size: 2rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 48px;
+    text-align: center;
+    letter-spacing: -0.02em;
+  }
+
+  /* Stat Cards */
+  .results-cards {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .stat-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: -0.02em;
+  }
+
+  .stat-breakdown {
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .stat-breakdown .stat-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .stat-breakdown .stat-row span:last-child {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Results Actions */
+  .results-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  .action-btn {
+    padding: 12px 28px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .action-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+
+  .modal {
+    background: #1b1912;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .modal-close:hover {
+    color: var(--text);
+  }
+
+  .modal-search {
+    margin: var(--space-md) var(--space-lg);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+
+  .modal-search:focus {
+    outline: none;
+    border-color: #fb923c;
+  }
+
+  .modal-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 var(--space-lg) var(--space-lg);
+  }
+
+  .generator-category h4 {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+    margin: var(--space-md) 0 var(--space-sm);
+  }
+
+  .generator-item {
+    display: block;
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--surface);
+    border: none;
+    border-radius: 4px;
+    color: var(--text);
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    margin-bottom: var(--space-xs);
+    transition: all 0.15s;
+  }
+
+  .generator-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .generator-item.added {
+    opacity: 0.5;
+    color: var(--muted);
+  }
+
+  /* Times Up Modal */
+  .timesup-modal {
+    text-align: center;
+    padding: var(--space-2xl);
+  }
+
+  .timesup-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .timesup-modal h3 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .timesup-modal p {
+    color: var(--muted);
+    margin-bottom: var(--space-lg);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--surface);
+    color: var(--text);
+    padding: var(--space-md) var(--space-xl);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 200;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* Quiz Explanation */
+  .quiz-explanation {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .quiz-explanation .explanation-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-bottom: var(--space-md);
+  }
+
+  .quiz-explanation .explanation-content {
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 900px) {
+    .factory-layout {
+      flex-direction: column;
+    }
+
+    .quiz-container,
+    .results-container {
+      padding: var(--space-lg);
+    }
+
+    .forest-logo {
+      font-size: 4rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .results-cards {
+      flex-direction: column;
+    }
+    
+    .results-title {
+      font-size: 1.5rem;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+    }
+  }
+</style>

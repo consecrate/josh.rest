@@ -1,23 +1,44 @@
 ---
 import { getCollection, render } from "astro:content";
-import { getCourseStructure } from "../../lib/courses";
+import { getCourseStructure, getCourseLessons } from "../../lib/courses";
 import Course from "../../layouts/Course.astro";
 
 export async function getStaticPaths() {
   const lessons = await getCollection("courses");
-  return lessons
-    .filter((l) => !l.data.comingSoon)
-    .map((lesson) => ({
-      params: { slug: lesson.id },
-      props: { lesson },
-    }));
+  const availableLessons = lessons.filter((l) => !l.data.comingSoon);
+  
+  // Generate paths for individual lessons
+  const lessonPaths = availableLessons.map((lesson) => ({
+    params: { slug: lesson.id },
+    props: { lesson, isRedirect: false },
+  }));
+  
+  // Generate redirect paths for course-only slugs
+  const courses = new Set(availableLessons.map(l => l.id.split('/')[0]));
+  const coursePaths = [...courses].map(course => {
+    const firstLesson = availableLessons
+      .filter(l => l.id.startsWith(course + '/'))
+      .sort((a, b) => a.data.order - b.data.order)[0];
+    return {
+      params: { slug: course },
+      props: { lesson: firstLesson, isRedirect: true },
+    };
+  });
+  
+  return [...lessonPaths, ...coursePaths];
 }
 
 type Props = {
   lesson: Awaited<ReturnType<typeof getCollection<"courses">>>[number];
+  isRedirect: boolean;
 };
 
-const { lesson } = Astro.props;
+const { lesson, isRedirect } = Astro.props;
+
+// Handle course-only redirects
+if (isRedirect) {
+  return Astro.redirect(`/courses/${lesson.id}`);
+}
 const { Content } = await render(lesson);
 
 // Extract course slug first (needed for sidebar filtering)

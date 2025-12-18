@@ -1,0 +1,115 @@
+---
+interface Props {
+  collapsible?: boolean;
+  id?: string;
+}
+
+const { collapsible = false, id = "sidebar" } = Astro.props;
+---
+
+<div class="sidebar-wrapper" id={id} data-collapsed="false">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <slot />
+    </div>
+  </aside>
+
+  {collapsible && (
+    <button class="sidebar-toggle" aria-label="Toggle sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+  )}
+</div>
+
+<script>
+  document.querySelectorAll(".sidebar-wrapper").forEach((wrapper) => {
+    const toggle = wrapper.querySelector(".sidebar-toggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("click", () => {
+      const isCollapsed = wrapper.getAttribute("data-collapsed") === "true";
+      wrapper.setAttribute("data-collapsed", String(!isCollapsed));
+    });
+  });
+</script>
+
+<style>
+  .sidebar-wrapper {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    background: #1b1912;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .sidebar-inner {
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  /* Collapsed state */
+  .sidebar-wrapper[data-collapsed="true"] .sidebar {
+    width: 0;
+    border-right: none;
+  }
+
+  .sidebar-wrapper[data-collapsed="true"] .sidebar-inner {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Toggle button */
+  .sidebar-toggle {
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    background: #1b1912;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+  }
+
+  .sidebar-wrapper[data-collapsed="true"] .sidebar-toggle {
+    right: -36px;
+  }
+
+  .sidebar-wrapper[data-collapsed="true"] .sidebar-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .sidebar-toggle svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Responsive - hide on mobile */
+  @media (max-width: 900px) {
+    .sidebar-wrapper {
+      display: none;
+    }
+  }
+</style>

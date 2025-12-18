@@ -119,7 +119,7 @@ export const lawValidConsent: ProblemGenerator = {
       question: `<strong>Scenario:</strong> ${scenario.text}<br/><br/>Is this consent valid under GDPR?`,
       options: finalOptions,
       correctIndex,
-      explanation: scenario.explanation
+      explanation: scenario.reason
     };
   }
 };

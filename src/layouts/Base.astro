@@ -28,6 +28,9 @@ const { title, description = 'josh.rest — Learning through interaction', fullW
 <script>
   import renderMathInElement from 'katex/contrib/auto-render';
 
+  // Expose globally for dynamic content re-rendering
+  (window as any).renderMathInElement = renderMathInElement;
+
   function renderMath() {
     renderMathInElement(document.body, {
       delimiters: [

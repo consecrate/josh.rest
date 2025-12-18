@@ -10,11 +10,16 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
+    "@astrojs/cloudflare": "^12.6.12",
     "@astrojs/mdx": "^4.3.13",
     "astro": "^5.16.5",
     "katex": "^0.16.27",
+    "marked": "^17.0.1",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@sylphx/pdf-reader-mcp": "^2.0.8"
   }
 }

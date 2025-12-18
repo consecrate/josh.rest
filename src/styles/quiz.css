@@ -1,0 +1,168 @@
+/* Shared Quiz Component Styles
+   Used by Forest Factory and MultipleChoice.astro */
+
+/* ========================================
+   Quiz Options Container
+   ======================================== */
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ========================================
+   Quiz Option (Individual Option)
+   ======================================== */
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--surface);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.quiz-option:hover:not(.locked) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.quiz-option.selected {
+  border-color: #fb923c;
+  background: rgba(251, 146, 60, 0.1);
+}
+
+.quiz-option.correct {
+  background: rgba(74, 222, 128, 0.08);
+  border-color: var(--correct);
+}
+
+.quiz-option.incorrect {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: var(--incorrect);
+}
+
+.quiz-option.locked {
+  cursor: default;
+}
+
+/* ========================================
+   Option Key (A, B, C, D)
+   ======================================== */
+.quiz-option-key {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   Option Text
+   ======================================== */
+.quiz-option-text {
+  flex: 1;
+  line-height: 1.5;
+}
+
+/* ========================================
+   Question Text
+   ======================================== */
+.quiz-question-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: var(--space-xl);
+  color: var(--heading);
+}
+
+/* ========================================
+   Result Item Styles
+   ======================================== */
+.quiz-result-item {
+  background: var(--surface);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.quiz-result-item summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  cursor: pointer;
+  list-style: none;
+}
+
+.quiz-result-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.quiz-result-icon {
+  font-size: 1.2rem;
+}
+
+.quiz-result-item.correct .quiz-result-icon {
+  color: var(--correct);
+}
+
+.quiz-result-item.incorrect .quiz-result-icon {
+  color: var(--incorrect);
+}
+
+.quiz-result-q {
+  font-weight: 600;
+  color: var(--heading);
+  min-width: 40px;
+}
+
+.quiz-result-preview {
+  color: var(--muted);
+  font-size: 0.9rem;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quiz-result-detail {
+  padding: var(--space-md);
+  padding-top: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quiz-result-question {
+  margin-bottom: var(--space-md);
+  line-height: 1.6;
+}
+
+.quiz-result-answers {
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.quiz-result-your-answer {
+  color: var(--incorrect);
+  margin-bottom: var(--space-xs);
+}
+
+.quiz-result-correct-answer {
+  color: var(--correct);
+}
+
+.quiz-result-explanation {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}

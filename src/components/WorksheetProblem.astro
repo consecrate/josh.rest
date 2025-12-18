@@ -113,10 +113,8 @@ const hasDerivation = Astro.slots.has("derivation");
   }
 
   .answer-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-size: 0.8125rem;
+    font-weight: 600;
     color: var(--correct);
     margin-bottom: var(--space-sm);
   }
@@ -132,10 +130,8 @@ const hasDerivation = Astro.slots.has("derivation");
   }
 
   .derivation-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-size: 0.8125rem;
+    font-weight: 600;
     color: var(--muted);
     margin-bottom: var(--space-sm);
   }
@@ -167,6 +163,13 @@ const hasDerivation = Astro.slots.has("derivation");
     margin-left: 0;
   }
 
+  /* Multi-part answer line breaks */
+  .answer-content br {
+    content: "";
+    display: block;
+    margin-top: var(--space-xs);
+  }
+
   /* List styles in derivations */
   .derivation-content :global(ol),
   .derivation-content :global(ul) {
@@ -187,12 +190,32 @@ const hasDerivation = Astro.slots.has("derivation");
 
       if (!btn || !answerSection) return;
 
+      let mathRendered = false;
+
       btn.addEventListener("click", () => {
         const isHidden = answerSection.classList.contains("hidden");
         
         answerSection.classList.toggle("hidden");
         btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
         btn.textContent = isHidden ? "Hide Answer" : "Show Answer";
+
+        // Render math on first reveal
+        if (isHidden && !mathRendered) {
+          mathRendered = true;
+
+          // Re-render math in answer section
+          import("katex/contrib/auto-render").then(
+            ({ default: renderMathInElement }) => {
+              renderMathInElement(answerSection, {
+                delimiters: [
+                  { left: "$$", right: "$$", display: true },
+                  { left: "$", right: "$", display: false },
+                ],
+                throwOnError: false,
+              });
+            },
+          );
+        }
       });
     });
   }

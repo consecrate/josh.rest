@@ -1,5 +1,6 @@
 ---
 import { inlineMarkdown } from "../lib/markdown";
+import "../styles/quiz.css";
 
 interface Props {
   question: string;
@@ -28,14 +29,13 @@ const explanationHtml = explanation ? inlineMarkdown(explanation) : undefined;
       <span set:html={questionHtml} />
     </legend>
 
-    <div class="options">
+    <div class="quiz-options">
       {
         options.map((option, index) => (
-          <label class="option" data-index={index}>
-            <span class="radio" />
+          <label class="quiz-option" data-index={index}>
+            <span class="quiz-option-key">{String.fromCharCode(65 + index)}</span>
             <input type="radio" name={id} value={index} />
-            <span class="option-text" set:html={optionsHtml[index]} />
-            <span class="status-icon" />
+            <span class="quiz-option-text" set:html={optionsHtml[index]} />
           </label>
         ))
       }
@@ -91,125 +91,20 @@ const explanationHtml = explanation ? inlineMarkdown(explanation) : undefined;
     line-height: 1.5;
   }
 
-  .options {
-    display: flex;
-    flex-direction: column;
+  /* Override quiz-options gap for MultipleChoice */
+  .quiz-options {
     gap: var(--space-md);
     margin-bottom: var(--space-lg);
   }
 
-  .option {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    border-radius: 4px;
-  }
-
-  .option.selected {
-  }
-
-  .option.correct {
-    background: rgba(74, 222, 128, 0.08);
-    border-left-color: var(--correct);
-  }
-
-  .option.incorrect {
-    background: rgba(248, 113, 113, 0.12);
-    border-left-color: var(--incorrect);
-  }
-
-  .option.locked {
-    cursor: default;
-  }
-
-  .radio {
-    width: 22px;
-    height: 22px;
-    border: 2px solid var(--muted);
-    border-radius: 50%;
-    flex-shrink: 0;
-    transition: all 0.15s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .option.selected .radio {
-    border-color: var(--text);
-  }
-
-  .option.selected .radio::after {
-    content: "";
-    width: 10px;
-    height: 10px;
-    background: var(--text);
-    border-radius: 50%;
-  }
-
-  .option.correct .radio {
-    border-color: var(--correct);
-  }
-
-  .option.correct .radio::after {
-    content: "";
-    width: 10px;
-    height: 10px;
-    background: var(--correct);
-    border-radius: 50%;
-  }
-
-  .option.incorrect .radio {
-    border-color: var(--incorrect);
-  }
-
-  .option.incorrect .radio::after {
-    content: "";
-    width: 10px;
-    height: 10px;
-    background: var(--incorrect);
-    border-radius: 50%;
-  }
-
-  .option input {
+  /* Hide the actual radio input */
+  .quiz-option input {
     position: absolute;
     width: 1px;
     height: 1px;
     opacity: 0;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
-  }
-
-  .option-text {
-    flex: 1;
-    color: var(--text);
-    line-height: 1.5;
-  }
-
-  .option.correct .option-text,
-  .option.incorrect .option-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .status-icon {
-    display: none;
-  }
-
-  .feedback {
-    font-size: 0.85rem;
-    margin-top: 4px;
-  }
-
-  .option.correct .feedback {
-    color: var(--correct);
-  }
-
-  .option.incorrect .feedback {
-    color: var(--incorrect);
   }
 
   .buttons {
@@ -283,10 +178,12 @@ const explanationHtml = explanation ? inlineMarkdown(explanation) : undefined;
 </style>
 
 <script>
+  import { playCorrect, playIncorrect } from '../lib/audio-feedback';
+
   function initMultipleChoice(container: HTMLElement) {
     const correctIndex = parseInt(container.dataset.correct || "0", 10);
     const explanation = container.dataset.explanation || "";
-    const options = container.querySelectorAll<HTMLLabelElement>(".option");
+    const options = container.querySelectorAll<HTMLLabelElement>(".quiz-option");
     const checkBtn = container.querySelector<HTMLButtonElement>(".check-btn");
     const resetBtn = container.querySelector<HTMLButtonElement>(".reset-btn");
 
@@ -333,6 +230,13 @@ const explanationHtml = explanation ? inlineMarkdown(explanation) : undefined;
 
       submitted = true;
       const isCorrect = selectedIndex === correctIndex;
+
+      // Play audio feedback
+      if (isCorrect) {
+        playCorrect();
+      } else {
+        playIncorrect();
+      }
 
       container.classList.add(
         isCorrect ? "result-correct" : "result-incorrect",
