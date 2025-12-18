@@ -37,6 +37,16 @@ const scenarios: Scenario[] = [
     text: "Bob writes: 'I am Bob. I collect your data to share with my partners.'",
     missing: "Recipients of Data",
     explanation: "Bob must specify the **Recipients** or categories of recipients of the personal data."
+  },
+  {
+    text: "Bob writes: 'I am Bob of DataVault Ltd. I collect your email for marketing. I rely on consent. You can complain to me.'",
+    missing: "Right to lodge complaint with supervisory authority",
+    explanation: "Bob forgot to mention the user's **right to lodge a complaint with a supervisory authority** (e.g., the ICO in the UK)."
+  },
+  {
+    text: "Bob writes: 'I am Bob. I process your location data to show nearby restaurants. I keep it for 30 days.'",
+    missing: "Legal Basis",
+    explanation: "Bob has identity, purpose, and retention, but he must state the **Legal Basis** (e.g., consent, legitimate interest) for processing."
   }
 ];
 
@@ -54,7 +64,9 @@ export const lawNoticeCheck: ProblemGenerator = {
       "Retention Period",
       "Rights of the Data Subject",
       "Recipients of Data",
-      "Legal Basis"
+      "Legal Basis",
+      "Right to lodge complaint with supervisory authority",
+      "Legitimate Interest Details"
     ];
 
     // Ensure the correct answer is in the options

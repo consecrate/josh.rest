@@ -42,6 +42,21 @@ const scenarios: Scenario[] = [
     text: "A developer adheres to the team's style guide to avoid code review comments.",
     type: "Social Rule",
     explanation: "Team conventions are **Social Rules** (or internal policies). The penalty is professional friction, not jail."
+  },
+  {
+    text: "A patient sues a hospital for medical malpractice after a failed surgery.",
+    type: "Law",
+    explanation: "This involves **Law** (Tort Law). The court system will determine if the hospital breached its legal duty of care."
+  },
+  {
+    text: "A freelancer's client refuses to pay because they're unhappy with the logo design, despite the signed agreement.",
+    type: "Contract",
+    explanation: "This is a **Contract** dispute. The freelancer can sue for breach of the signed agreement."
+  },
+  {
+    text: "You feel it's wrong to eat meat, so you become vegetarian.",
+    type: "Moral Rule",
+    explanation: "This is a **Moral Rule**. It's a personal ethical choice with no external enforcement—only your own conscience."
   }
 ];
 

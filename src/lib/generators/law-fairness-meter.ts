@@ -47,6 +47,16 @@ const scenarios: Scenario[] = [
     text: "An online retailer charges Mac users 10% more than PC users for the same hotel booking based on device data.",
     verdict: 'Fairness Violation',
     explanation: "Price discrimination based on device type is often cited as a **Fairness** violation. It uses data to the detriment of the data subject in an unexpected way."
+  },
+  {
+    text: "A fitness app shares your workout data with health insurers who then raise your premiums based on 'inactivity patterns'.",
+    verdict: 'Fairness Violation',
+    explanation: "This is a **Fairness** violation. Users do not reasonably expect fitness app data to be used against them for insurance purposes."
+  },
+  {
+    text: "A newspaper website requires users to accept tracking cookies OR pay a subscription fee to access articles.",
+    verdict: 'Compliant',
+    explanation: "This 'cookie wall with alternative' model is **generally considered Compliant** by some DPAs (though contested). Users have a genuine choice, even if one option costs money."
   }
 ];
 

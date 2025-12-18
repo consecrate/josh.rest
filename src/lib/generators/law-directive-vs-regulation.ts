@@ -25,6 +25,24 @@ export const directiveVsRegulation: ProblemGenerator = {
         correct: "To harmonize laws so businesses only face one set of rules.",
         wrong: ["To make laws weaker.", "To let countries have more freedom.", "To ban the internet."],
         explanation: "The shift to a **Regulation** was driven by the need for **Harmonization**. Under the Directive, companies had to deal with 28 different variations of the law."
+      },
+      {
+        text: "The ePrivacy Directive (2002) governs cookies and electronic communications. Why is it still a 'Directive' and not a Regulation?",
+        correct: "It predates GDPR and political negotiations for an ePrivacy Regulation have stalled for years.",
+        wrong: ["Directives are stronger than Regulations.", "The EU forgot to update it.", "Cookies are not important enough."],
+        explanation: "The ePrivacy **Regulation** has been proposed but repeatedly delayed. Until it passes, the older **Directive** (implemented differently in each country) still applies."
+      },
+      {
+        text: "A Member State wants to set the age of digital consent at 13 instead of the GDPR's default 16. Can they?",
+        correct: "Yes, GDPR allows Member States to lower it to 13 (this is a Directive-like flexibility built into the Regulation).",
+        wrong: ["No, Regulations cannot be changed by Member States.", "Only if they leave the EU.", "Only with unanimous EU approval."],
+        explanation: "Some GDPR provisions deliberately include **Member State flexibility** (like Article 8 on children's consent), which is a Directive-like feature within a Regulation."
+      },
+      {
+        text: "The NIS2 Directive (Network and Information Security) requires critical infrastructure operators to report cyber incidents. How does it become law in France?",
+        correct: "France must pass its own national law implementing the Directive's requirements.",
+        wrong: ["It applies automatically like GDPR.", "France can ignore it.", "It only applies to German companies."],
+        explanation: "As a **Directive**, NIS2 sets minimum standards but each Member State must **transpose** it into national law, potentially adding stricter requirements."
       }
     ];
 

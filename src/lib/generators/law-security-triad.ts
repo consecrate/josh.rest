@@ -9,14 +9,14 @@ interface Scenario {
 
 const scenarios: Scenario[] = [
   {
-    text: "A hacker uses ransomware to encrypt your database, making it inaccessible to you.",
+    text: "A DDoS attack floods the company's servers with traffic, crashing the website for 6 hours.",
     violation: 'Availability',
-    explanation: "The data is still there, but you can't get to it. This is an **Availability** breach."
+    explanation: "Users cannot access the service. This is an **Availability** breach—the data exists but is unreachable."
   },
   {
-    text: "An employee leaves a printout of a patient list on a train.",
+    text: "A misconfigured S3 bucket exposes 10,000 customer records to the public internet.",
     violation: 'Confidentiality',
-    explanation: "Unauthorized people (passengers) could see the data. This is a **Confidentiality** breach."
+    explanation: "Unauthorized parties could access the data. This is a **Confidentiality** breach caused by misconfiguration."
   },
   {
     text: "A software bug accidentally overwrites customer addresses with random characters.",
@@ -37,6 +37,16 @@ const scenarios: Scenario[] = [
     text: "An attacker performs a SQL Injection to change the price of all products to $0.00.",
     violation: 'Integrity',
     explanation: "The attacker didn't steal the data, they changed it. This violates **Integrity**."
+  },
+  {
+    text: "A phishing email tricks an employee into revealing their login credentials to an attacker.",
+    violation: 'Confidentiality',
+    explanation: "The attacker gained unauthorized access to credentials. This is a **Confidentiality** breach through social engineering."
+  },
+  {
+    text: "A cloud provider's data center loses power for 4 hours, and the backup generators fail.",
+    violation: 'Availability',
+    explanation: "Services become unreachable due to infrastructure failure. This is an **Availability** breach."
   }
 ];
 

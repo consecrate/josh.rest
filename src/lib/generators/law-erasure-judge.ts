@@ -37,6 +37,16 @@ const scenarios: Scenario[] = [
     request: "I want you to delete my medical records held by the public hospital.",
     action: "KEEP",
     explanation: "<strong>KEEP.</strong> Erasure often does not apply when processing is necessary for **reasons of public interest in the area of public health**."
+  },
+  {
+    request: "I was a minor when I signed up for this social media platform. Delete all my data from that period.",
+    action: "DELETE",
+    explanation: "<strong>DELETE.</strong> Article 17(1)(f) gives special protection when **personal data has been collected in relation to the offer of information society services to a child**."
+  },
+  {
+    request: "Delete my credit score data from your credit reference agency database.",
+    action: "KEEP",
+    explanation: "<strong>KEEP (likely).</strong> Credit reference agencies typically process data under **Legal Obligation** (financial regulations) or **Public Interest**, which are exceptions to erasure."
   }
 ];
 

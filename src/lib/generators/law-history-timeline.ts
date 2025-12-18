@@ -31,6 +31,30 @@ export const historyTimeline: ProblemGenerator = {
         correct: "The GDPR (General Data Protection Regulation)",
         wrong: ["The Internet Bill of Rights", "The Cyber Resilience Act", "The AI Act"],
         explanation: "The **GDPR** replaced the 1995 Directive to unify data protection laws across all EU member states."
+      },
+      {
+        q: "Which country enacted the world's first national data protection law in 1970?",
+        correct: "Germany (State of Hesse)",
+        wrong: ["United States", "United Kingdom", "Sweden"],
+        explanation: "The German state of **Hesse** passed the first data protection law in 1970, pioneering the concept before any nation had done so."
+      },
+      {
+        q: "The 'Schrems I' ruling (2015) invalidated which EU-US data transfer mechanism?",
+        correct: "Safe Harbor",
+        wrong: ["Privacy Shield", "Standard Contractual Clauses", "Binding Corporate Rules"],
+        explanation: "Max Schrems' case at the CJEU struck down **Safe Harbor** due to US mass surveillance concerns. It was replaced by Privacy Shield, which was later also invalidated (Schrems II, 2020)."
+      },
+      {
+        q: "Article 12 of the Universal Declaration of Human Rights (1948) protects against what?",
+        correct: "Arbitrary interference with privacy, family, home, or correspondence.",
+        wrong: ["The right to free healthcare.", "The right to internet access.", "The right to form corporations."],
+        explanation: "Article 12 UDHR established the **Right to Privacy** as a fundamental human right long before digital data existed."
+      },
+      {
+        q: "What key limitation did the 1995 Data Protection Directive have that GDPR addressed?",
+        correct: "It required national implementation, leading to 28 different versions across EU countries.",
+        wrong: ["It only applied to paper records.", "It had no fines.", "It didn't cover the internet."],
+        explanation: "As a **Directive**, it was implemented differently by each Member State, creating a fragmented patchwork that made cross-border business difficult."
       }
     ];
 
