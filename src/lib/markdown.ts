@@ -10,12 +10,17 @@ import markedKatex from 'marked-katex-extension';
  * - Display math: $$...$$
  * - Backslash escapes in LaTeX commands (\circ, \{, etc.)
  */
-const marked = new Marked();
+const marked = new Marked({
+  // Disable features that can interfere with math content
+  breaks: false,
+  gfm: true,
+});
 
 marked.use(
   markedKatex({
     throwOnError: false,
-    output: 'html', // Render to HTML (vs 'mathml')
+    output: 'html',
+    nonStandard: true, // More permissive math delimiter matching
   })
 );
 
