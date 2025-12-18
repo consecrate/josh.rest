@@ -18,11 +18,23 @@ const {
   maxQuestions = 10,
 } = Astro.props;
 
-// Generate all problems at build time
+// Generate unique problems at build time
+// Try more seeds than maxQuestions to maximize chances of filling the pool
 const generator = getGenerator(generatorType);
-const problems = Array.from({ length: maxQuestions }, (_, i) =>
-  generator.generate(baseSeed + i),
-);
+const seen = new Set<string>();
+const problems: ReturnType<typeof generator.generate>[] = [];
+const maxAttempts = maxQuestions * 5; // Try up to 5x seeds to find unique questions
+
+for (let i = 0; i < maxAttempts && problems.length < maxQuestions; i++) {
+  const problem = generator.generate(baseSeed + i);
+  // Use question text as uniqueness key (strips HTML for consistent comparison)
+  const key = problem.question.replace(/<[^>]*>/g, '').trim();
+  if (!seen.has(key)) {
+    seen.add(key);
+    problems.push(problem);
+  }
+}
+// If pool exhausted before maxQuestions, problems.length < maxQuestions - that's fine
 ---
 
 <div
