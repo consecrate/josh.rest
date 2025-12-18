@@ -133,3 +133,92 @@ const {
   }
 </style>
 
+<script>
+  // Mobile scroll-hide behavior for floating buttons (Apple-style pattern)
+  // Buttons hide when scrolling down, show when scrolling up
+  function initMobileScrollHide() {
+    const SCROLL_THRESHOLD = 10; // Minimum scroll to trigger
+    const IDLE_TIMEOUT = 2000; // Hide after 2s idle
+    
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    let idleTimer: number | null = null;
+    
+    const copyBtn = document.getElementById('copy-lesson-btn');
+    const menuBtn = document.querySelector('.mobile-menu-btn') as HTMLElement | null;
+    
+    // Only run on mobile
+    const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
+    
+    function hideButtons() {
+      copyBtn?.classList.add('scroll-hidden');
+      menuBtn?.classList.add('scroll-hidden');
+    }
+    
+    function showButtons() {
+      copyBtn?.classList.remove('scroll-hidden');
+      menuBtn?.classList.remove('scroll-hidden');
+    }
+    
+    function resetIdleTimer() {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => {
+        if (isMobile()) hideButtons();
+      }, IDLE_TIMEOUT);
+    }
+    
+    function onScroll() {
+      if (!isMobile()) {
+        showButtons();
+        return;
+      }
+      
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY;
+      
+      // Only trigger on meaningful scroll
+      if (Math.abs(delta) > SCROLL_THRESHOLD) {
+        if (delta > 0) {
+          // Scrolling down - hide
+          hideButtons();
+        } else {
+          // Scrolling up - show
+          showButtons();
+        }
+        lastScrollY = currentScrollY;
+      }
+      
+      // Reset idle timer
+      resetIdleTimer();
+      ticking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+    
+    // Show on touch start (user interaction)
+    window.addEventListener('touchstart', () => {
+      if (isMobile()) {
+        showButtons();
+        resetIdleTimer();
+      }
+    }, { passive: true });
+    
+    // Initialize: start idle timer on mobile
+    if (isMobile()) {
+      resetIdleTimer();
+    }
+  }
+  
+  // Initialize on DOM ready and view transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileScrollHide);
+  } else {
+    initMobileScrollHide();
+  }
+</script>
+
