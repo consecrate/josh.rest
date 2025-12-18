@@ -4,13 +4,14 @@ import {
   type Relation,
   createMatrix,
   matrixToRelation,
-  relationToLatex,
+  relationToHtml,
   matrixUnion,
   matrixIntersection,
   matrixTranspose,
   matrixCompose,
   pickRandom,
 } from './relation-utils';
+import { tex } from './katex-utils';
 
 type OperationType = 'union' | 'intersection' | 'inverse' | 'composition';
 
@@ -18,7 +19,7 @@ interface OperationInfo {
   type: OperationType;
   symbol: string;
   name: string;
-  binary: boolean; // true if needs two relations
+  binary: boolean;
 }
 
 const OPERATIONS: OperationInfo[] = [
@@ -70,7 +71,6 @@ function computeOperation(
       resultMatrix = matrixTranspose(matR);
       break;
     case 'composition':
-      // S ∘ R means: (a,c) ∈ S∘R iff ∃b: (a,b) ∈ R and (b,c) ∈ S
       resultMatrix = matrixCompose(matR, matS);
       break;
     default:
@@ -87,51 +87,44 @@ const relationOperationsGenerator: ProblemGenerator = {
   generate(seed: number): Problem {
     const rng = mulberry32(seed);
     const n = 3;
-    const pairCount = 2 + Math.floor(rng() * 2); // 2-3 pairs each
+    const pairCount = 2 + Math.floor(rng() * 2);
 
-    // Generate two relations
     const R = generateRelation(n, rng, pairCount);
     const S = generateRelation(n, rng, pairCount);
 
-    // Pick an operation
     const op = pickRandom(OPERATIONS, rng);
-
-    // Compute result
     const result = computeOperation(op.type, R, S, n);
-    const correctAnswer = relationToLatex(result);
+    const correctAnswer = relationToHtml(result);
 
-    // Format question based on operation type
+    // Format question parts using pre-rendered math
     let questionPart: string;
     if (op.type === 'inverse') {
-      questionPart = `$R^{-1}$`;
+      questionPart = tex('R^{-1}');
     } else if (op.type === 'composition') {
-      questionPart = `$S \\circ R$`;
+      questionPart = tex('S \\circ R');
     } else {
-      questionPart = `$R ${op.symbol} S$`;
+      questionPart = tex(`R ${op.symbol} S`);
     }
 
-    // Generate distractors
+    // Generate distractors (all pre-rendered)
     const distractors: string[] = [];
 
-    // Other operations
     for (const otherOp of OPERATIONS) {
       if (otherOp.type !== op.type) {
         const otherResult = computeOperation(otherOp.type, R, S, n);
-        distractors.push(relationToLatex(otherResult));
+        distractors.push(relationToHtml(otherResult));
       }
     }
 
-    // Wrong order composition
     if (op.type === 'composition') {
       const reversed = matrixToRelation(
         matrixCompose(createMatrix(n, S), createMatrix(n, R))
       );
-      distractors.push(relationToLatex(reversed));
+      distractors.push(relationToHtml(reversed));
     }
 
-    // Just R or S
-    distractors.push(relationToLatex(R));
-    distractors.push(relationToLatex(S));
+    distractors.push(relationToHtml(R));
+    distractors.push(relationToHtml(S));
 
     const uniqueDistractors = [...new Set(distractors)].filter((d) => d !== correctAnswer);
     const finalDistractors = shuffleWithSeed(uniqueDistractors, rng).slice(0, 3);
@@ -139,21 +132,33 @@ const relationOperationsGenerator: ProblemGenerator = {
     const options = shuffleWithSeed([correctAnswer, ...finalDistractors], rng);
     const correctIndex = options.indexOf(correctAnswer);
 
+    // Pre-rendered relations for display
+    const RHtml = relationToHtml(R);
+    const SHtml = relationToHtml(S);
+    const setA = tex('A = \\{1, 2, 3\\}');
+
     // Build explanation
     let explanation: string;
     if (op.type === 'inverse') {
-      explanation = `**Inverse** $R^{-1}$: Swap all pairs $(a,b) \\to (b,a)$\n\n$R = ${relationToLatex(R)}$\n\n$R^{-1} = ${correctAnswer}$`;
+      explanation = `**Inverse** ${tex('R^{-1}')}: Swap all pairs ${tex('(a,b) \\to (b,a)')}<br><br>R = ${RHtml}<br><br>${tex('R^{-1}')} = ${correctAnswer}`;
     } else if (op.type === 'union') {
-      explanation = `**Union** $R ∪ S$: All pairs in R or S\n\n$R = ${relationToLatex(R)}$, $S = ${relationToLatex(S)}$\n\n$R ∪ S = ${correctAnswer}$`;
+      explanation = `**Union** ${tex('R \\cup S')}: All pairs in R or S<br><br>R = ${RHtml}, S = ${SHtml}<br><br>${tex('R \\cup S')} = ${correctAnswer}`;
     } else if (op.type === 'intersection') {
-      explanation = `**Intersection** $R ∩ S$: Pairs in both R and S\n\n$R = ${relationToLatex(R)}$, $S = ${relationToLatex(S)}$\n\n$R ∩ S = ${correctAnswer}$`;
+      explanation = `**Intersection** ${tex('R \\cap S')}: Pairs in both R and S<br><br>R = ${RHtml}, S = ${SHtml}<br><br>${tex('R \\cap S')} = ${correctAnswer}`;
     } else {
-      explanation = `**Composition** $S ∘ R$: $(a,c) ∈ S∘R$ iff $∃b: (a,b) ∈ R ∧ (b,c) ∈ S$\n\n$R = ${relationToLatex(R)}$, $S = ${relationToLatex(S)}$\n\n$S ∘ R = ${correctAnswer}$`;
+      explanation = `**Composition** ${tex('S \\circ R')}: ${tex('(a,c) \\in S \\circ R')} iff ${tex('\\exists b: (a,b) \\in R \\land (b,c) \\in S')}<br><br>R = ${RHtml}, S = ${SHtml}<br><br>${tex('S \\circ R')} = ${correctAnswer}`;
     }
 
+    // Build question
+    let question = `Given relations on ${setA}:<br><br>R = ${RHtml}`;
+    if (op.binary) {
+      question += `<br><br>S = ${SHtml}`;
+    }
+    question += `<br><br>Find ${questionPart}.`;
+
     return {
-      question: `Given relations on $A = \\{1, 2, 3\\}$:\n\n$R = ${relationToLatex(R)}$\n\n${op.binary ? `$S = ${relationToLatex(S)}$\n\n` : ''}Find ${questionPart}.`,
-      options: options.map((o) => `$${o}$`),
+      question,
+      options,
       correctIndex,
       explanation,
     };

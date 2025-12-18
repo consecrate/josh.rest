@@ -1,6 +1,7 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
 import { binomial, pickRandom } from './relation-utils';
+import { tex, Zn, eqClass, modEq } from './katex-utils';
 
 // Generator 1: Modulo equivalence class representative
 const moduloClassGenerator: ProblemGenerator = {
@@ -38,11 +39,14 @@ const moduloClassGenerator: ProblemGenerator = {
     const options = shuffleWithSeed([correctAnswer, ...distractors.slice(0, 3)], rng);
     const correctIndex = options.indexOf(correctAnswer);
 
+    // Pre-render all LaTeX using KaTeX - no escaping issues!
+    const quotient = Math.floor(x / n);
+    
     return {
-      question: `In $\\mathbb{Z}_{${n}}$ (integers modulo ${n}), what equivalence class does $${x}$ belong to?\n\nIn other words, what is $[${x}]$ in $\\mathbb{Z}_{${n}}$?`,
-      options: options.map((o) => `$[${o}]$`),
+      question: `In ${Zn(n)}, which equivalence class does ${tex(String(x))} belong to?`,
+      options: options.map((o) => eqClass(o)),
       correctIndex,
-      explanation: `To find $[${x}]$ in $\\mathbb{Z}_{${n}}$, compute $${x} \\mod ${n}$.\n\n$${x} = ${Math.floor(x / n)} \\cdot ${n} + ${classRep}$\n\nSo $[${x}] = [${classRep}]$`,
+      explanation: `${tex(`${x} = ${quotient} \\cdot ${n} + ${classRep}`)}, so ${modEq(x, classRep, n)}. Alternatively: ${tex(`${x} + ${n * Math.ceil(Math.abs(x) / n)} = ${classRep + n * Math.ceil(Math.abs(x) / n)}`)}.`,
     };
   },
 };
@@ -77,11 +81,15 @@ const bitStringCountGenerator: ProblemGenerator = {
     const options = shuffleWithSeed([correctAnswer, ...uniqueDistractors], rng);
     const correctIndex = options.indexOf(correctAnswer);
 
+    // Pre-render LaTeX
+    const binomTex = tex(`\\binom{${n}}{${k}}`);
+    const formula = tex(`\\frac{${n}!}{${k}!(${n - k})!}`);
+
     return {
       question: `How many bit strings of length **${n}** have exactly **${k}** ones?`,
       options,
       correctIndex,
-      explanation: `We need to choose which ${k} positions (out of ${n}) will have a 1.\n\nThis is $\\binom{${n}}{${k}} = \\frac{${n}!}{${k}!(${n}-${k})!} = ${answer}$`,
+      explanation: `We need to choose which ${k} positions (out of ${n}) will have a 1.<br><br>This is ${binomTex} = ${formula} = ${tex(String(answer))}`,
     };
   },
 };
@@ -96,24 +104,24 @@ const countEquivalenceClassesGenerator: ProblemGenerator = {
 
     const scenarios = [
       {
-        description: 'integers modulo $n$',
+        description: (n: number) => `integers modulo ${tex(String(n))}`,
         param: () => randInt(rng, 3, 12),
         count: (n: number) => n,
         explanation: (n: number) =>
-          `$\\mathbb{Z}_${n}$ has exactly ${n} equivalence classes: $[0], [1], \\ldots, [${n - 1}]$`,
+          `${Zn(n)} has exactly ${n} equivalence classes: ${eqClass(0)}, ${eqClass(1)}, …, ${eqClass(n - 1)}`,
       },
       {
-        description: 'parity relation on $\\{1, 2, ..., n\\}$',
+        description: (n: number) => `parity relation on ${tex(`\\{1, 2, \\ldots, ${n}\\}`)}`,
         param: () => randInt(rng, 6, 20),
         count: () => 2,
         explanation: () => `The parity relation always has exactly 2 classes: even and odd numbers`,
       },
       {
-        description: 'bit strings of length $n$ by number of 1s',
+        description: (n: number) => `bit strings of length ${tex(String(n))} by number of 1s`,
         param: () => randInt(rng, 3, 6),
         count: (n: number) => n + 1,
         explanation: (n: number) =>
-          `Strings can have 0, 1, 2, ..., or ${n} ones. That's ${n + 1} possible equivalence classes.`,
+          `Strings can have 0, 1, 2, …, or ${n} ones. That's ${tex(String(n + 1))} possible equivalence classes.`,
       },
     ];
 
@@ -136,10 +144,8 @@ const countEquivalenceClassesGenerator: ProblemGenerator = {
     const options = shuffleWithSeed([correctAnswer, ...uniqueDistractors], rng);
     const correctIndex = options.indexOf(correctAnswer);
 
-    const desc = scenario.description.replace('$n$', `${param}`);
-
     return {
-      question: `How many equivalence classes are there for the ${desc}?`,
+      question: `How many equivalence classes are there for the ${scenario.description(param)}?`,
       options,
       correctIndex,
       explanation: scenario.explanation(param),

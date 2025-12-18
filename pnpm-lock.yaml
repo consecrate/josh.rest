@@ -26,6 +26,9 @@ importers:
       marked:
         specifier: ^17.0.1
         version: 17.0.1
+      marked-katex-extension:
+        specifier: ^5.1.6
+        version: 5.1.6(katex@0.16.27)(marked@17.0.1)
       rehype-katex:
         specifier: ^7.0.1
         version: 7.0.1
@@ -1886,6 +1889,12 @@ packages:
 
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
+
+  marked-katex-extension@5.1.6:
+    resolution: {integrity: sha512-vYpLXwmlIDKILIhJtiRTgdyZRn5sEYdFBuTmbpjD7lbCIzg0/DWyK3HXIntN3Tp8zV6hvOUgpZNLWRCgWVc24A==}
+    peerDependencies:
+      katex: '>=0.16 <0.17'
+      marked: '>=4 <18'
 
   marked@17.0.1:
     resolution: {integrity: sha512-boeBdiS0ghpWcSwoNm/jJBwdpFaMnZWRzjA6SkUMYb40SVaN1x7mmfGKp0jvexGcx+7y2La5zRZsYFZI6Qpypg==}
@@ -4653,6 +4662,11 @@ snapshots:
   markdown-extensions@2.0.0: {}
 
   markdown-table@3.0.4: {}
+
+  marked-katex-extension@5.1.6(katex@0.16.27)(marked@17.0.1):
+    dependencies:
+      katex: 0.16.27
+      marked: 17.0.1
 
   marked@17.0.1: {}
 

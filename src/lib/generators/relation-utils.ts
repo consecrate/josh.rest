@@ -33,7 +33,7 @@ export function matrixToLatex(matrix: boolean[][]): string {
   return `\\begin{pmatrix} ${rows.join(' \\\\ ')} \\end{pmatrix}`;
 }
 
-/** Format relation as set of pairs (1-indexed for display) */
+/** Format relation as set of pairs (1-indexed for display) - returns LaTeX string */
 export function relationToLatex(relation: Relation): string {
   if (relation.length === 0) return '\\emptyset';
   const pairs = relation.map(([r, c]) => `(${r + 1}, ${c + 1})`);
@@ -45,6 +45,29 @@ export function relationToLatexZeroIndexed(relation: Relation): string {
   if (relation.length === 0) return '\\emptyset';
   const pairs = relation.map(([r, c]) => `(${r}, ${c})`);
   return `\\{ ${pairs.join(', ')} \\}`;
+}
+
+// ============ Pre-rendered HTML versions (stable, no escaping issues) ============
+import { tex, displayTex } from './katex-utils';
+
+/** Format relation as pre-rendered HTML (1-indexed) */
+export function relationToHtml(relation: Relation): string {
+  if (relation.length === 0) return tex('\\emptyset');
+  const pairs = relation.map(([r, c]) => `(${r + 1}, ${c + 1})`);
+  return tex(`\\{ ${pairs.join(', ')} \\}`);
+}
+
+/** Format relation as pre-rendered HTML (0-indexed) */
+export function relationToHtmlZeroIndexed(relation: Relation): string {
+  if (relation.length === 0) return tex('\\emptyset');
+  const pairs = relation.map(([r, c]) => `(${r}, ${c})`);
+  return tex(`\\{ ${pairs.join(', ')} \\}`);
+}
+
+/** Format matrix as pre-rendered HTML */
+export function matrixToHtml(matrix: boolean[][]): string {
+  const rows = matrix.map((row) => row.map((v) => (v ? '1' : '0')).join(' & '));
+  return displayTex(`\\begin{pmatrix} ${rows.join(' \\\\ ')} \\end{pmatrix}`);
 }
 
 // ============ Property Checkers ============

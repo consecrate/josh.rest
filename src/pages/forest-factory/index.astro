@@ -214,32 +214,20 @@ const generatorsJson = JSON.stringify(allGenerators);
   
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
+  
+  <!-- Server data for client-side hydration -->
+  <script type="application/json" id="packs-data" set:html={packsJson}></script>
+  <script type="application/json" id="generators-data" set:html={generatorsJson}></script>
 </Base>
 
-<script define:vars={{ packsJson, generatorsJson }}>
-  // Parse server-side data
-  const PACKS = JSON.parse(packsJson);
-  const ALL_GENERATORS = JSON.parse(generatorsJson);
-  const PACKS_MAP = Object.fromEntries(PACKS.map(p => [p.id, p]));
-  const GENERATORS_MAP = Object.fromEntries(ALL_GENERATORS.map(g => [g.type, g]));
-
-  // Simple client-side text processor for quiz content
-  // Handles XSS prevention, basic markdown (bold), and newlines
-  // Leaves $...$ and $$...$$ intact for KaTeX to process
-  function formatText(text) {
-    if (!text) return '';
-    return text
-      // Escape HTML entities first (XSS prevention)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      // Convert **bold** to <strong>
-      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-      // Convert *italic* to <em>
-      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-      // Convert \n to <br>
-      .replace(/\n/g, '<br>');
-  }
+<script>
+  import { formatText } from '../../lib/format-text';
+  
+  // Parse server-side data from embedded JSON
+  const PACKS = JSON.parse(document.getElementById('packs-data')!.textContent!);
+  const ALL_GENERATORS = JSON.parse(document.getElementById('generators-data')!.textContent!);
+  const PACKS_MAP = Object.fromEntries(PACKS.map((p: any) => [p.id, p]));
+  const GENERATORS_MAP = Object.fromEntries(ALL_GENERATORS.map((g: any) => [g.type, g]));
 
   // State
   const state = {
@@ -689,17 +677,7 @@ const generatorsJson = JSON.stringify(allGenerators);
     prevBtn.style.display = currentIndex === 0 ? 'none' : '';
     nextBtn.style.display = currentIndex === questions.length - 1 ? 'none' : '';
     submitBtn.style.display = currentIndex === questions.length - 1 ? '' : 'none';
-
-    // Re-render KaTeX
-    if (window.renderMathInElement) {
-      window.renderMathInElement(quizContainer, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
-        ],
-        throwOnError: false,
-      });
-    }
+    // Math is already rendered by formatText via marked-katex-extension
   }
 
   function selectAnswer(index) {

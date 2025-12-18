@@ -1,15 +1,14 @@
-import { Marked } from 'marked';
-import markedKatex from 'marked-katex-extension';
-
 /**
- * Configured marked instance with KaTeX math support.
- * 
- * Uses marked-katex-extension which is the official, battle-tested
- * extension for handling LaTeX math in marked.
+ * Client-side text formatting with math support.
+ * Uses marked + marked-katex-extension for battle-tested markdown + LaTeX handling.
  * 
  * IMPORTANT: Content that already contains pre-rendered KaTeX HTML 
  * (from generators using katex-utils.ts) is passed through unchanged.
  */
+import { Marked } from 'marked';
+import markedKatex from 'marked-katex-extension';
+
+// Configure marked with KaTeX extension
 const marked = new Marked({
   breaks: false,
   gfm: true,
@@ -25,22 +24,23 @@ marked.use(
 
 /**
  * Check if text contains pre-rendered KaTeX HTML.
+ * If so, we should skip marked processing to avoid double-processing.
  */
 function containsPreRenderedKatex(text: string): boolean {
   return text.includes('class="katex"') || text.includes('class=\\"katex\\"');
 }
 
 /**
- * Converts markdown to HTML using marked with KaTeX math support.
- * Uses parseInline to process inline elements (bold, italic, code, links, math)
- * without wrapping in paragraph tags.
+ * Format text with markdown and LaTeX math support.
  * 
- * If text already contains pre-rendered KaTeX, skips marked to avoid issues.
+ * - If text contains pre-rendered KaTeX HTML, only does basic formatting
+ * - Otherwise, processes markdown and LaTeX with marked + katex extension
  */
-export function inlineMarkdown(text: string): string {
+export function formatText(text: string): string {
   if (!text) return '';
   
-  // If already contains KaTeX HTML, just do basic formatting
+  // If already contains KaTeX HTML, skip marked processing
+  // Just do basic markdown (bold, italic) without touching the HTML
   if (containsPreRenderedKatex(text)) {
     return text
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
@@ -48,21 +48,21 @@ export function inlineMarkdown(text: string): string {
       .replace(/\n/g, '<br>');
   }
   
-  // Parse inline markdown with math support
+  // Use marked's parseInline for inline content (no paragraph wrapping)
   const html = marked.parseInline(text, { async: false }) as string;
   
-  // Convert newlines to <br> for inline display
+  // Convert newlines to <br> for display
   return html.trim().replace(/\n/g, '<br>');
 }
 
 /**
- * Converts full markdown (with paragraphs) to HTML with KaTeX math support.
+ * Format full markdown text (with paragraphs) and LaTeX math support.
  */
-export function parseMarkdown(text: string): string {
+export function formatMarkdown(text: string): string {
   if (!text) return '';
   
   if (containsPreRenderedKatex(text)) {
-    return text;
+    return text; // Already has KaTeX, just return as-is
   }
   
   return marked.parse(text, { async: false }) as string;

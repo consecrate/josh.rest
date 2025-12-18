@@ -1,5 +1,6 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
+import { tex, displayTex } from './katex-utils';
 
 /**
  * Compute a mod n, handling negative numbers correctly
@@ -38,6 +39,16 @@ function generateModWrongs(correct: number, n: number, rng: () => number): numbe
   return [...wrongs];
 }
 
+// Helper for pmod notation
+function pmod(a: number, n: number): string {
+  return tex(`${a} \\pmod{${n}}`);
+}
+
+// Helper for equiv relation
+function equiv(a: number | string, b: number | string, n: number): string {
+  return tex(`${a} \\equiv ${b} \\pmod{${n}}`);
+}
+
 // Generator 1: Basic Mod Operation
 const basicModGenerator: ProblemGenerator = {
   type: 'number-theory-mod-basic',
@@ -46,23 +57,22 @@ const basicModGenerator: ProblemGenerator = {
   generate(seed: number): Problem {
     const rng = mulberry32(seed);
     
-    // Choose modulus (small primes or composites for variety)
     const moduli = [7, 9, 10, 11, 12, 13];
     const n = moduli[randInt(rng, 0, moduli.length - 1)];
     
-    // Generate a positive number
     const a = randInt(rng, n + 1, n * 10);
     const correct = mod(a, n);
+    const quotient = Math.floor(a / n);
     
     const wrongs = generateModWrongs(correct, n, rng);
     const options = shuffleWithSeed([correct, ...wrongs], rng);
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `What is $${a} \\pmod{${n}}$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${pmod(a, n)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `To find $${a} \\pmod{${n}}$, divide ${a} by ${n}:\n\n$$${a} = ${n} \\times ${Math.floor(a / n)} + ${correct}$$\n\nThe remainder is **${correct}**.`,
+      explanation: `To find ${pmod(a, n)}, divide ${a} by ${n}:<br><br>${displayTex(`${a} = ${n} \\times ${quotient} + ${correct}`)}<br><br>The remainder is **${correct}**.`,
     };
   },
 };
@@ -78,14 +88,12 @@ const negativeModGenerator: ProblemGenerator = {
     const moduli = [7, 9, 10, 11, 12];
     const n = moduli[randInt(rng, 0, moduli.length - 1)];
     
-    // Generate a small negative number
     const a = -randInt(rng, 1, n + 5);
     const correct = mod(a, n);
     
-    // Common mistake: just taking absolute value, or forgetting to add n
     const wrongs = new Set<number>();
-    wrongs.add(mod(-a, n)); // Common mistake: using |a|
-    wrongs.add(mod(a + n, n) === correct ? mod(a - 1, n) : mod(a + n, n)); // Off by one
+    wrongs.add(mod(-a, n));
+    wrongs.add(mod(a + n, n) === correct ? mod(a - 1, n) : mod(a + n, n));
     
     while (wrongs.size < 3) {
       const w = randInt(rng, 0, n - 1);
@@ -95,19 +103,18 @@ const negativeModGenerator: ProblemGenerator = {
     const options = shuffleWithSeed([correct, ...[...wrongs].slice(0, 3)], rng);
     const correctIndex = options.indexOf(correct);
 
-    const positiveEquiv = correct;
     const stepsToAdd = Math.ceil(-a / n);
 
     return {
-      question: `What is $${a} \\pmod{${n}}$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${pmod(a, n)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `For negative numbers, we need a positive remainder.\n\n**Method:** Add multiples of ${n} until positive.\n\n$$${a} + ${stepsToAdd} \\times ${n} = ${a + stepsToAdd * n}$$\n\nSince $${a} \\equiv ${positiveEquiv} \\pmod{${n}}$, the answer is **${correct}**.`,
+      explanation: `For negative numbers, we need a positive remainder.<br><br>**Method:** Add multiples of ${n} until positive.<br><br>${displayTex(`${a} + ${stepsToAdd} \\times ${n} = ${a + stepsToAdd * n}`)}<br><br>Since ${equiv(a, correct, n)}, the answer is **${correct}**.`,
     };
   },
 };
 
-// Generator 3: Modular Multiplication (reduce first, then multiply)
+// Generator 3: Modular Multiplication
 const modMultiplyGenerator: ProblemGenerator = {
   type: 'number-theory-mod-multiply',
   displayName: 'Modular Multiplication',
@@ -118,7 +125,6 @@ const modMultiplyGenerator: ProblemGenerator = {
     const moduli = [7, 9, 11, 12, 13];
     const n = moduli[randInt(rng, 0, moduli.length - 1)];
     
-    // Generate two numbers that benefit from reduction
     const a = randInt(rng, n + 1, n * 3);
     const b = randInt(rng, n + 1, n * 3);
     
@@ -127,11 +133,10 @@ const modMultiplyGenerator: ProblemGenerator = {
     const product = aReduced * bReduced;
     const correct = mod(product, n);
     
-    // Common mistakes
     const wrongs = new Set<number>();
-    wrongs.add(mod(a * b, n) === correct ? mod(correct + 1, n) : mod(a + b, n)); // Adding instead
-    wrongs.add(mod(aReduced * bReduced + 1, n)); // Off by one
-    wrongs.add(mod(a * bReduced, n)); // Only reducing one
+    wrongs.add(mod(a * b, n) === correct ? mod(correct + 1, n) : mod(a + b, n));
+    wrongs.add(mod(aReduced * bReduced + 1, n));
+    wrongs.add(mod(a * bReduced, n));
     
     while (wrongs.size < 3) {
       const w = randInt(rng, 0, n - 1);
@@ -142,10 +147,10 @@ const modMultiplyGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correct);
 
     return {
-      question: `What is $${a} \\cdot ${b} \\pmod{${n}}$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${tex(`${a} \\cdot ${b} \\pmod{${n}}`)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Key insight:** Reduce each factor first, then multiply!\n\n$$${a} \\equiv ${aReduced} \\pmod{${n}}$$\n$$${b} \\equiv ${bReduced} \\pmod{${n}}$$\n\nNow multiply:\n$$${aReduced} \\times ${bReduced} = ${product}$$\n\nFinally reduce:\n$$${product} \\equiv ${correct} \\pmod{${n}}$$\n\n**Answer: ${correct}**`,
+      explanation: `**Key insight:** Reduce each factor first, then multiply!<br><br>${displayTex(`${a} \\equiv ${aReduced} \\pmod{${n}}`)}<br>${displayTex(`${b} \\equiv ${bReduced} \\pmod{${n}}`)}<br><br>Now multiply: ${tex(`${aReduced} \\times ${bReduced} = ${product}`)}<br><br>Finally reduce: ${displayTex(`${product} \\equiv ${correct} \\pmod{${n}}`)}<br><br>**Answer: ${correct}**`,
     };
   },
 };
@@ -173,11 +178,18 @@ const modAddGenerator: ProblemGenerator = {
     const options = shuffleWithSeed([correct, ...wrongs], rng);
     const correctIndex = options.indexOf(correct);
 
+    let explanation = `Reduce each term first:<br><br>${displayTex(`${a} \\equiv ${aReduced} \\pmod{${n}}`)}<br>${displayTex(`${b} \\equiv ${bReduced} \\pmod{${n}}`)}<br><br>Add: ${tex(`${aReduced} + ${bReduced} = ${sum}`)}`;
+    
+    if (sum >= n) {
+      explanation += `<br><br>Reduce: ${equiv(sum, correct, n)}`;
+    }
+    explanation += `<br><br>**Answer: ${correct}**`;
+
     return {
-      question: `What is $${a} + ${b} \\pmod{${n}}$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${tex(`${a} + ${b} \\pmod{${n}}`)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `Reduce each term first:\n\n$$${a} \\equiv ${aReduced} \\pmod{${n}}$$\n$$${b} \\equiv ${bReduced} \\pmod{${n}}$$\n\nAdd: $${aReduced} + ${bReduced} = ${sum}$\n\n${sum >= n ? `Reduce: $${sum} \\equiv ${correct} \\pmod{${n}}$` : ''}\n\n**Answer: ${correct}**`,
+      explanation,
     };
   },
 };
@@ -190,7 +202,6 @@ const lastDigitGenerator: ProblemGenerator = {
   generate(seed: number): Problem {
     const rng = mulberry32(seed);
     
-    // Generate 3-4 numbers for a sum
     const count = randInt(rng, 3, 4);
     const numbers: number[] = [];
     let digitSum = 0;
@@ -210,16 +221,24 @@ const lastDigitGenerator: ProblemGenerator = {
     const lastDigits = numbers.map((n) => n % 10);
     const lastDigitSum = lastDigits.reduce((a, b) => a + b, 0);
 
+    let explanation = `**Key insight:** The last digit of a sum depends only on the last digits of each term!<br><br>Last digits: ${lastDigits.join(' + ')} = ${lastDigitSum}`;
+    
+    if (lastDigitSum >= 10) {
+      explanation += `<br><br>Last digit of ${lastDigitSum} is **${correct}**`;
+    } else {
+      explanation += `<br><br>**Answer: ${correct}**`;
+    }
+
     return {
-      question: `What is the last digit of $${sumStr}$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is the last digit of ${tex(sumStr)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Key insight:** The last digit of a sum depends only on the last digits of each term!\n\nLast digits: ${lastDigits.join(' + ')} = ${lastDigitSum}\n\n${lastDigitSum >= 10 ? `Last digit of ${lastDigitSum} is **${correct}**` : `**Answer: ${correct}**`}`,
+      explanation,
     };
   },
 };
 
-// Generator 6: Power Cycles (without FLT - just pattern recognition)
+// Generator 6: Power Cycles
 const powerCycleGenerator: ProblemGenerator = {
   type: 'number-theory-power-cycle',
   displayName: 'Power Cycles in Mod',
@@ -227,9 +246,8 @@ const powerCycleGenerator: ProblemGenerator = {
   generate(seed: number): Problem {
     const rng = mulberry32(seed);
     
-    // Choose base and modulus that give nice cycles
     const configs = [
-      { base: 2, mod: 7, cycle: [2, 4, 1] }, // 2^1=2, 2^2=4, 2^3=1
+      { base: 2, mod: 7, cycle: [2, 4, 1] },
       { base: 3, mod: 7, cycle: [3, 2, 6, 4, 5, 1] },
       { base: 2, mod: 9, cycle: [2, 4, 8, 7, 5, 1] },
       { base: 5, mod: 7, cycle: [5, 4, 6, 2, 3, 1] },
@@ -241,22 +259,22 @@ const powerCycleGenerator: ProblemGenerator = {
     const { base, mod: n, cycle } = config;
     const cycleLen = cycle.length;
     
-    // Generate a moderate exponent
     const exp = randInt(rng, cycleLen + 1, cycleLen * 5);
-    const posInCycle = mod(exp - 1, cycleLen); // exp=1 -> pos=0
+    const posInCycle = mod(exp - 1, cycleLen);
     const correct = cycle[posInCycle];
     
     const wrongs = generateModWrongs(correct, n, rng);
     const options = shuffleWithSeed([correct, ...wrongs], rng);
     const correctIndex = options.indexOf(correct);
 
-    const cycleStr = cycle.map((v, i) => `$${base}^{${i + 1}} \\equiv ${v}$`).join(', ');
+    const cycleStr = cycle.map((v, i) => equiv(`${base}^{${i + 1}}`, v, n)).join(', ');
+    const expRemainder = ((exp - 1) % cycleLen) + 1;
 
     return {
-      question: `What is $${base}^{${exp}} \\pmod{${n}}$?`,
-      options: options.map((o) => `$${o}$`),
+      question: `What is ${tex(`${base}^{${exp}} \\pmod{${n}}`)}?`,
+      options: options.map((o) => tex(String(o))),
       correctIndex,
-      explanation: `**Find the cycle:** Compute successive powers of ${base} mod ${n}:\n\n${cycleStr}\n\nThe pattern repeats with **period ${cycleLen}**.\n\nSince $${exp} = ${cycleLen} \\times ${Math.floor((exp - 1) / cycleLen)} + ${((exp - 1) % cycleLen) + 1}$,\n\n$${base}^{${exp}} \\equiv ${base}^{${((exp - 1) % cycleLen) + 1}} \\equiv ${correct} \\pmod{${n}}$`,
+      explanation: `**Find the cycle:** Compute successive powers of ${base} mod ${n}:<br><br>${cycleStr}<br><br>The pattern repeats with **period ${cycleLen}**.<br><br>Since ${tex(`${exp} = ${cycleLen} \\times ${Math.floor((exp - 1) / cycleLen)} + ${expRemainder}`)},<br><br>${equiv(`${base}^{${exp}}`, `${base}^{${expRemainder}}`, n)} ${tex(`\\equiv ${correct}`)}`,
     };
   },
 };

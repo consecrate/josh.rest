@@ -254,7 +254,7 @@ const explanationHtml = explanation ? inlineMarkdown(explanation) : undefined;
         }
       });
 
-      // Show explanation section
+      // Show explanation section (math already pre-rendered by marked-katex-extension)
       if (explanation) {
         const explanationSection = container.querySelector(
           ".explanation-section",
@@ -265,19 +265,6 @@ const explanationHtml = explanation ? inlineMarkdown(explanation) : undefined;
         if (explanationSection && explanationContent) {
           explanationContent.innerHTML = explanation;
           explanationSection.classList.remove("hidden");
-
-          // Re-render math in explanation
-          import("katex/contrib/auto-render").then(
-            ({ default: renderMathInElement }) => {
-              renderMathInElement(explanationContent as HTMLElement, {
-                delimiters: [
-                  { left: "$$", right: "$$", display: true },
-                  { left: "$", right: "$", display: false },
-                ],
-                throwOnError: false,
-              });
-            },
-          );
         }
       }
 

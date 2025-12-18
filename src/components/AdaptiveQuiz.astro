@@ -69,8 +69,7 @@ const problems = Array.from({ length: maxQuestions }, (_, i) =>
 </style>
 
 <script>
-  import renderMathInElement from "katex/contrib/auto-render";
-
+  // Math is pre-rendered at build time by marked-katex-extension via inlineMarkdown
   function initAdaptiveQuiz(container: HTMLElement) {
     const appendCount = parseInt(container.dataset.appendCount!, 10);
 
@@ -91,14 +90,7 @@ const problems = Array.from({ length: maxQuestions }, (_, i) =>
         wrapper.classList.remove("hidden");
         insertAfter.after(wrapper);
         insertAfter = wrapper;
-        // Re-render math for newly revealed elements
-        renderMathInElement(wrapper, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-          ],
-          throwOnError: false,
-        });
+        // Math already rendered at build time, no client-side rendering needed
       }
     }
 
