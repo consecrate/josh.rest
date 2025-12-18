@@ -1,6 +1,7 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed } from './prng';
 import { pickRandom, pickRandomN } from './relation-utils';
+import { tex } from './katex-utils';
 
 interface Poset {
   name: string;
@@ -152,7 +153,7 @@ const posetMinMaxGenerator: ProblemGenerator = {
       question: `In the poset "${poset.name}", what are the **${type}** element(s)?`,
       options,
       correctIndex,
-      explanation: `**${type.charAt(0).toUpperCase() + type.slice(1)} elements**: ${definition}\n\n**Answer:** ${correctAnswer}`,
+      explanation: `**${type.charAt(0).toUpperCase() + type.slice(1)} elements**: ${definition}<br><br>**Answer:** ${correctAnswer}`,
     };
   },
 };
@@ -193,7 +194,7 @@ const posetGreatestLeastGenerator: ProblemGenerator = {
       question: `In the poset "${poset.name}", what is the **${type}** element?`,
       options,
       correctIndex,
-      explanation: `**${type.charAt(0).toUpperCase() + type.slice(1)} element**: ${definition}\n\n${element !== null ? `The ${type} element is ${element}.` : `No ${type} element exists in this poset.`}`,
+      explanation: `**${type.charAt(0).toUpperCase() + type.slice(1)} element**: ${definition}<br><br>${element !== null ? `The ${type} element is ${element}.` : `No ${type} element exists in this poset.`}`,
     };
   },
 };
@@ -239,10 +240,10 @@ const posetBoundsGenerator: ProblemGenerator = {
     const aka = askLUB ? 'supremum / join' : 'infimum / meet';
 
     return {
-      question: `In the poset "${poset.name}", find the **${type}** of the subset $\\{${subset.join(', ')}\\}$.`,
+      question: `In the poset "${poset.name}", find the **${type}** of the subset ${tex(`\\{${subset.join(', ')}\\}`)}.`,
       options,
       correctIndex,
-      explanation: `**${type}** (also called ${aka}):\n\n${bound !== null ? `The ${askLUB ? 'LUB' : 'GLB'} is ${bound}.` : `No ${askLUB ? 'LUB' : 'GLB'} exists for this subset.`}`,
+      explanation: `**${type}** (also called ${aka}):<br><br>${bound !== null ? `The ${askLUB ? 'LUB' : 'GLB'} is ${bound}.` : `No ${askLUB ? 'LUB' : 'GLB'} exists for this subset.`}`,
     };
   },
 };

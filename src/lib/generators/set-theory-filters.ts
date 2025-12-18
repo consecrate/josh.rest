@@ -1,6 +1,7 @@
 import type { Problem, ProblemGenerator } from './types';
 import { mulberry32, shuffleWithSeed, randInt } from './prng';
 import { isPrime, isPerfectSquare, pickRandom } from './relation-utils';
+import { tex } from './katex-utils';
 
 type Predicate = {
   name: string;
@@ -65,7 +66,7 @@ const setListGenerator: ProblemGenerator = {
       if (predicate.test(i)) elements.push(i);
     }
 
-    const correctAnswer = `$${formatSet(elements)}$`;
+    const correctAnswer = tex(formatSet(elements));
 
     // Generate distractors
     const distractors: string[] = [];
@@ -77,31 +78,31 @@ const setListGenerator: ProblemGenerator = {
       for (let i = 1; i <= max; i++) {
         if (otherPred.test(i)) wrongElements.push(i);
       }
-      distractors.push(`$${formatSet(wrongElements)}$`);
+      distractors.push(tex(formatSet(wrongElements)));
     }
 
     // Missing some elements
     if (elements.length > 2) {
-      distractors.push(`$${formatSet(elements.slice(0, -2))}$`);
+      distractors.push(tex(formatSet(elements.slice(0, -2))));
     }
 
     // Extra elements
     const extra = [...elements, elements[elements.length - 1] + 1];
-    distractors.push(`$${formatSet(extra)}$`);
+    distractors.push(tex(formatSet(extra)));
 
     // All numbers
     const all = Array.from({ length: max }, (_, i) => i + 1);
-    distractors.push(`$${formatSet(all.slice(0, 10))}$`);
+    distractors.push(tex(formatSet(all.slice(0, 10))));
 
     const uniqueDistractors = [...new Set(distractors)].filter((d) => d !== correctAnswer).slice(0, 3);
     const options = shuffleWithSeed([correctAnswer, ...uniqueDistractors], rng);
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Let $U = \\{1, 2, \\ldots, ${max}\\}$.\n\nList the elements of $A = \\{x \\in U \\mid ${predicate.latex}\\}$:`,
+      question: `Let ${tex(`U = \\{1, 2, \\ldots, ${max}\\}`)}.<br><br>List the elements of ${tex(`A = \\{x \\in U \\mid ${predicate.latex}\\}`)}:`,
       options,
       correctIndex,
-      explanation: `Checking each element 1 to ${max} for the property "${predicate.name}":\n\n$A = ${formatSet(elements)}$\n\nThere are ${elements.length} elements.`,
+      explanation: `Checking each element 1 to ${max} for the property "${predicate.name}":<br><br>${tex(`A = ${formatSet(elements)}`)}<br><br>There are ${elements.length} elements.`,
     };
   },
 };
@@ -163,10 +164,10 @@ const setIntersectionSizeGenerator: ProblemGenerator = {
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Let $U = \\{1, 2, \\ldots, ${max}\\}$.\n\nLet $A = \\{x \\in U \\mid ${pred1.latex}\\}$\nLet $B = \\{x \\in U \\mid ${pred2.latex}\\}$\n\nFind $|A \\cap B|$:`,
+      question: `Let ${tex(`U = \\{1, 2, \\ldots, ${max}\\}`)}.<br><br>Let ${tex(`A = \\{x \\in U \\mid ${pred1.latex}\\}`)}<br>Let ${tex(`B = \\{x \\in U \\mid ${pred2.latex}\\}`)}<br><br>Find ${tex('|A \\cap B|')}:`,
       options,
       correctIndex,
-      explanation: `$A \\cap B$ contains elements satisfying both conditions.\n\n$A \\cap B = ${formatSet(intersection)}$\n\n$|A \\cap B| = ${answer}$`,
+      explanation: `${tex('A \\cap B')} contains elements satisfying both conditions.<br><br>${tex(`A \\cap B = ${formatSet(intersection)}`)}<br><br>${tex(`|A \\cap B| = ${answer}`)}`,
     };
   },
 };
@@ -193,36 +194,36 @@ const setComplementGenerator: ProblemGenerator = {
       }
     }
 
-    const correctAnswer = `$${formatSet(complement)}$`;
+    const correctAnswer = tex(formatSet(complement));
 
     // Distractors
     const distractors: string[] = [];
     
     // A itself
-    distractors.push(`$${formatSet(A)}$`);
+    distractors.push(tex(formatSet(A)));
     
     // Missing some elements
     if (complement.length > 2) {
-      distractors.push(`$${formatSet(complement.slice(1))}$`);
+      distractors.push(tex(formatSet(complement.slice(1))));
     }
     
     // Wrong complement (extra elements)
     const wrong = [...complement, A[0] || max + 1];
-    distractors.push(`$${formatSet(wrong)}$`);
+    distractors.push(tex(formatSet(wrong)));
 
     const uniqueDistractors = [...new Set(distractors)].filter((d) => d !== correctAnswer).slice(0, 3);
     while (uniqueDistractors.length < 3) {
-      uniqueDistractors.push(`$${formatSet([1, 2, 3])}$`);
+      uniqueDistractors.push(tex(formatSet([1, 2, 3])));
     }
 
     const options = shuffleWithSeed([correctAnswer, ...uniqueDistractors], rng);
     const correctIndex = options.indexOf(correctAnswer);
 
     return {
-      question: `Let $U = \\{1, 2, \\ldots, ${max}\\}$ and $A = \\{x \\in U \\mid ${predicate.latex}\\}$.\n\nFind $\\overline{A}$ (the complement of A):`,
+      question: `Let ${tex(`U = \\{1, 2, \\ldots, ${max}\\}`)} and ${tex(`A = \\{x \\in U \\mid ${predicate.latex}\\}`)}.<br><br>Find ${tex('\\overline{A}')} (the complement of A):`,
       options,
       correctIndex,
-      explanation: `$A = ${formatSet(A)}$ (elements satisfying "${predicate.name}")\n\n$\\overline{A} = U \\setminus A = ${formatSet(complement)}$`,
+      explanation: `${tex(`A = ${formatSet(A)}`)} (elements satisfying "${predicate.name}")<br><br>${tex(`\\overline{A} = U \\setminus A = ${formatSet(complement)}`)}`,
     };
   },
 };
