@@ -1,0 +1,252 @@
+---
+/**
+ * Minimalistic copy button - copies lesson content to clipboard
+ * Positioned at bottom right corner of the viewport
+ */
+---
+
+<button class="copy-btn" id="copy-lesson-btn" title="Copy lesson content">
+  <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+  </svg>
+  <span class="copy-text">Copy</span>
+</button>
+
+<style>
+  .copy-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    z-index: 100;
+  }
+
+  .copy-btn:hover {
+    color: var(--text);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .copy-btn:active {
+    transform: scale(0.97);
+  }
+
+  .copy-btn.copied {
+    color: var(--correct);
+    border-color: var(--correct);
+  }
+
+  .copy-btn.prompted {
+    color: #a78bfa;
+    border-color: #a78bfa;
+  }
+
+  .copy-icon {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .copy-btn {
+      bottom: 16px;
+      right: 16px;
+      padding: 6px 10px;
+    }
+  }
+</style>
+
+<script>
+  function extractLessonContent(): string {
+    const parts: string[] = [];
+    
+    // Get lesson header
+    const header = document.querySelector('.lesson-header');
+    if (header) {
+      const section = header.querySelector('.section-name')?.textContent?.trim();
+      const title = header.querySelector('h1')?.textContent?.trim();
+      if (section) parts.push(section);
+      if (title) parts.push(`# ${title}\n`);
+    }
+
+    // Get main content
+    const article = document.querySelector('.lesson-content');
+    if (!article) return '';
+
+    // Walk through content and extract text
+    const walker = document.createTreeWalker(
+      article,
+      NodeFilter.SHOW_ELEMENT,
+      {
+        acceptNode: (node) => {
+          const el = node as Element;
+          // Skip script and style tags
+          if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE') {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    const processedNodes = new Set<Node>();
+    let currentNode: Node | null = walker.currentNode;
+    
+    while (currentNode = walker.nextNode()) {
+      const el = currentNode as Element;
+      
+      // Skip if already processed as part of parent
+      if (processedNodes.has(el)) continue;
+
+      // Headings
+      if (/^H[1-6]$/.test(el.tagName)) {
+        const level = parseInt(el.tagName[1]);
+        const text = el.textContent?.trim();
+        if (text) {
+          parts.push(`\n${'#'.repeat(level)} ${text}\n`);
+        }
+        continue;
+      }
+
+      // Paragraphs
+      if (el.tagName === 'P' && !el.closest('.quiz-option, .quiz-feedback')) {
+        const text = el.textContent?.trim();
+        if (text) parts.push(`${text}\n`);
+        continue;
+      }
+
+      // Lists
+      if (el.tagName === 'UL' || el.tagName === 'OL') {
+        const items = el.querySelectorAll(':scope > li');
+        items.forEach((li, i) => {
+          const text = li.textContent?.trim();
+          if (text) {
+            const prefix = el.tagName === 'OL' ? `${i + 1}.` : '-';
+            parts.push(`${prefix} ${text}`);
+          }
+        });
+        parts.push('');
+        // Mark children as processed
+        el.querySelectorAll('*').forEach(child => processedNodes.add(child));
+        continue;
+      }
+
+      // Blockquotes
+      if (el.tagName === 'BLOCKQUOTE') {
+        const text = el.textContent?.trim();
+        if (text) parts.push(`> ${text}\n`);
+        el.querySelectorAll('*').forEach(child => processedNodes.add(child));
+        continue;
+      }
+
+      // Multiple Choice Quiz
+      if (el.classList.contains('quiz-container') || el.classList.contains('quiz-card')) {
+        const question = el.querySelector('.quiz-question, h3')?.textContent?.trim();
+        if (question) {
+          parts.push(`\n**Quiz: ${question}**`);
+        }
+        
+        const options = el.querySelectorAll('.quiz-option');
+        options.forEach((opt, i) => {
+          const label = opt.querySelector('.option-label')?.textContent?.trim() || String.fromCharCode(65 + i);
+          const text = opt.querySelector('.option-text')?.textContent?.trim() || opt.textContent?.trim();
+          if (text) parts.push(`  ${label}. ${text}`);
+        });
+        parts.push('');
+        
+        // Mark children as processed
+        el.querySelectorAll('*').forEach(child => processedNodes.add(child));
+        continue;
+      }
+
+      // Adaptive Quiz problems
+      if (el.classList.contains('worksheet-problem')) {
+        const prompt = el.querySelector('.problem-prompt')?.textContent?.trim();
+        if (prompt) {
+          parts.push(`\n**Problem: ${prompt}**`);
+        }
+        
+        const choices = el.querySelectorAll('.choice-btn');
+        choices.forEach((choice) => {
+          const text = choice.textContent?.trim();
+          if (text) parts.push(`  - ${text}`);
+        });
+        parts.push('');
+        
+        el.querySelectorAll('*').forEach(child => processedNodes.add(child));
+        continue;
+      }
+    }
+
+    return parts.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  const AI_QUIZ_PROMPT = `Generate high-quality quiz questions based on the following lesson content. Create a variety of question types (multiple choice, true/false, short answer) that test understanding of key concepts. Ensure questions range from basic recall to application and analysis. Include correct answers and brief explanations.
+
+---
+
+`;
+
+  function initCopyButton() {
+    const btn = document.getElementById('copy-lesson-btn');
+    if (!btn) return;
+
+    let state: 'idle' | 'copied' | 'prompted' = 'idle';
+    let resetTimeout: number | null = null;
+    const textEl = btn.querySelector('.copy-text');
+
+    const resetState = () => {
+      state = 'idle';
+      btn.classList.remove('copied', 'prompted');
+      if (textEl) textEl.textContent = 'Copy';
+      resetTimeout = null;
+    };
+
+    btn.addEventListener('click', async () => {
+      const content = extractLessonContent();
+      
+      try {
+        if (state === 'copied') {
+          // Second click while "Copied!" - add AI prompt
+          await navigator.clipboard.writeText(AI_QUIZ_PROMPT + content);
+          
+          if (resetTimeout) clearTimeout(resetTimeout);
+          state = 'prompted';
+          btn.classList.remove('copied');
+          btn.classList.add('prompted');
+          if (textEl) textEl.textContent = 'Prompt Added';
+          
+          resetTimeout = window.setTimeout(resetState, 1500);
+        } else {
+          // First click or from idle - just copy content
+          await navigator.clipboard.writeText(content);
+          
+          if (resetTimeout) clearTimeout(resetTimeout);
+          state = 'copied';
+          btn.classList.remove('prompted');
+          btn.classList.add('copied');
+          if (textEl) textEl.textContent = 'Copied!';
+          
+          resetTimeout = window.setTimeout(resetState, 2000);
+        }
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  }
+
+  // Initialize on load and view transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCopyButton);
+  } else {
+    initCopyButton();
+  }
+</script>
