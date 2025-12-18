@@ -1,14 +1,49 @@
 ---
 import "../styles/quiz.css";
+import { inlineMarkdown } from "../lib/markdown";
 
 interface Props {
   number: number;
+  distractors?: string[];
 }
 
-const { number } = Astro.props;
+const { number, distractors = [] } = Astro.props;
 const id = `ws-${number}-${Math.random().toString(36).slice(2, 9)}`;
-
 const hasDerivation = Astro.slots.has("derivation");
+
+// Pre-render MCQ at build time if distractors provided
+let mcqOptionsHtml: string[] = [];
+let correctIndex = 0;
+
+if (distractors.length > 0) {
+  // Get answer slot content
+  const answerHtml = await Astro.slots.render("answer");
+  
+  // Build options: answer first, then distractors (pre-rendered)
+  const allOptions = [
+    answerHtml.trim(),
+    ...distractors.map(d => inlineMarkdown(d))
+  ];
+  
+  // Shuffle with seeded PRNG for consistent builds
+  const seed = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const shuffled = shuffleSeeded(allOptions, seed);
+  mcqOptionsHtml = shuffled;
+  correctIndex = shuffled.indexOf(allOptions[0]);
+}
+
+function shuffleSeeded<T>(arr: T[], seed: number): T[] {
+  const result = [...arr];
+  let s = seed;
+  for (let i = result.length - 1; i > 0; i--) {
+    s = (s * 1103515245 + 12345) & 0x7fffffff;
+    const j = s % (i + 1);
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+const hasMcq = mcqOptionsHtml.length > 0;
 ---
 
 <div class="worksheet-problem" data-id={id} data-number={number}>
@@ -19,29 +54,35 @@ const hasDerivation = Astro.slots.has("derivation");
     </div>
   </div>
 
-  <button
-    class="toggle-answer"
-    data-target={id}
-    aria-expanded="false"
-    aria-controls={`${id}-answer`}
-  >
-    Show Answer
-  </button>
+  <button class="toggle-answer" aria-expanded="false">Show Answer</button>
 
-  <div class="answer-section hidden" id={`${id}-answer`}>
-    <div class="answer-box">
-      <div class="answer-label">Answer</div>
-      <div class="answer-content">
-        <slot name="answer" />
+  {hasMcq && (
+    <div class="hello-mcq" data-correct={correctIndex}>
+      <div class="quiz-options">
+        {mcqOptionsHtml.map((html, i) => (
+          <label class="quiz-option" data-index={i}>
+            <span class="quiz-option-key">{String.fromCharCode(65 + i)}</span>
+            <input type="radio" name={`${id}-mcq`} value={i} />
+            <span class="quiz-option-text" set:html={html} />
+          </label>
+        ))}
+      </div>
+      <div class="mcq-buttons">
+        <button type="button" class="check-btn" disabled>Check</button>
+        <button type="button" class="reset-btn">Reset</button>
       </div>
     </div>
+  )}
 
+  <div class="answer-section hidden">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <div class="answer-content"><slot name="answer" /></div>
+    </div>
     {hasDerivation && (
       <div class="derivation">
         <div class="derivation-label">Derivation</div>
-        <div class="derivation-content">
-          <slot name="derivation" />
-        </div>
+        <div class="derivation-content"><slot name="derivation" /></div>
       </div>
     )}
   </div>
@@ -89,11 +130,63 @@ const hasDerivation = Astro.slots.has("derivation");
     border-color: var(--text);
   }
 
-  .toggle-answer[aria-expanded="true"] {
-    color: var(--text);
-    border-color: var(--text);
+  /* Hello Mode: hide toggle, show MCQ */
+  :global(.hello-mode) .toggle-answer { display: none; }
+  :global(.hello-mode) .hello-mcq { display: block; }
+
+  /* MCQ Section - hidden by default */
+  .hello-mcq {
+    display: none;
+    margin-top: var(--space-md);
   }
 
+  .hello-mcq .quiz-options {
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .mcq-buttons {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .hello-mcq .check-btn {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    background: var(--accent, #e97a1e);
+    color: #fff;
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .hello-mcq .check-btn:hover:not(:disabled) { opacity: 0.85; }
+  .hello-mcq .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .hello-mcq .reset-btn {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .hello-mcq .reset-btn:hover { color: var(--text); }
+
+  /* Hide radio inputs */
+  .hello-mcq .quiz-option input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  /* Answer Section */
   .answer-section {
     margin-top: var(--space-lg);
     padding-top: var(--space-lg);
@@ -101,18 +194,14 @@ const hasDerivation = Astro.slots.has("derivation");
     animation: fadeIn 0.2s ease;
   }
 
-  .answer-section.hidden {
-    display: none;
-  }
+  .answer-section.hidden { display: none; }
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .answer-box {
-    margin-bottom: var(--space-lg);
-  }
+  .answer-box { margin-bottom: var(--space-lg); }
 
   .answer-label {
     font-size: 0.8125rem;
@@ -127,9 +216,7 @@ const hasDerivation = Astro.slots.has("derivation");
     line-height: 1.6;
   }
 
-  .derivation {
-    padding-top: var(--space-md);
-  }
+  .derivation { padding-top: var(--space-md); }
 
   .derivation-label {
     font-size: 0.8125rem;
@@ -143,82 +230,106 @@ const hasDerivation = Astro.slots.has("derivation");
     line-height: 1.75;
   }
 
-  /* Inline styles for slot content */
+  /* Slot content styles */
   .problem-question :global(p),
-  .answer-content :global(p) {
-    margin: 0;
-  }
+  .answer-content :global(p) { margin: 0; }
 
-  .derivation-content :global(p) {
-    margin: 0 0 var(--space-md) 0;
-  }
+  .derivation-content :global(p) { margin: 0 0 var(--space-md) 0; }
+  .derivation-content :global(p:last-child) { margin-bottom: 0; }
 
-  .derivation-content :global(p:last-child) {
-    margin-bottom: 0;
-  }
-
-  /* KaTeX display math within answers */
   .answer-section :global(.katex-display) {
     margin: var(--space-md) 0;
     text-align: left;
-    width: auto;
-    margin-left: 0;
   }
 
-  /* Multi-part answer line breaks */
-  .answer-content br {
-    content: "";
-    display: block;
-    margin-top: var(--space-xs);
-  }
-
-  /* List styles in derivations */
   .derivation-content :global(ol),
   .derivation-content :global(ul) {
     margin: var(--space-sm) 0;
     padding-left: var(--space-xl);
   }
 
-  .derivation-content :global(li) {
-    margin-bottom: var(--space-xs);
-  }
+  .derivation-content :global(li) { margin-bottom: var(--space-xs); }
 </style>
 
 <script>
+  import { playCorrect, playIncorrect } from '../lib/audio-feedback';
+
   function initWorksheetProblems() {
     document.querySelectorAll<HTMLElement>(".worksheet-problem").forEach((problem) => {
-      const btn = problem.querySelector<HTMLButtonElement>(".toggle-answer");
+      const toggleBtn = problem.querySelector<HTMLButtonElement>(".toggle-answer");
       const answerSection = problem.querySelector<HTMLElement>(".answer-section");
+      const mcqSection = problem.querySelector<HTMLElement>(".hello-mcq");
 
-      if (!btn || !answerSection) return;
+      if (!toggleBtn || !answerSection) return;
 
       let mathRendered = false;
 
-      btn.addEventListener("click", () => {
+      // Toggle answer visibility
+      toggleBtn.addEventListener("click", () => {
         const isHidden = answerSection.classList.contains("hidden");
-        
         answerSection.classList.toggle("hidden");
-        btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
-        btn.textContent = isHidden ? "Hide Answer" : "Show Answer";
+        toggleBtn.setAttribute("aria-expanded", isHidden ? "true" : "false");
+        toggleBtn.textContent = isHidden ? "Hide Answer" : "Show Answer";
 
-        // Render math on first reveal
+        // Lazy render math on first reveal
         if (isHidden && !mathRendered) {
           mathRendered = true;
-
-          // Re-render math in answer section
-          import("katex/contrib/auto-render").then(
-            ({ default: renderMathInElement }) => {
-              renderMathInElement(answerSection, {
-                delimiters: [
-                  { left: "$$", right: "$$", display: true },
-                  { left: "$", right: "$", display: false },
-                ],
-                throwOnError: false,
-              });
-            },
-          );
+          import("katex/contrib/auto-render").then(({ default: renderMath }) => {
+            renderMath(answerSection, {
+              delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+              ],
+              throwOnError: false,
+            });
+          });
         }
       });
+
+      // MCQ interaction (Hello Mode)
+      if (mcqSection) {
+        const correctIndex = parseInt(mcqSection.dataset.correct || "0", 10);
+        const options = mcqSection.querySelectorAll<HTMLLabelElement>(".quiz-option");
+        const checkBtn = mcqSection.querySelector<HTMLButtonElement>(".check-btn");
+        const resetBtn = mcqSection.querySelector<HTMLButtonElement>(".reset-btn");
+
+        let selectedIndex: number | null = null;
+        let submitted = false;
+
+        options.forEach((opt, i) => {
+          opt.addEventListener("click", (e) => {
+            if (submitted) return;
+            e.preventDefault();
+            selectedIndex = i;
+            options.forEach((o, j) => o.classList.toggle("selected", j === i));
+            if (checkBtn) checkBtn.disabled = false;
+          });
+        });
+
+        checkBtn?.addEventListener("click", () => {
+          if (submitted || selectedIndex === null) return;
+          submitted = true;
+
+          const isCorrect = selectedIndex === correctIndex;
+          isCorrect ? playCorrect() : playIncorrect();
+
+          options.forEach((opt) => opt.classList.add("locked"));
+          options.forEach((opt, i) => {
+            opt.classList.remove("selected");
+            if (i === correctIndex) opt.classList.add("correct");
+            else if (i === selectedIndex) opt.classList.add("incorrect");
+          });
+        });
+
+        resetBtn?.addEventListener("click", () => {
+          submitted = false;
+          selectedIndex = null;
+          options.forEach((opt) => {
+            opt.classList.remove("selected", "correct", "incorrect", "locked");
+          });
+          if (checkBtn) checkBtn.disabled = true;
+        });
+      }
     });
   }
 
