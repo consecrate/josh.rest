@@ -1,5 +1,5 @@
 {
-  "name": "josh-rest",
+  "name": "joshrest",
   "compatibility_date": "2025-12-15",
   "main": "./dist/_worker.js",
   "assets": {
