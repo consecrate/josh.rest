@@ -5,13 +5,17 @@ import type { CourseSection } from "../lib/courses";
 interface Props {
   sections: CourseSection[];
   currentSlug?: string;
+  courseTitle?: string;
 }
 
-const { sections, currentSlug } = Astro.props;
+const { sections, currentSlug, courseTitle } = Astro.props;
 ---
 
 <BaseSidebar collapsible id="course-sidebar">
   <div class="sidebar-content">
+    {courseTitle && (
+      <h2 class="course-title">{courseTitle}</h2>
+    )}
     {
       sections.map((section) => (
         <div class="section">
@@ -58,6 +62,16 @@ const { sections, currentSlug } = Astro.props;
 <style>
   .sidebar-content {
     padding: var(--space-md) 0;
+  }
+
+  .course-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    padding: 0 var(--space-lg);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .section {

@@ -13,6 +13,7 @@ interface Props {
   currentSlug: string;
   nextLesson?: CollectionEntry<"courses"> | null;
   isWorksheet?: boolean;
+  courseTitle?: string;
 }
 
 const {
@@ -23,12 +24,13 @@ const {
   currentSlug,
   nextLesson,
   isWorksheet = false,
+  courseTitle,
 } = Astro.props;
 ---
 
 <Base title={`${title} — josh.rest`} description={description} fullWidth>
   <div class="course-layout">
-    <CourseSidebar sections={sections} currentSlug={currentSlug} />
+    <CourseSidebar sections={sections} currentSlug={currentSlug} courseTitle={courseTitle} />
     <main class="course-content">
       <div class="content-wrapper">
         {!isWorksheet && (
