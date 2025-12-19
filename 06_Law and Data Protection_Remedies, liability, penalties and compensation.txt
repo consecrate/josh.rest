@@ -1,0 +1,393 @@
+12/17/2025
+
+REMEDIES, LIABILITY, PENALTIES AND
+COMPENSATION
+
+RIGHT TO LODGE A COMPLAINT WITH A
+SUPERVISORY AUTHORITY
+
+ASSOC. PROF. DR. TRAN THANG LONG
+
+1
+
+3
+
+OUTLINE
+
+RIGHT TO LODGE A COMPLAINT WITH A SUPERVISORY
+AUTHORITY
+
+• Data subject has the right to lodge a complaint with a
+supervisory authority
+• GDPR  supervisory authorities to adopt measures to
+facilitate the submission of complaints
+ e.g. electronic complaint submission form
+
+• Right to lodge a complaint with a supervisory authority
+• Right to an effective judicial remedy
+• Liability and the right to compensation
+• Sanctions
+
+2
+
+4
+
+1
+
+12/17/2025
+
+WHERE TO LODGE A COMPLAINT?
+
+APPEALLATION
+
+• The data subject can lodge the complaint with the
+supervisory authority in the Member State of:
+
+• Data subject as well as to controllers and
+processors may appeal to the courts against
+decisions by a national supervisory authority.
+
+• his or her habitual residence, place of work, or
+• place of the alleged infringement
+
+5
+
+7
+
+INVESTIGATION AND PROCEEDINGS
+
+• Complaints must be investigated
+• the supervisory authority must inform the person
+concerned of the outcome of the proceedings dealing
+with the claim
+
+6
+
+JUDICIAL REMEDIES
+
+8
+
+2
+
+12/17/2025
+
+WHAT JUDICIAL REMEDIES
+
+WHERE TO LODGE A COMPLAINT
+
+• Complaint lodged to a court
+
+• If the controller or processor are public
+authorities and processing is undertaken in the
+exercise of their public powers
+•  only the courts of the state of the relevant
+public authority are competent for a claim
+
+• In cases data subject’s rights is violated, they are
+entitled to bring a complaint before a court
+• This is an option of the data subjects to choose
+where to lodge their complaints
+
+9
+
+11
+
+WHERE TO LODGE A COMPLAINT
+
+WHERE TO LODGE A COMPLAINT
+
+• Data subjects may choose to lodge their
+complaints either:
+
+• Note: Complaints can be lodge to the General
+Court of the EU (part of the CJEU)
+• When: EU institutions or bodies unlawfully
+processing personal data.
+
+• in the Member State in which the controller or
+processor has an establishment, or
+• in the Member State in which the data subjects
+concerned have their habitual residence
+
+10
+
+12
+
+3
+
+12/17/2025
+
+THE PROCEEDINGS
+
+THE PROCEEDINGS
+
+• The right to request clarification (preliminary rulings)
+• Who? data subjects, supervisory authorities, controllers
+or processors
+• the CJEU can refuse if the question does not fall within its
+sphere of competence.
+
+• How? ask the national court to request clarification from
+the CJEU
+• On what issues? on the interpretation and validity of
+acts of EU institutions, bodies, offices or agencies.
+
+13
+
+15
+
+RIGHT TO MANDATE A NOT-FOR-PROFIT BODY, ORGANISATION
+OR ASSOCIATION
+
+THE PROCEEDINGS
+
+• the CJEU
+
+• Data subjects lodging a complaint to a supervisory
+authority or bringing legal action before a court to
+mandate a non-profit body, organisation to represent
+them
+
+• must answer referred questions
+• it cannot refuse to give its preliminary ruling on the
+grounds that this response would be neither relevant nor
+timely in respect of the original case.
+
+14
+
+16
+
+4
+
+12/17/2025
+
+RIGHT TO MANDATE A NOT-FOR-PROFIT BODY, ORGANISATION
+OR ASSOCIATION
+
+• These non-profit entities:
+• must have statutory objectives within the sphere of public interest
+and be active in the field of data protection.
+
+LIABILITY AND COMPENSATION
+
+• may lodge the complaint or exercise the right to judicial remedy on
+behalf of the data subject(s). or association to represent them
+• bring collective claims on behalf of multiple data subjects.
+
+17
+
+19
+
+THE RIGHT TO COMPENSATION
+
+RIGHT TO MANDATE A NOT-FOR-PROFIT BODY, ORGANISATION
+OR ASSOCIATION
+
+• Data subjects can claim compensation for any damage
+suffered as a result of processing their data that
+infringes the applicable legislation
+
+• Depending on Member State law, a body can lodge
+complaints on behalf of data subjects, without being
+mandated by those data subjects.
+
+18
+
+• Example?
+
+20
+
+5
+
+12/17/2025
+
+WHAT TO COMPENSATE
+
+WHAT TO COMPENSATE
+
+• Both material and non-material damages
+• Material damages
+
+• GDPR  “the concept of damage should be broadly
+interpreted in the light of the case law of the Court of
+Justice in a manner which fully reflects the objectives
+of this Regulation”
+
+• are any "out of pocket" loss that are causes by a violation of the GDPR.
+• usually forms of secondary harm
+• (such as the loss of a job, the damage from having a contract denied or the
+damage from price discrimination),
+• are indirectly caused by a violation of the data subject's rights under
+GDPR.
+
+• Out of pocket losses can be objectively quantified.
+
+21
+
+23
+
+WHAT TO COMPENSATE
+
+WHO TO COMPENSATE?
+
+• Controllers
+
+• Non-material damages are the emotional damage of
+the illegal processing of personal data itself.
+
+• are liable and could be subject to compensation claims if
+they do not meet their obligations under the GDPR.
+• What are GDPR obligations of the controller?
+
+22
+
+24
+
+6
+
+12/17/2025
+
+HOW TO COMPENSATE?
+
+WHO TO COMPENSATE?
+
+• Processors
+• are liable for the damage caused by processing only
+where:
+
+• Compensation must be ‘full and effective’ in
+relation to the damage suffered.
+• What does “full and effective” mean?
+
+• it has not complied with the regulation’s obligations
+specifically addressed to processors, or
+• where it has acted outside, or contrary to, the lawful
+instructions of the controller.
+• What are obligations imposed to a processors?
+
+25
+
+27
+
+WHO TO COMPENSATE?
+
+HOW TO COMPENSATE?
+
+• The controller or processor can claim back
+• from the other controllers or processors involved in
+the same processing
+• that part of the compensation corresponding to the
+degree of responsibility for the damage
+• Example?
+
+26
+
+• Where damage is caused by the processing of
+several controllers and processors?
+• each controller or processor must be held liable for
+the entire damage.
+
+28
+
+7
+
+12/17/2025
+
+FINE LEVELS
+
+• The supervisory authorities have the power to impose
+administrative fines for infringements of the regulation
+• up to € 20,000,000, or
+
+SANCTIONS
+
+• in the case of an undertaking, 4 % of its total worldwide
+annual turnover – whichever is higher.
+• Undertaking?
+
+29
+
+31
+
+FINE LEVELS
+APPLICATION OF SANCTIONS
+
+• When?
+• breaches of the basic principles for processing and
+the conditions for consent,
+• breaches of data subjects’ rights
+• breaches of the regulation’s provisions governing the
+transfer of personal data to recipients in third
+countries.
+
+• GDPR empowers Member States’ supervisory
+authorities to impose administrative fines for
+infringements of the regulation.
+
+30
+
+32
+
+8
+
+12/17/2025
+
+FINE LEVELS
+FACTORS TO CONSIDER THE FINES?
+
+• For other infringements,
+
+• The degree of cooperation with the supervisory authority
+following the infringement,
+
+• fines can be up to € 10,000,000 or,
+• in the case of an undertaking, 2 % of its total
+worldwide annual turnover – whichever is higher
+
+33
+
+• How the supervisory authority learned of the infringement (by
+reported by the entity responsible for the processing, or by a data
+subject whose rights were violated)
+
+35
+
+FACTORS TO CONSIDER THE FINES?
+
+CORRECTIVE POWERS OF THE SUPERVISORY AUTHORITY
+
+• the nature, gravity and duration of the infringement, the
+categories of personal data affected
+• whether it had an intentional or negligent character.
+• Whether a controller or processor has taken action to
+mitigate the damage suffered by data subjects,
+
+• issuing of orders,
+• warnings and reprimands to controllers and processors,
+• the imposition of temporary or permanent bans on
+processing activities.
+
+• Mitigation?
+
+34
+
+36
+
+9
+
+12/17/2025
+
+INFRINGEMENTS OF EU LAW BY EU INSTITUTIONS OR BODIES?
+
+• Sanctions may be  disciplinary action.
+• According to Article 49 GDPR, “any failure to comply with the
+obligations pursuant to this Regulation, whether intentionally
+or through negligence on his or her part, shall make an
+official or other servant of the European Communities liable
+to disciplinary action [...]”.
+
+37
+
+10
+
+

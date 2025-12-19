@@ -1,0 +1,72 @@
+---
+title: "The Price of Error"
+description: "Liability and the Right to Compensation"
+order: 26
+comingSoon: false
+section: "Enforcement & Remedies (The Reckoning)"
+sectionOrder: 7
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Bob's Wallet is Crying
+
+Bob thinks that if he didn't *steal* the users' money, he shouldn't have to pay them anything. Alice corrections him.
+
+"In the EU, Bob, privacy is a fundamental right. If you break it, you pay."
+
+## Right to Compensation (Article 82)
+
+Any person who has suffered **material or non-material damage** as a result of an infringement of the GDPR has the right to receive compensation from the controller or processor.
+
+### What counts as "Damage"?
+1.  **Material Damage**: Direct financial loss (e.g., identity theft led to money being stolen from a bank account).
+2.  **Non-Material Damage**: Emotional harm, distress, or loss of control over your data (e.g., your private photos were leaked and you suffered anxiety).
+
+> [!IMPORTANT]
+> The concept of damage should be **broadly interpreted**. Even "mere loss of control" over data can be enough to claim compensation in some cases.
+
+## Who Pays?
+*   **Controllers** are liable for any damage caused by processing that infringes the GDPR.
+*   **Processors** are liable ONLY if they ignored the controller's instructions or violated processor-specific GDPR rules (like security).
+
+### Joint and Several Liability
+If multiple companies (e.g., Bob and his Cloud Provider) are involved in the same processing that caused damage, **each is liable for the entire damage**. The user can sue either one for 100% of the money.
+*   The company that pays can then sue the other one to "claim back" their fair share of the cost.
+
+<MultipleChoice
+  question="A user's home address was leaked from DataVault. They didn't lose any money, but they felt 'extremely distressed and unsafe.' Can they claim compensation?"
+  options={[
+    "No, compensation is only for financial loss.",
+    "Yes, this is 'non-material damage' and is covered by Article 82.",
+    "Only if they can prove the leak was intentional.",
+    "Only if Bob is a public authority."
+  ]}
+  correct={1}
+  explanation="Article 82 specifically includes 'non-material damage' (like distress or loss of reputation). You don't have to lose money to get compensated."
+/>
+
+<MultipleChoice
+  question="Bob's developer accidentally leaked data. Bob says: 'It's not my fault, it was the developer!' What does the GDPR say about his liability?"
+  options={[
+    "Bob is exempt if he can prove the developer was negligent.",
+    "Bob is exempt only if he fired the developer.",
+    "Bob is liable unless he proves he is 'not in any way responsible' for the event giving rise to the damage.",
+    "Bob is only liable for 50% of the damage."
+  ]}
+  correct={2}
+  explanation="Under Article 82(3), the controller is exempt only if they prove they are *not in any way* responsible. This is a very high bar to meet."
+/>
+
+## Practice: The Damage Calculator
+
+Identify the types of damages and who is responsible for paying.
+
+<AdaptiveQuiz
+  generator="law-damage-calculator"
+  baseSeed={26}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

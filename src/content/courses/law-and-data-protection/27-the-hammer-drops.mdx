@@ -1,0 +1,74 @@
+---
+title: "The Hammer Drops"
+description: "Administrative Fines and Sanctions"
+order: 27
+comingSoon: false
+section: "Enforcement & Remedies (The Reckoning)"
+sectionOrder: 7
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# The Reckoning
+
+The Supervisory Authority has finished its investigation into Bob's "cat leak." They agree with the users: Bob was negligent. Now comes the part everyone fears: **The Fine**.
+
+## The Two Tiers of Fines (Article 83)
+
+The GDPR doesn't just have one fine. It has two "tiers" depending on what you did wrong.
+
+### Tier 1: The "Small" Fine (€10,000,000 or 2%)
+Up to **€10 million** or **2%** of total worldwide annual turnover (whichever is higher).
+*   **Applies to:** Minor administrative violations (e.g., failing to keep records of processing, failing to perform a Privacy Impact Assessment).
+
+### Tier 2: The "Big" Fine (€20,000,000 or 4%)
+Up to **€20 million** or **4%** of total worldwide annual turnover (whichever is higher).
+*   **Applies to:** Serious breaches of core principles (e.g., violating data subject rights, lack of legal basis, illegal transfers to third countries).
+
+## How is the amount decided?
+The SA doesn't just pick a number. They must consider **11 factors** (Article 83(2)):
+1.  **Nature, gravity, and duration** of the infringement.
+2.  **Intentional or negligent** character.
+3.  **Mitigation** (did Bob try to fix it quickly?).
+4.  **Cooperation** with the SA.
+5.  **Previous infringements**.
+
+> [!TIP]
+> Fines must be **effective, proportionate, and dissuasive**. They are meant to hurt enough that companies don't just treat them as a "cost of doing business."
+
+<MultipleChoice
+  question="Bob forgot to appoint a Data Protection Officer (DPO), which is a requirement for his company. This is an administrative failure. Which tier of fine likely applies?"
+  options={[
+    "Tier 1: Up to €10M or 2% turnover.",
+    "Tier 2: Up to €20M or 4% turnover.",
+    "Fixed fee of €5,000.",
+    "No fine, just a warning."
+  ]}
+  correct={0}
+  explanation="Administrative obligations (like appointing a DPO or keeping records) generally fall under the Tier 1 limits."
+/>
+
+<MultipleChoice
+  question="Bob's company deliberately ignored a user's request to delete their data (Right to Erasure). Which tier of fine applies?"
+  options={[
+    "Tier 1: Up to €10M or 2% turnover.",
+    "Tier 2: Up to €20M or 4% turnover.",
+    "No fine, erasure is optional.",
+    "Only a criminal penalty."
+  ]}
+  correct={1}
+  explanation="Breaches of Data Subject Rights (Chapter III of the GDPR) are considered serious and fall under the Tier 2 limits."
+/>
+
+## Practice: The Fine Tuner
+
+Evaluate a breach and determine the maximum fine and the aggravating/mitigating factors.
+
+<AdaptiveQuiz
+  generator="law-fine-tuner"
+  baseSeed={27}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

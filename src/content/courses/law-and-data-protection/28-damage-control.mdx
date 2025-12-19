@@ -1,0 +1,70 @@
+---
+title: "Damage Control"
+description: "Corrective Powers of the Supervisory Authority"
+order: 28
+comingSoon: false
+section: "Enforcement & Remedies (The Reckoning)"
+sectionOrder: 7
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Beyond the Money
+
+Bob thinks that if he pays the fine (Lesson 27), he's done. Alice laughs. "The fine is just the beginning, Bob. They can make you stop working entirely."
+
+## Corrective Powers (Article 58)
+
+The Supervisory Authority (SA) has a toolbox of "Corrective Powers" to make sure companies actually fix their problems. Fines are just one tool.
+
+### The Toolbox
+1.  **Warnings**: "Don't do that, or we'll investigate you." (Usually for planned processing).
+2.  **Reprimands**: "You did it wrong, don't do it again." (For past minor violations).
+3.  **Orders to Comply**: "You must respect the user's request for access within 7 days."
+4.  **Bans**: A temporary or permanent **limitation or ban on processing**. This is the nuclear option.
+5.  **Suspension of Data Flows**: "Stop sending data to the US until you have safeguards."
+
+## The Non-Profit Watchdogs (Article 80)
+Bob should also watch out for non-profits. Organizations like NOYB (None of Your Business) can be **mandated by data subjects** to lodge complaints or take legal action on their behalf. 
+
+In some countries, these organizations can even act **without a mandate** if they see a systemic violation!
+
+> [!CAUTION]
+> A Processing Ban can kill a business faster than a fine. Imagine if DataVault was banned from processing *all* pet data for 30 days.
+
+<MultipleChoice
+  question="The Supervisory Authority discovers that Bob's 'Security' is non-existent. They order him to 'bring processing operations into compliance' within 30 days. What power is this?"
+  options={[
+    "A warning.",
+    "A reprimand.",
+    "An order to comply.",
+    "A permanent ban."
+  ]}
+  correct={2}
+  explanation="Article 58(2)(d) gives the SA the power to order the controller to bring processing operations into compliance with the GDPR."
+/>
+
+<MultipleChoice
+  question="Can a non-profit organization sue Bob for a GDPR violation even if NO single user has complained to them?"
+  options={[
+    "No, they must be hired by a specific victim.",
+    "Yes, if the Member State's law allows for 'representative actions' without a mandate.",
+    "Only if they pay Bob first.",
+    "Only if the violation involves more than 1,000,000 people."
+  ]}
+  correct={1}
+  explanation="Article 80(2) allows Member States to provide that organizations can lodge complaints/judicial remedies independently of a data subject's mandate if they believe rights have been infringed."
+/>
+
+## Practice: The Power Play
+
+Match the SA's corrective tool to the severity and type of Bob's mistake.
+
+<AdaptiveQuiz
+  generator="law-power-play"
+  baseSeed={28}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

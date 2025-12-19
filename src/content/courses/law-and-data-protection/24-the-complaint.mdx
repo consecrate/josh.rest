@@ -1,0 +1,75 @@
+---
+title: "The Complaint"
+description: "Right to Lodge a Complaint with a Supervisory Authority"
+order: 24
+comingSoon: false
+section: "Enforcement & Remedies (The Reckoning)"
+sectionOrder: 7
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Bob's Bad Day
+
+Bob's "DataVault" app is growing fast, but so are the mistakes. Last week, a glitch in the "Pet Health" module accidentally leaked the medical records of thousands of cats to a public forum.
+
+Bob expects an angry email. Instead, he gets a letter from the **Supervisory Authority (SA)**.
+
+A user didn't bother talking to Bob. They went straight to the government.
+
+## The Right to Complain (Article 77)
+
+Every data subject has the right to lodge a complaint with a supervisory authority if they believe the processing of their personal data infringes the GDPR.
+
+### Where can they file it?
+The user has options. They can file the complaint in the Member State of:
+1.  **Their Habitual Residence** (where they live).
+2.  **Their Place of Work**.
+3.  **The Place of the Alleged Infringement** (where the leak happened).
+
+> [!NOTE]
+> Supervisory authorities must make it easy. Most have electronic submission forms.
+
+## Investigation and Outcome
+The SA must:
+*   **Investigate** the complaint to the extent necessary.
+*   **Inform** the complainant on the progress and the outcome of the complaint.
+
+If the SA doesn't act or inform the user within 3 months, the user has the right to a **judicial remedy** (taking the SA to court!).
+
+<MultipleChoice
+  question="A user lives in Paris (France), works in Berlin (Germany), and Bob's company leaked their data in Dublin (Ireland). Where can the user file a GDPR complaint?"
+  options={[
+    "Only in Ireland, where the leak happened.",
+    "Only in France, where they live.",
+    "In France, Germany, or Ireland.",
+    "Only in the country where Bob's company is headquartered."
+  ]}
+  correct={2}
+  explanation="Article 77 allows the data subject to choose between their residence, place of work, or the place of the infringement. This 'forum shopping' favor protects the individual."
+/>
+
+<MultipleChoice
+  question="What must a Supervisory Authority do if they receive a complaint?"
+  options={[
+    "Immediately fine the company.",
+    "Investigate and inform the complainant of the progress/outcome.",
+    "Forward it to the police.",
+    "Ignore it if it's the company's first mistake."
+  ]}
+  correct={1}
+  explanation="Under Article 77(2), the SA is obligated to investigate to the extent appropriate and keep the complainant informed."
+/>
+
+## Practice: The Complaint Router
+
+Help users find the right office for their grievances.
+
+<AdaptiveQuiz
+  generator="law-complaint-router"
+  baseSeed={24}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>

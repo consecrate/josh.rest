@@ -1,0 +1,69 @@
+---
+title: "See You in Court"
+description: "Right to an Effective Judicial Remedy"
+order: 25
+comingSoon: false
+section: "Enforcement & Remedies (The Reckoning)"
+sectionOrder: 7
+---
+
+import AdaptiveQuiz from "../../../components/AdaptiveQuiz.astro";
+import MultipleChoice from "../../../components/MultipleChoice.astro";
+
+# Bob's Day in Court
+
+Bob is being sued. 
+
+Wait—wasn't there a complaint with the Supervisory Authority (Lesson 24)? Yes. But users have **two** paths. They can complain to the government, OR they can go straight to a judge.
+
+## Two Types of Judicial Remedies
+
+### 1. Suing the Supervisory Authority (Article 78)
+If the SA ignores a complaint, or if the SA makes a decision that the user (or Bob!) hates, they can take the **SA to court**.
+*   This usually happens in the Member State where the SA is established.
+
+### 2. Suing the Controller or Processor (Article 79)
+Users can sue Bob (the Controller) or his cloud provider (the Processor) directly for violating their rights.
+*   **Where?** In the Member State where the company has an establishment, OR where the data subject lives.
+*   **Exception:** If the controller is a **public authority** (like a government tax office), you usually must sue them in their own state's courts.
+
+## The Role of the CJEU
+Sometimes, a national judge isn't sure how to interpret the GDPR. They ask the **Court of Justice of the European Union (CJEU)** for help. This is called a **Preliminary Ruling**.
+
+The CJEU doesn't decide if Bob is guilty. It just explains what the Law means. The national judge then takes that explanation and applies it to Bob's case.
+
+<MultipleChoice
+  question="If Bob's company is in Sweden and the user lives in Italy, where can the user sue Bob for a GDPR violation?"
+  options={[
+    "Only in Sweden.",
+    "Only in Italy.",
+    "Either Sweden or Italy.",
+    "Only in the EU General Court in Luxembourg."
+  ]}
+  correct={2}
+  explanation="Article 79 gives the data subject the choice to sue in the state of the controller's establishment OR their own habitual residence."
+/>
+
+<MultipleChoice
+  question="What is a 'Preliminary Ruling' by the CJEU?"
+  options={[
+    "A final verdict on whether Bob must pay a fine.",
+    "An interpretation of EU law requested by a national court to help them decide a case.",
+    "A secret meeting between judges.",
+    "A warning issued to a company before they are sued."
+  ]}
+  correct={1}
+  explanation="When a national court is uncertain about GDPR interpretation, they refer questions to the CJEU. The CJEU provides the 'ruling' on the interpretation, which the national court then uses."
+/>
+
+## Practice: The Courtroom Maze
+
+Should the case go to a local court, a different country, or do we need the CJEU?
+
+<AdaptiveQuiz
+  generator="law-courtroom-maze"
+  baseSeed={25}
+  initialCount={3}
+  appendCount={2}
+  maxQuestions={10}
+/>
