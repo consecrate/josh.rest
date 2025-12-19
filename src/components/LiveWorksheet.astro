@@ -87,35 +87,25 @@ const { title, description } = Astro.props;
 <script>
   function initLiveWorksheets() {
     document.querySelectorAll<HTMLElement>(".live-worksheet").forEach((worksheet) => {
-      const helloModeBtn = worksheet.querySelector<HTMLButtonElement>(".hello-mode-btn");
+      const helloBtn = worksheet.querySelector<HTMLButtonElement>(".hello-mode-btn");
       const showAllBtn = worksheet.querySelector<HTMLButtonElement>(".show-all-btn");
       const hideAllBtn = worksheet.querySelector<HTMLButtonElement>(".hide-all-btn");
 
-      helloModeBtn?.addEventListener("click", () => {
+      helloBtn?.addEventListener("click", () => {
         const isActive = worksheet.classList.toggle("hello-mode");
-        helloModeBtn.classList.toggle("active", isActive);
-        helloModeBtn.textContent = isActive ? "Exit Hello Mode" : "Hello Mode";
-        
-        // Dispatch event to child problems
-        worksheet.dispatchEvent(new CustomEvent("hello-mode-toggle", { 
-          detail: { active: isActive },
-          bubbles: true 
-        }));
+        helloBtn.classList.toggle("active", isActive);
+        helloBtn.textContent = isActive ? "Exit Hello Mode" : "Hello Mode";
       });
 
       showAllBtn?.addEventListener("click", () => {
         worksheet.querySelectorAll<HTMLButtonElement>(".toggle-answer").forEach((btn) => {
-          if (btn.getAttribute("aria-expanded") === "false") {
-            btn.click();
-          }
+          if (btn.getAttribute("aria-expanded") === "false") btn.click();
         });
       });
 
       hideAllBtn?.addEventListener("click", () => {
         worksheet.querySelectorAll<HTMLButtonElement>(".toggle-answer").forEach((btn) => {
-          if (btn.getAttribute("aria-expanded") === "true") {
-            btn.click();
-          }
+          if (btn.getAttribute("aria-expanded") === "true") btn.click();
         });
       });
     });

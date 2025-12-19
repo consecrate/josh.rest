@@ -31,7 +31,7 @@ const explanationHtml = explanation ? inlineMarkdown(explanation) : undefined;
 
     <div class="quiz-options">
       {
-        options.map((option, index) => (
+        options.map((_option, index) => (
           <label class="quiz-option" data-index={index}>
             <span class="quiz-option-key">{String.fromCharCode(65 + index)}</span>
             <input type="radio" name={id} value={index} />
