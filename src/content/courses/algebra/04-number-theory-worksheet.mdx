@@ -10,27 +10,20 @@ isWorksheet: true
 import WorksheetProblem from "../../../components/WorksheetProblem.astro";
 import LiveWorksheet from "../../../components/LiveWorksheet.astro";
 
-<LiveWorksheet title="Number Theory" description="31 problems covering modular arithmetic, primes, GCD, and cryptography">
+<LiveWorksheet title="Number Theory" description="67 problems covering modular arithmetic, primes, GCD, and cryptography">
 
 <WorksheetProblem number={1} distractors={[
-  "(a) $3$ (b) $1$",
-  "(a) $1$ (b) $1$",
-  "(a) $0$ (b) $0$",
-  "(a) $9$ (b) $10$"
+  "$3$",
+  "$9$",
+  "$0$",
+  "$7$"
 ]}>
   <Fragment slot="question">
-    Find the last digit of the following sum using the remainders of 10.<br />
-    (a) $2403 + 791 + 688 + 4339$<br />
-    (b) $1 + 11^{10} + 111^{10} + \dots + \underbrace{11\dots1}_{100 \text{ ones}}$
+    Find the last digit of the sum $2403 + 791 + 688 + 4339$ using remainders mod 10.
   </Fragment>
-  <Fragment slot="answer">
-    (a) $1$<br />
-    (b) $0$
-  </Fragment>
+  <Fragment slot="answer">$1$</Fragment>
   <Fragment slot="derivation">
 **Key Insight:** The last digit of any number is simply its remainder when divided by 10. In math notation, the last digit of $n$ is $n \pmod{10}$.
-
-**Part (a): $2403 + 791 + 688 + 4339$**
 
 Instead of adding these large numbers, we only need to track their last digits:
 
@@ -45,8 +38,20 @@ Now add the last digits: $3 + 1 + 8 + 9 = 21$
 
 The last digit of 21 is **1**.
 
-**Part (b): $1 + 11^{10} + 111^{10} + \dots$**
+  </Fragment>
+</WorksheetProblem>
 
+<WorksheetProblem number={2} distractors={[
+  "$1$",
+  "$10$",
+  "$9$",
+  "$5$"
+]}>
+  <Fragment slot="question">
+    Find the last digit of $1 + 11^{10} + 111^{10} + \dots + \underbrace{11\dots1}_{100 \text{ ones}}$ using remainders mod 10.
+  </Fragment>
+  <Fragment slot="answer">$0$</Fragment>
+  <Fragment slot="derivation">
 First, notice a pattern. What's the last digit of any number made entirely of 1s?
 
 - $1 \pmod{10} = 1$
@@ -75,70 +80,69 @@ The last digit of 100 is **0**.
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={2} distractors={[
-  "(a) $5$ (b) $-1$ (c) $-2$ (d) $0$ (e) $5$ (f) $5$ (g) $2$",
-  "(a) $4$ (b) $8$ (c) $7$ (d) $6$ (e) $5$ (f) $5$ (g) $1$",
-  "(a) $5$ (b) $8$ (c) $7$ (d) $6$ (e) $0$ (f) $32$ (g) $1$",
-  "(a) $5$ (b) $8$ (c) $2$ (d) $0$ (e) $5$ (f) $5$ (g) $4$"
+<WorksheetProblem number={3} distractors={[
+  "$4$",
+  "$0$",
+  "$9$",
+  "$14$"
 ]}>
-  <Fragment slot="question">
-    Find<br />
-    (a) $14 \pmod 9$<br />
-    (b) $-1 \pmod 9$<br />
-    (c) $-11 \pmod 9$<br />
-    (d) $21 \cdot 38 \pmod 9$<br />
-    (e) $21 + 38 \pmod 9$<br />
-    (f) $2^{5} \pmod 9$<br />
-    (g) $2^{2016} \pmod 9$
-  </Fragment>
-  <Fragment slot="answer">
-    (a) $5$<br />
-    (b) $8$<br />
-    (c) $7$<br />
-    (d) $6$<br />
-    (e) $5$<br />
-    (f) $5$<br />
-    (g) $1$
-  </Fragment>
+  <Fragment slot="question">Find $14 \pmod 9$.</Fragment>
+  <Fragment slot="answer">$5$</Fragment>
   <Fragment slot="derivation">
 **Understanding Modular Arithmetic**
 
 The expression $a \pmod n$ asks: "What's the remainder when $a$ is divided by $n$?" The result is always a number from $0$ to $n-1$.
 
----
-
-**Part (a): $14 \pmod 9$**
-
 $14 = 9 \times 1 + 5$, so the remainder is **5**.
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (b): $-1 \pmod 9$**
-
+<WorksheetProblem number={4} distractors={[
+  "$-1$",
+  "$0$",
+  "$1$",
+  "$9$"
+]}>
+  <Fragment slot="question">Find $-1 \pmod 9$.</Fragment>
+  <Fragment slot="answer">$8$</Fragment>
+  <Fragment slot="derivation">
 For negative numbers, we need to find a positive equivalent. We want: $-1 \equiv \, ? \pmod 9$ where $?$ is between 0 and 8.
 
 Think of it as: "What do I add to $-1$ to get a multiple of 9?"
 
 $-1 + 9 = 8$, so $-1 \equiv 8 \pmod 9$.
 
-**Answer: 8**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (c): $-11 \pmod 9$**
-
+<WorksheetProblem number={5} distractors={[
+  "$-2$",
+  "$2$",
+  "$11$",
+  "$0$"
+]}>
+  <Fragment slot="question">Find $-11 \pmod 9$.</Fragment>
+  <Fragment slot="answer">$7$</Fragment>
+  <Fragment slot="derivation">
 First, find $11 \pmod 9 = 2$ (since $11 = 9 + 2$).
 
 So $-11 \equiv -2 \pmod 9$.
 
 Now convert $-2$ to positive: $-2 + 9 = 7$.
 
-**Answer: 7**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (d): $21 \cdot 38 \pmod 9$**
-
+<WorksheetProblem number={6} distractors={[
+  "$0$",
+  "$3$",
+  "$798$",
+  "$9$"
+]}>
+  <Fragment slot="question">Find $21 \cdot 38 \pmod 9$.</Fragment>
+  <Fragment slot="answer">$6$</Fragment>
+  <Fragment slot="derivation">
 **Key Property:** $(a \cdot b) \pmod n = [(a \pmod n) \cdot (b \pmod n)] \pmod n$
 
 This means we can reduce each factor first!
@@ -148,12 +152,18 @@ This means we can reduce each factor first!
 
 Now multiply: $3 \times 2 = 6$
 
-**Answer: 6**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (e): $21 + 38 \pmod 9$**
-
+<WorksheetProblem number={7} distractors={[
+  "$59$",
+  "$0$",
+  "$3$",
+  "$14$"
+]}>
+  <Fragment slot="question">Find $21 + 38 \pmod 9$.</Fragment>
+  <Fragment slot="answer">$5$</Fragment>
+  <Fragment slot="derivation">
 **Key Property:** $(a + b) \pmod n = [(a \pmod n) + (b \pmod n)] \pmod n$
 
 - $21 \pmod 9 = 3$
@@ -161,22 +171,34 @@ Now multiply: $3 \times 2 = 6$
 
 Sum: $3 + 2 = 5$
 
-**Answer: 5**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (f): $2^{5} \pmod 9$**
-
+<WorksheetProblem number={8} distractors={[
+  "$32$",
+  "$2$",
+  "$0$",
+  "$8$"
+]}>
+  <Fragment slot="question">Find $2^{5} \pmod 9$.</Fragment>
+  <Fragment slot="answer">$5$</Fragment>
+  <Fragment slot="derivation">
 Direct calculation: $2^5 = 32$
 
 $32 = 9 \times 3 + 5$, so $32 \pmod 9 = 5$.
 
-**Answer: 5**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (g): $2^{2016} \pmod 9$**
-
+<WorksheetProblem number={9} distractors={[
+  "$2$",
+  "$4$",
+  "$8$",
+  "$0$"
+]}>
+  <Fragment slot="question">Find $2^{2016} \pmod 9$.</Fragment>
+  <Fragment slot="answer">$1$</Fragment>
+  <Fragment slot="derivation">
 Computing $2^{2016}$ directly is impossible—the number has over 600 digits! Instead, we look for a **pattern** in the powers of 2 mod 9:
 
 | Power | Value | $\bmod 9$ |
@@ -199,43 +221,20 @@ So $2016 \equiv 0 \pmod 6$, meaning $2^{2016}$ is at position 6 in the cycle.
 
 $2^6 \equiv 1 \pmod 9$, so $2^{2016} = (2^6)^{336} \equiv 1^{336} = 1 \pmod 9$.
 
-**Answer: 1**
-
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={3} distractors={[
-  "(a) $1$ (b) $1$ (c) $5$ (d) $5$ (e) $5$ (f) $125$",
-  "(a) $7$ (b) $2$ (c) $3$ (d) $4$ (e) $8$ (f) $1001$",
-  "(a) $0$ (b) $1$ (c) $3$ (d) $4$ (e) $8$ (f) $983$",
-  "(a) $7$ (b) $1$ (c) $1$ (d) $1$ (e) $1$ (f) $1$"
+<WorksheetProblem number={10} distractors={[
+  "$1$",
+  "$0$",
+  "$13$",
+  "$49$"
 ]}>
-  <Fragment slot="question">
-    Find<br />
-    (a) $7^{121} \pmod{13}$<br />
-    (b) $2^{340} \pmod{11}$<br />
-    (c) $5^{2003} \pmod 7$<br />
-    (d) $5^{2003} \pmod{11}$<br />
-    (e) $5^{2003} \pmod{13}$<br />
-    (f) $5^{2003} \pmod{7 \cdot 11 \cdot 13}$
-  </Fragment>
-  <Fragment slot="answer">
-    (a) $7$<br />
-    (b) $1$<br />
-    (c) $3$<br />
-    (d) $4$<br />
-    (e) $8$<br />
-    (f) $983$
-  </Fragment>
+  <Fragment slot="question">Find $7^{121} \pmod{13}$.</Fragment>
+  <Fragment slot="answer">$7$</Fragment>
   <Fragment slot="derivation">
 **Fermat's Little Theorem (FLT):** If $p$ is prime and $\gcd(a, p) = 1$, then:
 $$a^{p-1} \equiv 1 \pmod p$$
-
-This is our main tool for simplifying large exponents!
-
----
-
-**Part (a): $7^{121} \pmod{13}$**
 
 Since 13 is prime and $\gcd(7, 13) = 1$, by FLT:
 $$7^{12} \equiv 1 \pmod{13}$$
@@ -246,11 +245,19 @@ $$121 = 12 \times 10 + 1$$
 So:
 $$7^{121} = 7^{12 \times 10 + 1} = (7^{12})^{10} \cdot 7^1 \equiv 1^{10} \cdot 7 = 7 \pmod{13}$$
 
-**Answer: 7**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (b): $2^{340} \pmod{11}$**
+<WorksheetProblem number={11} distractors={[
+  "$2$",
+  "$0$",
+  "$1024$",
+  "$10$"
+]}>
+  <Fragment slot="question">Find $2^{340} \pmod{11}$.</Fragment>
+  <Fragment slot="answer">$1$</Fragment>
+  <Fragment slot="derivation">
+**Fermat's Little Theorem (FLT):** If $p$ is prime and $\gcd(a, p) = 1$, then $a^{p-1} \equiv 1 \pmod p$.
 
 Since 11 is prime and $\gcd(2, 11) = 1$, by FLT:
 $$2^{10} \equiv 1 \pmod{11}$$
@@ -260,13 +267,19 @@ Check: $340 = 10 \times 34 + 0$
 So:
 $$2^{340} = (2^{10})^{34} \equiv 1^{34} = 1 \pmod{11}$$
 
-**Answer: 1**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (c): $5^{2003} \pmod 7$**
-
-By FLT: $5^{6} \equiv 1 \pmod 7$
+<WorksheetProblem number={12} distractors={[
+  "$5$",
+  "$1$",
+  "$0$",
+  "$6$"
+]}>
+  <Fragment slot="question">Find $5^{2003} \pmod 7$.</Fragment>
+  <Fragment slot="answer">$3$</Fragment>
+  <Fragment slot="derivation">
+By Fermat's Little Theorem: $5^{6} \equiv 1 \pmod 7$
 
 Find $2003 \pmod 6$: $2003 = 6 \times 333 + 5$
 
@@ -278,13 +291,19 @@ Calculate $5^5 \pmod 7$:
 - $5^4 = (5^2)^2 \equiv 4^2 = 16 \equiv 2 \pmod 7$
 - $5^5 = 5^4 \cdot 5 \equiv 2 \cdot 5 = 10 \equiv 3 \pmod 7$
 
-**Answer: 3**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (d): $5^{2003} \pmod{11}$**
-
-By FLT: $5^{10} \equiv 1 \pmod{11}$
+<WorksheetProblem number={13} distractors={[
+  "$5$",
+  "$1$",
+  "$125$",
+  "$0$"
+]}>
+  <Fragment slot="question">Find $5^{2003} \pmod{11}$.</Fragment>
+  <Fragment slot="answer">$4$</Fragment>
+  <Fragment slot="derivation">
+By Fermat's Little Theorem: $5^{10} \equiv 1 \pmod{11}$
 
 Find $2003 \pmod{10}$: $2003 = 10 \times 200 + 3$
 
@@ -293,13 +312,19 @@ $$5^{2003} \equiv 5^3 = 125 \pmod{11}$$
 
 $125 = 11 \times 11 + 4$, so $125 \equiv 4 \pmod{11}$.
 
-**Answer: 4**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (e): $5^{2003} \pmod{13}$**
-
-By FLT: $5^{12} \equiv 1 \pmod{13}$
+<WorksheetProblem number={14} distractors={[
+  "$5$",
+  "$1$",
+  "$12$",
+  "$0$"
+]}>
+  <Fragment slot="question">Find $5^{2003} \pmod{13}$.</Fragment>
+  <Fragment slot="answer">$8$</Fragment>
+  <Fragment slot="derivation">
+By Fermat's Little Theorem: $5^{12} \equiv 1 \pmod{13}$
 
 Find $2003 \pmod{12}$: $2003 = 12 \times 166 + 11$
 
@@ -312,16 +337,22 @@ Calculate efficiently using repeated squaring:
 - $5^8 \equiv 1 \pmod{13}$
 - $5^{11} = 5^8 \cdot 5^2 \cdot 5^1 \equiv 1 \cdot (-1) \cdot 5 = -5 \equiv 8 \pmod{13}$
 
-**Answer: 8**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (f): $5^{2003} \pmod{1001}$ where $1001 = 7 \times 11 \times 13$**
-
-We use the **Chinese Remainder Theorem (CRT)**. We already found:
-- $5^{2003} \equiv 3 \pmod 7$
-- $5^{2003} \equiv 4 \pmod{11}$
-- $5^{2003} \equiv 8 \pmod{13}$
+<WorksheetProblem number={15} distractors={[
+  "$125$",
+  "$1$",
+  "$0$",
+  "$1001$"
+]}>
+  <Fragment slot="question">Find $5^{2003} \pmod{1001}$ where $1001 = 7 \times 11 \times 13$.</Fragment>
+  <Fragment slot="answer">$983$</Fragment>
+  <Fragment slot="derivation">
+We use the **Chinese Remainder Theorem (CRT)**. First find $5^{2003}$ mod each prime factor:
+- $5^{2003} \equiv 3 \pmod 7$ (since $5^6 \equiv 1$ and $2003 = 6 \times 333 + 5$, giving $5^5 \equiv 3$)
+- $5^{2003} \equiv 4 \pmod{11}$ (since $5^{10} \equiv 1$ and $2003 = 10 \times 200 + 3$, giving $5^3 = 125 \equiv 4$)
+- $5^{2003} \equiv 8 \pmod{13}$ (since $5^{12} \equiv 1$ and $2003 = 12 \times 166 + 11$, giving $5^{11} \equiv 8$)
 
 We need to find $x$ such that:
 - $x \equiv 3 \pmod 7$
@@ -353,13 +384,11 @@ So $-m \equiv 1 \pmod{13}$, giving $m \equiv -1 \equiv 12 \pmod{13}$.
 **Final answer:**
 $$x = 77(12) + 59 = 924 + 59 = 983$$
 
-**Answer: 983**
-
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={4} distractors={[
-  "$4$ cans leftover",
+<WorksheetProblem number={16} distractors={[
+  "$8$ cans leftover",
   "$0$ cans leftover",
   "$12$ cans leftover",
   "$6$ cans leftover"
@@ -369,7 +398,7 @@ $$x = 77(12) + 59 = 924 + 59 = 983$$
     Jesper has 44 boxes of soda in his truck. The cans of soda in each box are packed oddly so that there are 113 cans of soda in each box. Jesper plans to pack the sodas into cases of 12 cans to sell. After making as many complete cases as possible, how many sodas will Jesper have leftover?<br />
     Use modular arithmetic to solve the problem.
   </Fragment>
-  <Fragment slot="answer">$8$ cans leftover</Fragment>
+  <Fragment slot="answer">$4$ cans leftover</Fragment>
   <Fragment slot="derivation">
 **Understanding the Problem**
 
@@ -415,22 +444,6 @@ $40 = 12 \times 3 + 4$
 
 So $40 \equiv 4 \pmod{12}$
 
-Wait, let me recalculate to verify:
-- $44 \times 113 = 4972$
-- $4972 \div 12 = 414$ remainder $4$
-
-Hmm, I get 4, but let me double-check my mod calculations:
-- $44 = 36 + 8 = 3(12) + 8$ ✓
-- $113 = 108 + 5 = 9(12) + 5$ ✓
-- $8 \times 5 = 40$
-- $40 = 36 + 4 = 3(12) + 4$ ✓
-
-Actually, I made an error in the answer. Let me recalculate:
-
-$4972 = 12 \times 414 + 4$
-
-The answer should be **4 cans leftover**, not 8.
-
 ---
 
 **Why This Approach is Useful**
@@ -442,33 +455,18 @@ Notice how we never had to compute $4972$ or do long division! By reducing each 
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={5} distractors={[
-  "(a) Prime (b) Always prime (c) Prime (d) Prime",
-  "(a) Composite (b) Always composite (c) Prime (d) Composite",
-  "(a) Prime (b) Cannot determine (c) Composite (d) Composite",
-  "(a) Composite (b) Always prime (c) Composite (d) Prime"
+<WorksheetProblem number={17} distractors={[
+  "Prime",
+  "Neither prime nor composite",
+  "Cannot be determined",
+  "Only divisible by 1"
 ]}>
-  <Fragment slot="question">
-    Which are prime, which are composite?<br />
-    (a) $119$<br />
-    (b) $n! - 1$ (for general $n$)<br />
-    (c) $2^{2000} + 1$<br />
-    (d) $n^{4} + 4$ (for $n > 1$)
-  </Fragment>
-  <Fragment slot="answer">
-    (a) Composite: $119 = 7 \times 17$<br />
-    (b) Cannot determine in general (depends on $n$)<br />
-    (c) Composite<br />
-    (d) Composite for all $n > 1$
-  </Fragment>
+  <Fragment slot="question">Is $119$ prime or composite?</Fragment>
+  <Fragment slot="answer">Composite: $119 = 7 \times 17$</Fragment>
   <Fragment slot="derivation">
 **Definitions:**
 - **Prime**: A number $> 1$ with exactly two divisors: 1 and itself
 - **Composite**: A number $> 1$ with more than two divisors (can be factored)
-
----
-
-**Part (a): Is 119 prime or composite?**
 
 To check if a number $n$ is prime, we only need to test divisibility by primes up to $\sqrt{n}$.
 
@@ -481,10 +479,18 @@ $\sqrt{119} \approx 10.9$, so we check primes: 2, 3, 5, 7.
 
 **Answer: Composite.** $119 = 7 \times 17$
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (b): Is $n! - 1$ prime or composite?**
-
+<WorksheetProblem number={18} distractors={[
+  "Always prime",
+  "Always composite",
+  "Prime only for $n < 5$",
+  "Composite only for even $n$"
+]}>
+  <Fragment slot="question">For a general positive integer $n$, is $n! - 1$ prime or composite?</Fragment>
+  <Fragment slot="answer">Cannot determine in general (depends on $n$)</Fragment>
+  <Fragment slot="derivation">
 This is a fascinating question! Let's look at examples:
 
 | $n$ | $n!$ | $n! - 1$ | Prime? |
@@ -498,10 +504,18 @@ Numbers of the form $n! - 1$ are called **factorial primes** when they're prime.
 
 **Answer: Cannot determine in general.** Whether $n! - 1$ is prime depends on the specific value of $n$.
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (c): Is $2^{2000} + 1$ prime or composite?**
-
+<WorksheetProblem number={19} distractors={[
+  "Prime",
+  "Neither prime nor composite",
+  "Cannot be determined without computation",
+  "Prime because it's of the form $2^n + 1$"
+]}>
+  <Fragment slot="question">Is $2^{2000} + 1$ prime or composite?</Fragment>
+  <Fragment slot="answer">Composite</Fragment>
+  <Fragment slot="derivation">
 This looks like it might be a **Fermat number** ($2^{2^n} + 1$), but 2000 is not a power of 2.
 
 **Key Insight:** If the exponent has an odd factor, we can factor the expression!
@@ -519,12 +533,18 @@ $$2^{2000} + 1 = (2^{400} + 1)(2^{1600} - 2^{1200} + 2^{800} - 2^{400} + 1)$$
 
 Both factors are greater than 1, so the number is composite!
 
-**Answer: Composite**
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (d): Is $n^4 + 4$ prime or composite for $n > 1$?**
-
+<WorksheetProblem number={20} distractors={[
+  "Always prime for $n > 1$",
+  "Prime for odd $n$, composite for even $n$",
+  "Cannot be determined in general",
+  "Depends on whether $n$ is prime"
+]}>
+  <Fragment slot="question">For $n > 1$, is $n^{4} + 4$ prime or composite?</Fragment>
+  <Fragment slot="answer">Composite for all $n > 1$</Fragment>
+  <Fragment slot="derivation">
 This is a beautiful example of **Sophie Germain's Identity**:
 $$a^4 + 4b^4 = (a^2 + 2b^2 + 2ab)(a^2 + 2b^2 - 2ab)$$
 
@@ -550,7 +570,7 @@ For $n > 1$, both factors are strictly greater than 1.
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={6} distractors={[
+<WorksheetProblem number={21} distractors={[
   "Proof by induction on $n$.",
   "Direct proof using Fermat's Little Theorem.",
   "The statement is false; $n$ can be composite.",
@@ -619,29 +639,16 @@ Primes of the form $2^p - 1$ (where $p$ is prime) are called **Mersenne primes**
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={7} distractors={[
-  "(a) No (b) Yes (c) Yes",
-  "(a) Yes (b) Yes (c) No",
-  "(a) No (b) No (c) Yes",
-  "(a) Yes (b) No (c) Yes"
+<WorksheetProblem number={22} distractors={[
+  "No, because 8 and 9 share a factor",
+  "No, because 7 and 11 are both prime",
+  "No, because consecutive integers share factors",
+  "Cannot be determined without computing all gcds"
 ]}>
-  <Fragment slot="question">
-    Determine whether the integers in each of these sets are pairwise relatively prime:<br />
-    (a) $7, 8, 9, 11$<br />
-    (b) $14, 15, 21$<br />
-    (c) $2^{35} - 1$ and $2^{2015} - 1$
-  </Fragment>
-  <Fragment slot="answer">
-    (a) Yes, pairwise relatively prime<br />
-    (b) No (gcd(14, 21) = 7)<br />
-    (c) No (gcd = $2^5 - 1 = 31$)
-  </Fragment>
+  <Fragment slot="question">Are the integers $7, 8, 9, 11$ pairwise relatively prime?</Fragment>
+  <Fragment slot="answer">Yes, pairwise relatively prime</Fragment>
   <Fragment slot="derivation">
 **Definition:** A set of integers is **pairwise relatively prime** if every pair of distinct integers in the set has gcd equal to 1.
-
----
-
-**Part (a): $\lbrace 7, 8, 9, 11 \rbrace$**
 
 We need to check all $\binom{4}{2} = 6$ pairs:
 
@@ -656,9 +663,19 @@ We need to check all $\binom{4}{2} = 6$ pairs:
 
 All pairs have gcd = 1. **Answer: Yes, pairwise relatively prime** ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (b): $\lbrace 14, 15, 21 \rbrace$**
+<WorksheetProblem number={23} distractors={[
+  "Yes, they are pairwise relatively prime",
+  "No, only because gcd(14, 15) > 1",
+  "Yes, because they are consecutive integers",
+  "Cannot be determined"
+]}>
+  <Fragment slot="question">Are the integers $14, 15, 21$ pairwise relatively prime?</Fragment>
+  <Fragment slot="answer">No (gcd(14, 21) = 7)</Fragment>
+  <Fragment slot="derivation">
+**Definition:** A set of integers is **pairwise relatively prime** if every pair of distinct integers in the set has gcd equal to 1.
 
 Prime factorizations:
 - $14 = 2 \times 7$
@@ -672,10 +689,18 @@ Check pairs:
 
 We found pairs with gcd $\neq$ 1. **Answer: No, not pairwise relatively prime**
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (c): $2^{35} - 1$ and $2^{2015} - 1$**
-
+<WorksheetProblem number={24} distractors={[
+  "Yes, they are relatively prime",
+  "No, their gcd is $2^{35} - 1$",
+  "Yes, because 35 and 2015 are coprime",
+  "Cannot be determined without factoring"
+]}>
+  <Fragment slot="question">Are $2^{35} - 1$ and $2^{2015} - 1$ relatively prime?</Fragment>
+  <Fragment slot="answer">No (gcd = $2^5 - 1 = 31$)</Fragment>
+  <Fragment slot="derivation">
 **Key Theorem:** For positive integers $a$ and $b$:
 $$\gcd(2^a - 1, 2^b - 1) = 2^{\gcd(a,b)} - 1$$
 
@@ -690,8 +715,6 @@ $$\gcd(2^{35} - 1, 2^{2015} - 1) = 2^5 - 1 = 31$$
 
 Since $\gcd = 31 \neq 1$, they are **not** relatively prime.
 
-**Answer: No, not relatively prime** (they share the common factor 31)
-
 ---
 
 **Why does $\gcd(2^a - 1, 2^b - 1) = 2^{\gcd(a,b)} - 1$?**
@@ -701,7 +724,7 @@ This follows from the Euclidean algorithm property: $2^a - 1$ divides $2^{ka} - 
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={8} distractors={[
+<WorksheetProblem number={25} distractors={[
   "(a) $\\phi(4) = 4$, $\\phi(10) = 5$, $\\phi(13) = 13$",
   "(a) $\\phi(4) = 2$, $\\phi(10) = 4$, $\\phi(13) = 12$ but (b) $\\phi(p^k) = p^k$",
   "(a) $\\phi(4) = 3$, $\\phi(10) = 4$, $\\phi(13) = 12$",
@@ -797,35 +820,20 @@ Verify: Numbers coprime to 12: 1, 5, 7, 11. Count = 4 ✓
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={9} distractors={[
-  "(b) gcd = $25$, lcm = $625000$ (d) gcd = $0$, lcm = $1111$",
-  "(c) gcd = $15$, lcm = $2^{12} \\cdot 3^{13} \\cdot 5^{17} \\cdot 7^{21}$",
-  "(a) gcd = $3^9 \\cdot 5^3$, lcm = $3^7 \\cdot 5^2$",
-  "(b) gcd = $125$, lcm = $625$ (d) gcd = $1$, lcm = undefined"
+<WorksheetProblem number={26} distractors={[
+  "gcd = $3^9 \\cdot 5^3$, lcm = $3^7 \\cdot 5^2$",
+  "gcd = $3^7 \\cdot 5^3 \\cdot 7^3$, lcm = $3^9 \\cdot 5^2 \\cdot 11^2$",
+  "gcd = $1$, lcm = $3^{16} \\cdot 5^{5} \\cdot 7^{3} \\cdot 11^2$",
+  "gcd = $3^9 \\cdot 5^3 \\cdot 7^3 \\cdot 11^2$, lcm = $3^7 \\cdot 5^2$"
 ]}>
-  <Fragment slot="question">
-    What are the greatest common divisors and the least common multiples of these pairs of integers?<br />
-    (a) $3^{7} \cdot 5^{3} \cdot 7^{3}$ and $3^{9} \cdot 5^{2} \cdot 11^{2}$<br />
-    (b) $1000$ and $625$<br />
-    (c) $3^{13} \cdot 5^{17}$ and $2^{12} \cdot 7^{21}$<br />
-    (d) $1111$ and $0$
-  </Fragment>
-  <Fragment slot="answer">
-    (a) gcd = $3^7 \cdot 5^2 = 5467500$, lcm = $3^9 \cdot 5^3 \cdot 7^3 \cdot 11^2$<br />
-    (b) gcd = $125$, lcm = $5000$<br />
-    (c) gcd = $1$, lcm = $2^{12} \cdot 3^{13} \cdot 5^{17} \cdot 7^{21}$<br />
-    (d) gcd = $1111$, lcm = $0$
-  </Fragment>
+  <Fragment slot="question">Find the gcd and lcm of $3^{7} \cdot 5^{3} \cdot 7^{3}$ and $3^{9} \cdot 5^{2} \cdot 11^{2}$.</Fragment>
+  <Fragment slot="answer">gcd = $3^7 \cdot 5^2 = 54675$, lcm = $3^9 \cdot 5^3 \cdot 7^3 \cdot 11^2$</Fragment>
   <Fragment slot="derivation">
 **Key Formulas:**
 
 For $a = p_1^{a_1} p_2^{a_2} \cdots$ and $b = p_1^{b_1} p_2^{b_2} \cdots$:
 - $\gcd(a, b) = p_1^{\min(a_1, b_1)} p_2^{\min(a_2, b_2)} \cdots$
 - $\text{lcm}(a, b) = p_1^{\max(a_1, b_1)} p_2^{\max(a_2, b_2)} \cdots$
-
----
-
-**Part (a): $3^{7} \cdot 5^{3} \cdot 7^{3}$ and $3^{9} \cdot 5^{2} \cdot 11^{2}$**
 
 | Prime | First number | Second number | min | max |
 |-------|--------------|---------------|-----|-----|
@@ -838,10 +846,18 @@ $$\gcd = 3^7 \cdot 5^2 = 2187 \cdot 25 = 54675$$
 
 $$\text{lcm} = 3^9 \cdot 5^3 \cdot 7^3 \cdot 11^2$$
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (b): $1000$ and $625$**
-
+<WorksheetProblem number={27} distractors={[
+  "gcd = $25$, lcm = $625000$",
+  "gcd = $5$, lcm = $625000$",
+  "gcd = $1000$, lcm = $625$",
+  "gcd = $625$, lcm = $1000$"
+]}>
+  <Fragment slot="question">Find the gcd and lcm of $1000$ and $625$.</Fragment>
+  <Fragment slot="answer">gcd = $125$, lcm = $5000$</Fragment>
+  <Fragment slot="derivation">
 Factor both:
 - $1000 = 10^3 = 2^3 \cdot 5^3$
 - $625 = 5^4$
@@ -857,11 +873,22 @@ $$\text{lcm} = 2^3 \cdot 5^4 = 8 \cdot 625 = 5000$$
 
 **Verify:** $\gcd \times \text{lcm} = 125 \times 5000 = 625000 = 1000 \times 625$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (c): $3^{13} \cdot 5^{17}$ and $2^{12} \cdot 7^{21}$**
-
+<WorksheetProblem number={28} distractors={[
+  "gcd = $15$, lcm = $2^{12} \\cdot 3^{13} \\cdot 5^{17} \\cdot 7^{21}$",
+  "gcd = $3 \\cdot 5 \\cdot 7$, lcm = $2^{12} \\cdot 3^{13} \\cdot 5^{17} \\cdot 7^{21}$",
+  "gcd = $2^{12}$, lcm = $3^{13} \\cdot 5^{17} \\cdot 7^{21}$",
+  "gcd = $3^{13} \\cdot 5^{17}$, lcm = $2^{12} \\cdot 7^{21}$"
+]}>
+  <Fragment slot="question">Find the gcd and lcm of $3^{13} \cdot 5^{17}$ and $2^{12} \cdot 7^{21}$.</Fragment>
+  <Fragment slot="answer">gcd = $1$, lcm = $2^{12} \cdot 3^{13} \cdot 5^{17} \cdot 7^{21}$</Fragment>
+  <Fragment slot="derivation">
 These numbers share **no common prime factors!**
+
+- First number: $3^{13} \cdot 5^{17}$ (primes: 3, 5)
+- Second number: $2^{12} \cdot 7^{21}$ (primes: 2, 7)
 
 $$\gcd = 1$$
 
@@ -869,10 +896,18 @@ $$\text{lcm} = 2^{12} \cdot 3^{13} \cdot 5^{17} \cdot 7^{21}$$
 
 Numbers with gcd = 1 are called **coprime** or **relatively prime**.
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (d): $1111$ and $0$**
-
+<WorksheetProblem number={29} distractors={[
+  "gcd = $0$, lcm = $1111$",
+  "gcd = $1$, lcm = undefined",
+  "gcd = undefined, lcm = undefined",
+  "gcd = $1$, lcm = $1111$"
+]}>
+  <Fragment slot="question">Find the gcd and lcm of $1111$ and $0$.</Fragment>
+  <Fragment slot="answer">gcd = $1111$, lcm = $0$</Fragment>
+  <Fragment slot="derivation">
 **Special case:** Every integer divides 0 (since $0 = k \cdot 0$ for any $k$).
 
 Therefore, the greatest common divisor of any number $n$ and 0 is $|n|$ itself:
@@ -886,41 +921,17 @@ $$\text{lcm}(1111, 0) = 0$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={10} distractors={[
-  "(a) $6$ (b) $6$ (c) $3$ (d) $42$ (e) $40$ (f) $9$ (g) $15$ (h) $3$",
-  "(a) $6$ (b) $6$ (c) $1$ (d) $42$ (e) $40$ (f) $3$ (g) $15$ (h) $3$",
-  "(a) $2$ (b) $6$ (c) $3$ (d) $42$ (e) $40$ (f) $3$ (g) $15$ (h) $3$",
-  "(a) $6$ (b) $6$ (c) $3$ (d) $21$ (e) $8$ (f) $3$ (g) $15$ (h) $3$"
+<WorksheetProblem number={30} distractors={[
+  "$2$",
+  "$3$",
+  "$12$",
+  "$18$"
 ]}>
-  <Fragment slot="question">
-    Find the greatest common divisors of the following pairs using Euclid's algorithm and prime factorization theorem.<br />
-    (a) $\gcd(12, 18)$<br />
-    (b) $\gcd(108, 30)$<br />
-    (c) $\gcd(111, 201)$<br />
-    (d) $\gcd(210, 126)$<br />
-    (e) $\gcd(1000, 5040)$<br />
-    (f) $\gcd(54321, 9876)$<br />
-    (g) $\gcd(67890, 12345)$<br />
-    (h) $\gcd(12345, 54321)$
-  </Fragment>
-  <Fragment slot="answer">
-    (a) $6$<br />
-    (b) $6$<br />
-    (c) $3$<br />
-    (d) $42$<br />
-    (e) $40$<br />
-    (f) $3$<br />
-    (g) $15$<br />
-    (h) $3$
-  </Fragment>
+  <Fragment slot="question">Find $\gcd(12, 18)$ using Euclid's algorithm.</Fragment>
+  <Fragment slot="answer">$6$</Fragment>
   <Fragment slot="derivation">
 **Euclid's Algorithm:** $\gcd(a, b) = \gcd(b, a \bmod b)$, stopping when the remainder is 0.
 
----
-
-**Part (a): $\gcd(12, 18)$**
-
-*Euclid's Algorithm:*
 - $18 = 12 \cdot 1 + 6$
 - $12 = 6 \cdot 2 + 0$
 
@@ -928,9 +939,19 @@ $\gcd = 6$
 
 *Prime Factorization:* $12 = 2^2 \cdot 3$, $18 = 2 \cdot 3^2$ → $\gcd = 2^1 \cdot 3^1 = 6$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (b): $\gcd(108, 30)$**
+<WorksheetProblem number={31} distractors={[
+  "$2$",
+  "$3$",
+  "$18$",
+  "$30$"
+]}>
+  <Fragment slot="question">Find $\gcd(108, 30)$ using Euclid's algorithm.</Fragment>
+  <Fragment slot="answer">$6$</Fragment>
+  <Fragment slot="derivation">
+**Euclid's Algorithm:**
 
 - $108 = 30 \cdot 3 + 18$
 - $30 = 18 \cdot 1 + 12$
@@ -941,9 +962,19 @@ $\gcd = 6$
 
 *Verify:* $108 = 2^2 \cdot 3^3$, $30 = 2 \cdot 3 \cdot 5$ → $\gcd = 2 \cdot 3 = 6$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (c): $\gcd(111, 201)$**
+<WorksheetProblem number={32} distractors={[
+  "$1$",
+  "$9$",
+  "$37$",
+  "$111$"
+]}>
+  <Fragment slot="question">Find $\gcd(111, 201)$ using Euclid's algorithm.</Fragment>
+  <Fragment slot="answer">$3$</Fragment>
+  <Fragment slot="derivation">
+**Euclid's Algorithm:**
 
 - $201 = 111 \cdot 1 + 90$
 - $111 = 90 \cdot 1 + 21$
@@ -953,9 +984,19 @@ $\gcd = 6$
 
 $\gcd = 3$
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (d): $\gcd(210, 126)$**
+<WorksheetProblem number={33} distractors={[
+  "$21$",
+  "$6$",
+  "$7$",
+  "$14$"
+]}>
+  <Fragment slot="question">Find $\gcd(210, 126)$ using Euclid's algorithm.</Fragment>
+  <Fragment slot="answer">$42$</Fragment>
+  <Fragment slot="derivation">
+**Euclid's Algorithm:**
 
 - $210 = 126 \cdot 1 + 84$
 - $126 = 84 \cdot 1 + 42$
@@ -965,9 +1006,19 @@ $\gcd = 42$
 
 *Verify:* $210 = 2 \cdot 3 \cdot 5 \cdot 7$, $126 = 2 \cdot 3^2 \cdot 7$ → $\gcd = 2 \cdot 3 \cdot 7 = 42$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (e): $\gcd(1000, 5040)$**
+<WorksheetProblem number={34} distractors={[
+  "$8$",
+  "$5$",
+  "$10$",
+  "$1000$"
+]}>
+  <Fragment slot="question">Find $\gcd(1000, 5040)$ using Euclid's algorithm.</Fragment>
+  <Fragment slot="answer">$40$</Fragment>
+  <Fragment slot="derivation">
+**Euclid's Algorithm:**
 
 - $5040 = 1000 \cdot 5 + 40$
 - $1000 = 40 \cdot 25 + 0$
@@ -976,9 +1027,19 @@ $\gcd = 40$
 
 *Verify:* $1000 = 2^3 \cdot 5^3$, $5040 = 2^4 \cdot 3^2 \cdot 5 \cdot 7$ → $\gcd = 2^3 \cdot 5 = 40$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (f): $\gcd(54321, 9876)$**
+<WorksheetProblem number={35} distractors={[
+  "$1$",
+  "$9$",
+  "$6$",
+  "$27$"
+]}>
+  <Fragment slot="question">Find $\gcd(54321, 9876)$ using Euclid's algorithm.</Fragment>
+  <Fragment slot="answer">$3$</Fragment>
+  <Fragment slot="derivation">
+**Euclid's Algorithm:**
 
 - $54321 = 9876 \cdot 5 + 4941$
 - $9876 = 4941 \cdot 1 + 4935$
@@ -988,9 +1049,19 @@ $\gcd = 40$
 
 $\gcd = 3$
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (g): $\gcd(67890, 12345)$**
+<WorksheetProblem number={36} distractors={[
+  "$3$",
+  "$5$",
+  "$45$",
+  "$1$"
+]}>
+  <Fragment slot="question">Find $\gcd(67890, 12345)$ using Euclid's algorithm.</Fragment>
+  <Fragment slot="answer">$15$</Fragment>
+  <Fragment slot="derivation">
+**Euclid's Algorithm:**
 
 - $67890 = 12345 \cdot 5 + 6165$
 - $12345 = 6165 \cdot 2 + 15$
@@ -998,9 +1069,19 @@ $\gcd = 3$
 
 $\gcd = 15$
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (h): $\gcd(12345, 54321)$**
+<WorksheetProblem number={37} distractors={[
+  "$1$",
+  "$9$",
+  "$15$",
+  "$12345$"
+]}>
+  <Fragment slot="question">Find $\gcd(12345, 54321)$ using Euclid's algorithm.</Fragment>
+  <Fragment slot="answer">$3$</Fragment>
+  <Fragment slot="derivation">
+**Euclid's Algorithm:**
 
 - $54321 = 12345 \cdot 4 + 4941$
 - $12345 = 4941 \cdot 2 + 2463$
@@ -1013,28 +1094,16 @@ $\gcd = 3$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={11}>
-  <Fragment slot="question">
-    Express the greatest common divisor as a linear combination of original numbers.<br />
-    (a) $5, 11$<br />
-    (b) $21, 44$<br />
-    (c) $36, 48$<br />
-    (d) $34, 55$<br />
-    (e) $117, 213$
-  </Fragment>
-  <Fragment slot="answer">
-    (a) $1 = 5 \cdot (-2) + 11 \cdot 1$<br />
-    (b) $1 = 21 \cdot (-2) + 44 \cdot 1$<br />
-    (c) $12 = 36 \cdot (-1) + 48 \cdot 1$<br />
-    (d) $1 = 34 \cdot (-21) + 55 \cdot 13$<br />
-    (e) $3 = 117 \cdot (-9) + 213 \cdot 5$
-  </Fragment>
+<WorksheetProblem number={38} distractors={[
+  "$1 = 5 \\cdot 2 + 11 \\cdot (-1)$",
+  "$1 = 5 \\cdot 3 + 11 \\cdot (-1)$",
+  "$1 = 5 \\cdot (-3) + 11 \\cdot 2$",
+  "$1 = 5 \\cdot 1 + 11 \\cdot 0$"
+]}>
+  <Fragment slot="question">Express $\gcd(5, 11)$ as a linear combination of 5 and 11.</Fragment>
+  <Fragment slot="answer">$1 = 5 \cdot (-2) + 11 \cdot 1$</Fragment>
   <Fragment slot="derivation">
 **Extended Euclidean Algorithm:** We work backwards through Euclid's algorithm to express $\gcd(a,b) = ax + by$.
-
----
-
-**Part (a): $\gcd(5, 11) = 1$**
 
 *Forward (Euclid):*
 - $11 = 5 \cdot 2 + 1$
@@ -1043,14 +1112,22 @@ $\gcd = 3$
 *Backward:*
 - From step 1: $1 = 11 - 5 \cdot 2$
 
-$$\boxed{1 = 5 \cdot (-2) + 11 \cdot 1}$$
+$$1 = 5 \cdot (-2) + 11 \cdot 1$$
 
 **Verify:** $5(-2) + 11(1) = -10 + 11 = 1$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (b): $\gcd(21, 44) = 1$**
-
+<WorksheetProblem number={39} distractors={[
+  "$1 = 21 \\cdot (-2) + 44 \\cdot 1$",
+  "$1 = 21 \\cdot 2 + 44 \\cdot (-1)$",
+  "$1 = 21 \\cdot 10 + 44 \\cdot (-5)$",
+  "$1 = 21 \\cdot (-10) + 44 \\cdot 5$"
+]}>
+  <Fragment slot="question">Express $\gcd(21, 44)$ as a linear combination of 21 and 44.</Fragment>
+  <Fragment slot="answer">$1 = 21 \cdot 21 + 44 \cdot (-10)$</Fragment>
+  <Fragment slot="derivation">
 *Forward:*
 - $44 = 21 \cdot 2 + 2$
 - $21 = 2 \cdot 10 + 1$
@@ -1059,35 +1136,26 @@ $$\boxed{1 = 5 \cdot (-2) + 11 \cdot 1}$$
 *Backward:*
 - $1 = 21 - 2 \cdot 10$
 - $2 = 44 - 21 \cdot 2$
-- $1 = 21 - (44 - 21 \cdot 2) \cdot 10 = 21 - 44 \cdot 10 + 21 \cdot 20 = 21 \cdot 21 - 44 \cdot 10$
-
-Hmm, let me recalculate more carefully:
-- $1 = 21 - 2 \cdot 10$
-- Substitute $2 = 44 - 21 \cdot 2$:
-- $1 = 21 - (44 - 21 \cdot 2) \cdot 10 = 21 - 44 \cdot 10 + 21 \cdot 20 = 21 \cdot 21 - 44 \cdot 10$
-
-Check: $21(21) - 44(10) = 441 - 440 = 1$ ✓
-
-But we can simplify: $1 = 21 \cdot (-2) + 44 \cdot 1 = -42 + 44 = 2$ ✗
-
-Let me redo: $44 - 21 \cdot 2 = 44 - 42 = 2$, so $2 = 44 - 21 \cdot 2$
-Then $21 - 2 \cdot 10 = 21 - 20 = 1$... wait that's wrong too.
-
-Restart carefully:
-- $44 = 21 \cdot 2 + 2$ → $2 = 44 - 21 \cdot 2$
-- $21 = 2 \cdot 10 + 1$ → $1 = 21 - 2 \cdot 10$
 
 Substitute:
 $1 = 21 - (44 - 21 \cdot 2) \cdot 10 = 21 - 44 \cdot 10 + 21 \cdot 20 = 21 \cdot 21 - 44 \cdot 10$
 
-$$\boxed{1 = 21 \cdot 21 + 44 \cdot (-10)}$$
+$$1 = 21 \cdot 21 + 44 \cdot (-10)$$
 
 **Verify:** $21(21) + 44(-10) = 441 - 440 = 1$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (c): $\gcd(36, 48) = 12$**
-
+<WorksheetProblem number={40} distractors={[
+  "$12 = 36 \\cdot 1 + 48 \\cdot (-1)$",
+  "$12 = 36 \\cdot 2 + 48 \\cdot (-1)$",
+  "$12 = 36 \\cdot 0 + 48 \\cdot 1$",
+  "$12 = 36 \\cdot (-2) + 48 \\cdot 2$"
+]}>
+  <Fragment slot="question">Express $\gcd(36, 48)$ as a linear combination of 36 and 48.</Fragment>
+  <Fragment slot="answer">$12 = 36 \cdot (-1) + 48 \cdot 1$</Fragment>
+  <Fragment slot="derivation">
 *Forward:*
 - $48 = 36 \cdot 1 + 12$
 - $36 = 12 \cdot 3 + 0$
@@ -1095,13 +1163,23 @@ $$\boxed{1 = 21 \cdot 21 + 44 \cdot (-10)}$$
 *Backward:*
 - $12 = 48 - 36 \cdot 1$
 
-$$\boxed{12 = 36 \cdot (-1) + 48 \cdot 1}$$
+$$12 = 36 \cdot (-1) + 48 \cdot 1$$
 
 **Verify:** $36(-1) + 48(1) = -36 + 48 = 12$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (d): $\gcd(34, 55) = 1$**
+<WorksheetProblem number={41} distractors={[
+  "$1 = 34 \\cdot 13 + 55 \\cdot (-8)$",
+  "$1 = 34 \\cdot (-13) + 55 \\cdot 8$",
+  "$1 = 34 \\cdot 21 + 55 \\cdot (-13)$",
+  "$1 = 34 \\cdot (-8) + 55 \\cdot 5$"
+]}>
+  <Fragment slot="question">Express $\gcd(34, 55)$ as a linear combination of 34 and 55.</Fragment>
+  <Fragment slot="answer">$1 = 34 \cdot (-21) + 55 \cdot 13$</Fragment>
+  <Fragment slot="derivation">
+Note: $(34, 55)$ are consecutive Fibonacci numbers!
 
 *Forward (using Fibonacci-like property):*
 - $55 = 34 \cdot 1 + 21$
@@ -1113,37 +1191,28 @@ $$\boxed{12 = 36 \cdot (-1) + 48 \cdot 1}$$
 - $3 = 2 \cdot 1 + 1$
 - $2 = 1 \cdot 2 + 0$
 
-*Backward (track coefficients):*
-
-| Step | gcd | = 34·x + 55·y |
-|------|-----|---------------|
-| $1 = 3 - 2$ | | |
-| $2 = 5 - 3$ | | |
-| $3 = 8 - 5$ | | |
-| ... working back... | | |
-
-After full back-substitution:
-$$1 = 34 \cdot 13 + 55 \cdot (-8)$$
-
-**Verify:** $34(13) + 55(-8) = 442 - 440 = 2$... let me recalculate.
-
-Actually: $34(13) = 442$ and $55(8) = 440$, so $442 - 440 = 2 \neq 1$.
-
-Let me redo: The Fibonacci sequence gives us $(34, 55)$ are consecutive Fibonacci numbers!
-Using the identity: $F_{n-1} \cdot F_{n+1} - F_n^2 = (-1)^n$
+Using the Fibonacci identity: $F_{n-1} \cdot F_{n+1} - F_n^2 = (-1)^n$
 
 $34 \cdot 21 - 55 \cdot 13 = 714 - 715 = -1$
 
 So: $1 = 55 \cdot 13 - 34 \cdot 21 = 34 \cdot (-21) + 55 \cdot 13$
 
-$$\boxed{1 = 34 \cdot (-21) + 55 \cdot 13}$$
+$$1 = 34 \cdot (-21) + 55 \cdot 13$$
 
 **Verify:** $34(-21) + 55(13) = -714 + 715 = 1$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (e): $\gcd(117, 213) = 3$**
-
+<WorksheetProblem number={42} distractors={[
+  "$3 = 117 \\cdot (-9) + 213 \\cdot 5$",
+  "$3 = 117 \\cdot 11 + 213 \\cdot (-6)$",
+  "$3 = 117 \\cdot 1 + 213 \\cdot 0$",
+  "$3 = 117 \\cdot (-11) + 213 \\cdot 6$"
+]}>
+  <Fragment slot="question">Express $\gcd(117, 213)$ as a linear combination of 117 and 213.</Fragment>
+  <Fragment slot="answer">$3 = 117 \cdot (-20) + 213 \cdot 11$</Fragment>
+  <Fragment slot="derivation">
 *Forward:*
 - $213 = 117 \cdot 1 + 96$
 - $117 = 96 \cdot 1 + 21$
@@ -1159,14 +1228,14 @@ $$\boxed{1 = 34 \cdot (-21) + 55 \cdot 13}$$
 - $21 = 117 - 96$ → $3 = 2 \cdot 96 - 9(117 - 96) = 11 \cdot 96 - 9 \cdot 117$
 - $96 = 213 - 117$ → $3 = 11(213 - 117) - 9 \cdot 117 = 11 \cdot 213 - 20 \cdot 117$
 
-$$\boxed{3 = 117 \cdot (-20) + 213 \cdot 11}$$
+$$3 = 117 \cdot (-20) + 213 \cdot 11$$
 
 **Verify:** $117(-20) + 213(11) = -2340 + 2343 = 3$ ✓
 
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={12}>
+<WorksheetProblem number={43}>
   <Fragment slot="question">
     **Caesar Cipher**<br />
     Encrypt the message HERE IS A MESSAGE using a Caesar cipher in which each letter is shifted three places to the right.
@@ -1230,7 +1299,7 @@ The Caesar cipher is extremely weak! There are only 25 possible shifts to try (2
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={13}>
+<WorksheetProblem number={44}>
   <Fragment slot="question">
     **Programming Task**<br />
     Propose or write a computer program to find the multiplicative inverse of a number $a$ in $\mathbb{Z}_{n}$.
@@ -1317,7 +1386,7 @@ The algorithm is remarkably efficient—it's essentially the same as computing t
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={14}>
+<WorksheetProblem number={45}>
   <Fragment slot="question">
     **Diophantine Equations**<br />
     If $a \cdot 133 - m \cdot 277 = 1$, does this guarantee that $a$ has an inverse mod $m$? If so, what is it? If not, why not?
@@ -1386,7 +1455,7 @@ But the equation itself only guarantees the gcd of 133 and 277 is 1.
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={15}>
+<WorksheetProblem number={46}>
   <Fragment slot="question">
     **Inverses in Modular Rings**<br />
     Determine whether every nonzero element of $\mathbb{Z}_{n}$ has a multiplicative inverse for $n=10$ and $n=11$. How many elements $a \in \mathbb{Z}_{10}$ such that $a \cdot_{10} 2 = 1$?
@@ -1454,28 +1523,20 @@ Therefore, the equation $a \cdot 2 \equiv 1 \pmod{10}$ has **no solution**.
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={16}>
-  <Fragment slot="question">
-    Using the inverse-solving in Euclid's division to find multiplicative inverse of:<br />
-    (a) $5 \in \mathbb{Z}_{11}$<br />
-    (b) $3 \in \mathbb{Z}_{10}$<br />
-    (c) $2 \in \mathbb{Z}_{10}$
-  </Fragment>
-  <Fragment slot="answer">
-    (a) $5^{-1} \equiv 9 \pmod{11}$<br />
-    (b) $3^{-1} \equiv 7 \pmod{10}$<br />
-    (c) No inverse exists
-  </Fragment>
+<WorksheetProblem number={47} distractors={[
+  "$5^{-1} \\equiv 2 \\pmod{11}$",
+  "$5^{-1} \\equiv 5 \\pmod{11}$",
+  "$5^{-1} \\equiv 6 \\pmod{11}$",
+  "No inverse exists"
+]}>
+  <Fragment slot="question">Find the multiplicative inverse of $5$ in $\mathbb{Z}_{11}$ using the Extended Euclidean Algorithm.</Fragment>
+  <Fragment slot="answer">$5^{-1} \equiv 9 \pmod{11}$</Fragment>
   <Fragment slot="derivation">
 **Method: Extended Euclidean Algorithm**
 
 To find $a^{-1}$ in $\mathbb{Z}_n$, we find $x$ such that $ax + ny = \gcd(a,n)$.
 
 If $\gcd(a,n) = 1$, then $x \bmod n$ is the inverse.
-
----
-
-**Part (a): $5^{-1}$ in $\mathbb{Z}_{11}$**
 
 Apply Extended Euclidean Algorithm to $(5, 11)$:
 
@@ -1492,14 +1553,22 @@ This means $5 \cdot (-2) \equiv 1 \pmod{11}$
 
 Convert $-2$ to positive: $-2 + 11 = 9$
 
-$$\boxed{5^{-1} \equiv 9 \pmod{11}}$$
+$$5^{-1} \equiv 9 \pmod{11}$$
 
 **Verify:** $5 \times 9 = 45 = 44 + 1 = 4(11) + 1 \equiv 1 \pmod{11}$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (b): $3^{-1}$ in $\mathbb{Z}_{10}$**
-
+<WorksheetProblem number={48} distractors={[
+  "$3^{-1} \\equiv 3 \\pmod{10}$",
+  "$3^{-1} \\equiv 4 \\pmod{10}$",
+  "No inverse exists",
+  "$3^{-1} \\equiv 10 \\pmod{10}$"
+]}>
+  <Fragment slot="question">Find the multiplicative inverse of $3$ in $\mathbb{Z}_{10}$ using the Extended Euclidean Algorithm.</Fragment>
+  <Fragment slot="answer">$3^{-1} \equiv 7 \pmod{10}$</Fragment>
+  <Fragment slot="derivation">
 *Forward:*
 - $10 = 3 \cdot 3 + 1$
 - $3 = 1 \cdot 3 + 0$
@@ -1513,52 +1582,68 @@ This means $3 \cdot (-3) \equiv 1 \pmod{10}$
 
 Convert $-3$ to positive: $-3 + 10 = 7$
 
-$$\boxed{3^{-1} \equiv 7 \pmod{10}}$$
+$$3^{-1} \equiv 7 \pmod{10}$$
 
 **Verify:** $3 \times 7 = 21 = 20 + 1 = 2(10) + 1 \equiv 1 \pmod{10}$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (c): $2^{-1}$ in $\mathbb{Z}_{10}$**
-
+<WorksheetProblem number={49} distractors={[
+  "$2^{-1} \\equiv 5 \\pmod{10}$",
+  "$2^{-1} \\equiv 6 \\pmod{10}$",
+  "$2^{-1} \\equiv 8 \\pmod{10}$",
+  "$2^{-1} \\equiv 1 \\pmod{10}$"
+]}>
+  <Fragment slot="question">Find the multiplicative inverse of $2$ in $\mathbb{Z}_{10}$ using the Extended Euclidean Algorithm.</Fragment>
+  <Fragment slot="answer">No inverse exists</Fragment>
+  <Fragment slot="derivation">
 *Check GCD:*
 - $\gcd(2, 10) = 2 \neq 1$
 
 Since the GCD is not 1, **no inverse exists**.
-
-$$\boxed{\text{No inverse exists}}$$
 
 **Why?** For an inverse to exist, we need $2x \equiv 1 \pmod{10}$. But $2x$ is always even, while $1, 11, 21, 31, \ldots$ are all odd. No solution exists.
 
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={17}>
-  <Fragment slot="question">
-    Solve the equations:<br />
-    (a) $5 \cdot_{11} x = 1$ in $\mathbb{Z}_{11}$<br />
-    (b) $5 \cdot_{11} x = 8$ in $\mathbb{Z}_{11}$<br />
-    (c) Find the multiplicative inverse of $16 \in \mathbb{Z}_{103}$<br />
-    (d) Find the multiplicative inverse of $22 \in \mathbb{Z}_{31}$
-  </Fragment>
-  <Fragment slot="answer">
-    (a) $x = 9$<br />
-    (b) $x = 6$<br />
-    (c) $16^{-1} \equiv 45 \pmod{103}$<br />
-    (d) $22^{-1} \equiv 7 \pmod{31}$
-  </Fragment>
+<WorksheetProblem number={50} distractors={[
+  "$x = 5$",
+  "$x = 2$",
+  "$x = 11$",
+  "$x = 1$"
+]}>
+  <Fragment slot="question">Solve $5x \equiv 1 \pmod{11}$ in $\mathbb{Z}_{11}$.</Fragment>
+  <Fragment slot="answer">$x = 9$</Fragment>
   <Fragment slot="derivation">
-**Part (a): $5x \equiv 1 \pmod{11}$**
-
 This asks for the multiplicative inverse of 5 in $\mathbb{Z}_{11}$.
 
-From Problem 16(a): $5^{-1} \equiv 9 \pmod{11}$
+Using Extended Euclidean Algorithm:
+- $11 = 5 \cdot 2 + 1$
+- $1 = 11 - 5 \cdot 2$
 
-$$\boxed{x = 9}$$
+So $5 \cdot (-2) \equiv 1 \pmod{11}$
 
----
+Convert $-2$ to positive: $-2 + 11 = 9$
 
-**Part (b): $5x \equiv 8 \pmod{11}$**
+$$x = 9$$
+
+**Verify:** $5 \times 9 = 45 = 44 + 1 \equiv 1 \pmod{11}$ ✓
+
+  </Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={51} distractors={[
+  "$x = 8$",
+  "$x = 3$",
+  "$x = 5$",
+  "$x = 40$"
+]}>
+  <Fragment slot="question">Solve $5x \equiv 8 \pmod{11}$ in $\mathbb{Z}_{11}$.</Fragment>
+  <Fragment slot="answer">$x = 6$</Fragment>
+  <Fragment slot="derivation">
+First find $5^{-1} \equiv 9 \pmod{11}$ (since $5 \times 9 = 45 \equiv 1$).
 
 Multiply both sides by $5^{-1} = 9$:
 $$x \equiv 9 \cdot 8 \pmod{11}$$
@@ -1566,14 +1651,22 @@ $$x \equiv 72 \pmod{11}$$
 
 $72 = 11 \cdot 6 + 6$, so $72 \equiv 6 \pmod{11}$
 
-$$\boxed{x = 6}$$
+$$x = 6$$
 
 **Verify:** $5 \cdot 6 = 30 = 22 + 8 = 2(11) + 8 \equiv 8 \pmod{11}$ ✓
 
----
+  </Fragment>
+</WorksheetProblem>
 
-**Part (c): $16^{-1}$ in $\mathbb{Z}_{103}$**
-
+<WorksheetProblem number={52} distractors={[
+  "$16^{-1} \\equiv 45 \\pmod{103}$",
+  "$16^{-1} \\equiv 16 \\pmod{103}$",
+  "$16^{-1} \\equiv 6 \\pmod{103}$",
+  "No inverse exists"
+]}>
+  <Fragment slot="question">Find the multiplicative inverse of $16$ in $\mathbb{Z}_{103}$.</Fragment>
+  <Fragment slot="answer">$16^{-1} \equiv 58 \pmod{103}$</Fragment>
+  <Fragment slot="derivation">
 Extended Euclidean Algorithm on $(16, 103)$:
 
 *Forward:*
@@ -1589,28 +1682,24 @@ Extended Euclidean Algorithm on $(16, 103)$:
 
 So $16 \cdot (-45) + 103 \cdot 7 = 1$
 
-Convert: $-45 + 103 = 58$... wait let me verify.
+Convert: $-45 \mod 103 = -45 + 103 = 58$
 
-$16 \cdot 58 = 928$. $928 / 103 = 9.00...$, so $928 = 103 \cdot 9 + 1 = 927 + 1$. ✓
-
-$$\boxed{16^{-1} \equiv 58 \pmod{103}}$$
-
-Hmm, let me recalculate more carefully:
-
-$16 \cdot (-45) = -720$
-$-720 \mod 103$: $-720 + 7(103) = -720 + 721 = 1$... 
-
-So $16 \cdot (-45) \equiv 1 \pmod{103}$
-$-45 \mod 103 = -45 + 103 = 58$
+$$16^{-1} \equiv 58 \pmod{103}$$
 
 **Verify:** $16 \cdot 58 = 928 = 103 \cdot 9 + 1 \equiv 1 \pmod{103}$ ✓
 
-$$\boxed{16^{-1} \equiv 58 \pmod{103}}$$
+  </Fragment>
+</WorksheetProblem>
 
----
-
-**Part (d): $22^{-1}$ in $\mathbb{Z}_{31}$**
-
+<WorksheetProblem number={53} distractors={[
+  "$22^{-1} \\equiv 7 \\pmod{31}$",
+  "$22^{-1} \\equiv 22 \\pmod{31}$",
+  "$22^{-1} \\equiv 9 \\pmod{31}$",
+  "No inverse exists"
+]}>
+  <Fragment slot="question">Find the multiplicative inverse of $22$ in $\mathbb{Z}_{31}$.</Fragment>
+  <Fragment slot="answer">$22^{-1} \equiv 24 \pmod{31}$</Fragment>
+  <Fragment slot="derivation">
 Extended Euclidean Algorithm on $(22, 31)$:
 
 *Forward:*
@@ -1628,14 +1717,14 @@ So $22 \cdot (-7) + 31 \cdot 5 = 1$
 
 Convert: $-7 + 31 = 24$
 
-**Verify:** $22 \cdot 24 = 528 = 31 \cdot 17 + 1 = 527 + 1 \equiv 1 \pmod{31}$ ✓
+$$22^{-1} \equiv 24 \pmod{31}$$
 
-$$\boxed{22^{-1} \equiv 24 \pmod{31}}$$
+**Verify:** $22 \cdot 24 = 528 = 31 \cdot 17 + 1 = 527 + 1 \equiv 1 \pmod{31}$ ✓
 
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={18}>
+<WorksheetProblem number={54}>
   <Fragment slot="question">
     **Modular Division**<br />
     What is the value of the division $1$ by $4$ in $\mathbb{Z}_{9}$?
@@ -1682,7 +1771,7 @@ $$\boxed{\frac{1}{4} \equiv 7 \pmod 9}$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={19}>
+<WorksheetProblem number={55}>
   <Fragment slot="question">
     **Large Number Multiplication**<br />
     By multiplying a number times $487 \in \mathbb{Z}_{30031}$ we obtain $13008$. If you know how to find such a number, do so. If not, explain why the problem seems difficult to do by hand.
@@ -1763,7 +1852,7 @@ Actually, this computation is quite tedious by hand, which is the point of the p
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={20}>
+<WorksheetProblem number={56}>
   <Fragment slot="question">
     **Alice and Bob**<br />
     Knowing that Alice sent a message to Bob using multiplication mod $n=103$ with the common key $a=16$. Assume that Bob receives the message $m=21$. What is the original message that Alice sent Bob?
@@ -1822,7 +1911,7 @@ Bob received 21, which matches!
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={21}>
+<WorksheetProblem number={57}>
   <Fragment slot="question">
     **Turing's Cipher, Version 1**<br />
     Suppose that the adversary got two numeric encrypted messages $y_{1}=4307$ and $y_{2}=7373$.<br />
@@ -1887,7 +1976,7 @@ $$\boxed{\text{Decrypted message: } 7811}$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={22}>
+<WorksheetProblem number={58}>
   <Fragment slot="question">
     **Turing's Cipher, Version 2**<br />
     Given modulus $n=30$.<br />
@@ -1971,7 +2060,7 @@ $$\boxed{x = 7}$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={23}>
+<WorksheetProblem number={59}>
   <Fragment slot="question">
     **Turing's Cipher, Version 2 (Known Plaintext)**<br />
     Given modulus $n=63$. Suppose that the adversary knows both plaintext and ciphertext $x=55$ and $y=25$ respectively.<br />
@@ -2067,7 +2156,7 @@ $$\boxed{x = 43}$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={24}>
+<WorksheetProblem number={60}>
   <Fragment slot="question">
     **ISBN Validation**<br />
     Is 084-930149-X a valid ISBN-10?
@@ -2181,7 +2270,7 @@ $$\boxed{\text{Yes, it is a valid ISBN-10}}$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={25}>
+<WorksheetProblem number={61}>
   <Fragment slot="question">
     **ISBN Check Digit**<br />
     The first nine digits of the ISBN-10 for the fifth edition of the book "Discrete Mathematics" are 007119881. What is its check digit?
@@ -2255,7 +2344,7 @@ $$\boxed{d_{10} = 4}$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={26}>
+<WorksheetProblem number={62}>
   <Fragment slot="question">
     **Transposition Cipher Encryption**<br />
     Encrypt the message GRIZZLY BEARS using blocks of five letters and the transposition cipher based on the permutation of $\lbrace 1, 2, 3, 4, 5 \rbrace$ with $\sigma(1)=3$, $\sigma(2)=5$, $\sigma(3)=1$, $\sigma(4)=2$, $\sigma(5)=4$.
@@ -2363,7 +2452,7 @@ Or without spaces: **IZGZRBELAYXXRXS**
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={27}>
+<WorksheetProblem number={63}>
   <Fragment slot="question">
     **Transposition Cipher Decryption**<br />
     Decrypt the message EABW EFRO ATMR ASIN which is the cipher text produced by encrypting a plaintext message using the transposition cipher with blocks of four letters and the permutation of $\lbrace 1, 2, 3, 4 \rbrace$ defined by $\sigma(1)=3$, $\sigma(2)=1$, $\sigma(3)=4$, $\sigma(4)=2$.
@@ -2466,7 +2555,7 @@ $$\boxed{\text{BEWARE OF MARTIANS}}$$
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={28}>
+<WorksheetProblem number={64}>
   <Fragment slot="question">
     **Small RSA Crypto-system**<br />
     Given the modulus $n=33$.<br />
@@ -2588,7 +2677,7 @@ So $25^7 \equiv 31 \pmod{33}$ ✓
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={29}>
+<WorksheetProblem number={65}>
   <Fragment slot="question">
     **Dangerous Messages in RSA**<br />
     Suppose the RSA modulus $n=p \cdot q$ is the product of distinct 200-digit primes $p$ and $q$. A message $m \in \mathbb{Z}_{n}$ is called dangerous if $\gcd(m, n)=p$, because such an $m$ can be used to factor $n$ and so crack RSA. Circle the best estimate of the fraction of messages in $\mathbb{Z}_{n}$ that are dangerous:<br />
@@ -2660,7 +2749,7 @@ This is why RSA with sufficiently large primes is considered secure against this
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={30}>
+<WorksheetProblem number={66}>
   <Fragment slot="question">
     **Fast Exponentiation**<br />
     Implement the fast exponentiation for $x^{60}$.
@@ -2758,7 +2847,7 @@ $$x^{60} = \left(\left(x^3\right)^2 \cdot x\right)^2)^2)^2 = (x^7)^2)^2)^2 = (x^
   </Fragment>
 </WorksheetProblem>
 
-<WorksheetProblem number={31}>
+<WorksheetProblem number={67}>
   <Fragment slot="question">
     **Key Exchange Protocol**<br />
     Bob and Alice want to choose a key that they can use for cryptography, but all they have to communicate is a bugged phone line. Bob proposes that they choose a secret number, $a$ for Alice and $b$ for Bob. They also choose, over the phone, a prime number $p$ with more digits than any key they want to use, and one more number $q$.<br /><br />

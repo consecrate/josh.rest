@@ -10,7 +10,7 @@ isWorksheet: true
 import WorksheetProblem from "../../../components/WorksheetProblem.astro";
 import LiveWorksheet from "../../../components/LiveWorksheet.astro";
 
-<LiveWorksheet title="Relations & Functions" description="28 problems with detailed derivations">
+<LiveWorksheet title="Relations & Functions" description="31 problems with detailed derivations">
 
 <WorksheetProblem number={1} distractors={[
   "The set of all integers multiplied together.",
@@ -648,22 +648,33 @@ This is a fundamental result in Linear Algebra: the equivalence classes partitio
 </WorksheetProblem>
 
 <WorksheetProblem number={22} distractors={[
-  "(a) No, fails transitivity. (b) $n^2$.",
-  "(a) Yes. (b) $2^n$.",
-  "(a) Yes. (b) $n!$.",
-  "(a) No, fails symmetry. (b) $\\frac{n(n-1)}{2}$."
+  "No, fails transitivity.",
+  "No, fails symmetry.",
+  "No, fails reflexivity.",
+  "Only for finite strings."
 ]}>
-  <Fragment slot="question">Bit strings: $s \sim t \iff \#_1(s) = \#_1(t)$ (same number of 1s). (a) Is this an equivalence relation? <br/> (b) How many strings of length $n$ have exactly two 1s?</Fragment>
-  <Fragment slot="answer">(a) Yes.<br />(b) $\frac{n(n-1)}{2}$.</Fragment>
+  <Fragment slot="question">Bit strings: $s \sim t \iff \#_1(s) = \#_1(t)$ (same number of 1s). Is this an equivalence relation?</Fragment>
+  <Fragment slot="answer">Yes.</Fragment>
   <Fragment slot="derivation">
-**(a) Equivalence Check**
 Think about what this relation does: it groups strings into buckets based on "how many 1s they have".
-*   Does $s$ have the same number of 1s as $s$? **Yes.**
-*   If $s$ has same count as $t$, does $t$ have same count as $s$? **Yes.**
-*   If count($s$) = count($t$) and count($t$) = count($u$), is count($s$) = count($u$)? **Yes.**
+*   Does $s$ have the same number of 1s as $s$? **Yes.** (Reflexive)
+*   If $s$ has same count as $t$, does $t$ have same count as $s$? **Yes.** (Symmetric)
+*   If count($s$) = count($t$) and count($t$) = count($u$), is count($s$) = count($u$)? **Yes.** (Transitive)
+
 So, yes, it is an equivalence relation.
 
-**(b) Combinatorics**
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={23} distractors={[
+  "$n^2$",
+  "$2^n$",
+  "$n!$",
+  "$2n$"
+]}>
+  <Fragment slot="question">How many bit strings of length $n$ have exactly two 1s?</Fragment>
+  <Fragment slot="answer">$\frac{n(n-1)}{2}$</Fragment>
+  <Fragment slot="derivation">
 We have a string of length $n$ (n empty slots).
 We need to place exactly two '1's.
 
@@ -703,13 +714,13 @@ We can verify technically:
 </WorksheetProblem>
 
 <WorksheetProblem number={25} distractors={[
-  "(a) Yes. (b) No. (c) Yes.",
-  "(a) No. (b) No. (c) No.",
-  "(a) Yes. (b) Yes. (c) No.",
-  "(a) No. (b) Yes. (c) No."
+  "Yes, it's reflexive and antisymmetric.",
+  "Yes, it's an equivalence relation.",
+  "Yes, it's transitive.",
+  "Cannot be determined without more information."
 ]}>
-  <Fragment slot="question">Given matrix representation for relations on $A = \{a, b, c\}$. Determine if the relations are partial ordering relations or not.<br /><br />(a) $M_{R_1} = \begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$<br /><br />(b) $M_{R_2} = \begin{pmatrix} 1 & 1 & 1 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$<br /><br />(c) $M_{R_3} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$</Fragment>
-  <Fragment slot="answer">(a) No.<br />(b) Yes.<br />(c) Yes.</Fragment>
+  <Fragment slot="question">Given the matrix representation $M_{R_1} = \begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$ for a relation on $A = \{a, b, c\}$. Is $R_1$ a partial ordering relation?</Fragment>
+  <Fragment slot="answer">No.</Fragment>
   <Fragment slot="derivation">
 **Recall: Partial Order Properties**
 A relation is a partial ordering if and only if it satisfies:
@@ -730,6 +741,24 @@ $$M_{R_1} = \begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$$
 
 **Conclusion: $R_1$ is NOT a partial ordering.**
 
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={26} distractors={[
+  "No, it fails reflexivity.",
+  "No, it fails antisymmetry.",
+  "No, it fails transitivity.",
+  "Cannot be determined."
+]}>
+  <Fragment slot="question">Given the matrix representation $M_{R_2} = \begin{pmatrix} 1 & 1 & 1 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$ for a relation on $A = \{a, b, c\}$. Is $R_2$ a partial ordering relation?</Fragment>
+  <Fragment slot="answer">Yes.</Fragment>
+  <Fragment slot="derivation">
+**Recall: Partial Order Properties**
+A relation is a partial ordering if and only if it satisfies:
+1.  **Reflexive:** Diagonal must be all 1s.
+2.  **Antisymmetric:** If $m_{ij}=1$ (where $i \neq j$), then $m_{ji}$ MUST be 0.
+3.  **Transitive:** If $i \to j$ and $j \to k$, then $i \to k$.
+
 ---
 
 **Analysis of $R_2$:**
@@ -745,6 +774,24 @@ $$M_{R_2} = \begin{pmatrix} 1 & 1 & 1 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$$
   - No violations found. ✓
 
 **Conclusion: $R_2$ IS a partial ordering.**
+
+</Fragment>
+</WorksheetProblem>
+
+<WorksheetProblem number={27} distractors={[
+  "No, it fails reflexivity.",
+  "No, it fails antisymmetry.",
+  "No, it fails transitivity.",
+  "Cannot be determined."
+]}>
+  <Fragment slot="question">Given the matrix representation $M_{R_3} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 1 & 0 & 1 \end{pmatrix}$ for a relation on $A = \{a, b, c\}$. Is $R_3$ a partial ordering relation?</Fragment>
+  <Fragment slot="answer">Yes.</Fragment>
+  <Fragment slot="derivation">
+**Recall: Partial Order Properties**
+A relation is a partial ordering if and only if it satisfies:
+1.  **Reflexive:** Diagonal must be all 1s.
+2.  **Antisymmetric:** If $m_{ij}=1$ (where $i \neq j$), then $m_{ji}$ MUST be 0.
+3.  **Transitive:** If $i \to j$ and $j \to k$, then $i \to k$.
 
 ---
 
