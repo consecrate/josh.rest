@@ -1,5 +1,19 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
+// Custom course titles (overrides auto-generated titles from folder names)
+export const courseTitles: Record<string, string> = {
+  'algebra': 'Algebra Finals Prep',
+  'law-and-data-protection': 'Law & Data Protection',
+  'computer-architecture': 'Computer Architecture',
+};
+
+export function getCourseTitle(courseSlug: string): string {
+  return courseTitles[courseSlug] ?? courseSlug
+    .split('-')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
 export interface CourseSection {
   slug: string;
   title: string;

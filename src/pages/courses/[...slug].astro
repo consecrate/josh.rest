@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
-import { getCourseStructure, getCourseLessons } from "../../lib/courses";
+import { getCourseStructure, getCourseTitle } from "../../lib/courses";
 import Course from "../../layouts/Course.astro";
 
 export async function getStaticPaths() {
@@ -43,10 +43,7 @@ const { Content } = await render(lesson);
 
 // Extract course slug first (needed for sidebar filtering)
 const courseSlug = lesson.id.split("/")[0];
-const courseTitle = courseSlug
-  .split("-")
-  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-  .join(" ");
+const courseTitle = getCourseTitle(courseSlug);
 
 // Get sections for THIS course only
 const sections = await getCourseStructure(courseSlug);
@@ -68,6 +65,7 @@ const nextLesson =
   currentSlug={lesson.id}
   nextLesson={nextLesson}
   isWorksheet={lesson.data.isWorksheet}
+  courseTitle={courseTitle}
 >
   <Content />
 </Course>
