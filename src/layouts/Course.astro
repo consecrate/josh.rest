@@ -1,6 +1,6 @@
 ---
 import Base from "./Base.astro";
-import CourseSidebar from "../components/CourseSidebar.astro";
+import BaseSidebar from "../components/BaseSidebar.astro";
 import CopyButton from "../components/CopyButton.astro";
 import type { CourseSection } from "../lib/courses";
 import type { CollectionEntry } from "astro:content";
@@ -30,15 +30,56 @@ const {
 
 <Base title={`${title} — josh.rest`} description={description} fullWidth>
   <div class="course-layout">
-    <CourseSidebar sections={sections} currentSlug={currentSlug} courseTitle={courseTitle} />
+    <BaseSidebar collapsible id="course-sidebar">
+      <div class="sidebar-content">
+        {courseTitle && <h2 class="course-title">{courseTitle}</h2>}
+        {
+          sections.map((section) => (
+            <div class="section">
+              {section.title && <h3 class="section-title">{section.title}</h3>}
+              <ul class="lesson-list">
+                {section.lessons.map((lesson) => {
+                  const isActive = lesson.id === currentSlug;
+                  const href = `/courses/${lesson.id}`;
+                  const isDisabled = lesson.data.comingSoon;
+                  return (
+                    <li
+                      class:list={[
+                        "lesson",
+                        { active: isActive, disabled: isDisabled },
+                      ]}
+                    >
+                      {isDisabled ? (
+                        <span class="lesson-link disabled">
+                          {lesson.data.title}
+                        </span>
+                      ) : (
+                        <a
+                          href={href}
+                          class:list={["lesson-link", { active: isActive }]}
+                        >
+                          {lesson.data.title}
+                        </a>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </BaseSidebar>
     <main class="course-content">
       <div class="content-wrapper">
-        {!isWorksheet && (
-          <header class="lesson-header">
-            {sectionTitle && <span class="section-name">{sectionTitle}</span>}
-            <h1>{title}</h1>
-          </header>
-        )}
+        {
+          !isWorksheet && (
+            <header class="lesson-header">
+              {sectionTitle && <span class="section-name">{sectionTitle}</span>}
+              <h1>{title}</h1>
+            </header>
+          )
+        }
         <article class="lesson-content">
           <slot />
         </article>
@@ -133,6 +174,64 @@ const {
       font-size: 1.8rem;
     }
   }
+
+  /* Course Sidebar Content */
+  .sidebar-content {
+    padding: var(--space-md) 0;
+  }
+
+  .course-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    padding: 0 var(--space-lg);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .section {
+    margin-bottom: var(--space-lg);
+  }
+
+  .section-title {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: var(--space-sm);
+    padding: 0 var(--space-lg);
+  }
+
+  .lesson-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .lesson {
+    padding: 2px var(--space-lg);
+  }
+
+  .lesson-link {
+    font-size: 0.875rem;
+    color: var(--text);
+    text-decoration: none;
+    line-height: 1.15;
+    display: block;
+  }
+
+  .lesson-link:hover {
+    color: #fb923c;
+  }
+
+  .lesson-link.active {
+    color: #f97316;
+  }
+
+  .lesson-link.disabled {
+    color: rgba(136, 136, 136, 0.4);
+    cursor: not-allowed;
+  }
 </style>
 
 <script>
@@ -141,43 +240,45 @@ const {
   function initMobileScrollHide() {
     const SCROLL_THRESHOLD = 10; // Minimum scroll to trigger
     const IDLE_TIMEOUT = 2000; // Hide after 2s idle
-    
+
     let lastScrollY = window.scrollY;
     let ticking = false;
     let idleTimer: number | null = null;
-    
-    const copyBtn = document.getElementById('copy-lesson-btn');
-    const menuBtn = document.querySelector('.mobile-menu-btn') as HTMLElement | null;
-    
+
+    const copyBtn = document.getElementById("copy-lesson-btn");
+    const menuBtn = document.querySelector(
+      ".mobile-menu-btn",
+    ) as HTMLElement | null;
+
     // Only run on mobile
-    const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
-    
+    const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
+
     function hideButtons() {
-      copyBtn?.classList.add('scroll-hidden');
-      menuBtn?.classList.add('scroll-hidden');
+      copyBtn?.classList.add("scroll-hidden");
+      menuBtn?.classList.add("scroll-hidden");
     }
-    
+
     function showButtons() {
-      copyBtn?.classList.remove('scroll-hidden');
-      menuBtn?.classList.remove('scroll-hidden');
+      copyBtn?.classList.remove("scroll-hidden");
+      menuBtn?.classList.remove("scroll-hidden");
     }
-    
+
     function resetIdleTimer() {
       if (idleTimer) clearTimeout(idleTimer);
       idleTimer = window.setTimeout(() => {
         if (isMobile()) hideButtons();
       }, IDLE_TIMEOUT);
     }
-    
+
     function onScroll() {
       if (!isMobile()) {
         showButtons();
         return;
       }
-      
+
       const currentScrollY = window.scrollY;
       const delta = currentScrollY - lastScrollY;
-      
+
       // Only trigger on meaningful scroll
       if (Math.abs(delta) > SCROLL_THRESHOLD) {
         if (delta > 0) {
@@ -189,38 +290,45 @@ const {
         }
         lastScrollY = currentScrollY;
       }
-      
+
       // Reset idle timer
       resetIdleTimer();
       ticking = false;
     }
-    
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(onScroll);
-        ticking = true;
-      }
-    }, { passive: true });
-    
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+
     // Show on touch start (user interaction)
-    window.addEventListener('touchstart', () => {
-      if (isMobile()) {
-        showButtons();
-        resetIdleTimer();
-      }
-    }, { passive: true });
-    
+    window.addEventListener(
+      "touchstart",
+      () => {
+        if (isMobile()) {
+          showButtons();
+          resetIdleTimer();
+        }
+      },
+      { passive: true },
+    );
+
     // Initialize: start idle timer on mobile
     if (isMobile()) {
       resetIdleTimer();
     }
   }
-  
+
   // Initialize on DOM ready and view transitions
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMobileScrollHide);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMobileScrollHide);
   } else {
     initMobileScrollHide();
   }
 </script>
-
