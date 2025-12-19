@@ -20,7 +20,7 @@ import LiveWorksheet from "../../../components/LiveWorksheet.astro";
 ]}>
   <Fragment slot="question">
     Find the last digit of the sum $2403 + 791 + 688 + 4339$ using remainders mod 10.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">$1$</Fragment>
   <Fragment slot="derivation">
 **Key Insight:** The last digit of any number is simply its remainder when divided by 10. In math notation, the last digit of $n$ is $n \pmod{10}$.
@@ -38,7 +38,7 @@ Now add the last digits: $3 + 1 + 8 + 9 = 21$
 
 The last digit of 21 is **1**.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={2} distractors={[
@@ -49,7 +49,7 @@ The last digit of 21 is **1**.
 ]}>
   <Fragment slot="question">
     Find the last digit of $1 + 11^{10} + 111^{10} + \dots + \underbrace{11\dots1}_{100 \text{ ones}}$ using remainders mod 10.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">$0$</Fragment>
   <Fragment slot="derivation">
 First, notice a pattern. What's the last digit of any number made entirely of 1s?
@@ -77,7 +77,7 @@ Sum of last digits = $1 + 1 + 1 + \dots + 1$ (100 times) $= 100$
 
 The last digit of 100 is **0**.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={3} distractors={[
@@ -95,7 +95,7 @@ The expression $a \pmod n$ asks: "What's the remainder when $a$ is divided by $n
 
 $14 = 9 \times 1 + 5$, so the remainder is **5**.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={4} distractors={[
@@ -113,7 +113,7 @@ Think of it as: "What do I add to $-1$ to get a multiple of 9?"
 
 $-1 + 9 = 8$, so $-1 \equiv 8 \pmod 9$.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={5} distractors={[
@@ -131,7 +131,7 @@ So $-11 \equiv -2 \pmod 9$.
 
 Now convert $-2$ to positive: $-2 + 9 = 7$.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={6} distractors={[
@@ -152,7 +152,7 @@ This means we can reduce each factor first!
 
 Now multiply: $3 \times 2 = 6$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={7} distractors={[
@@ -171,7 +171,7 @@ Now multiply: $3 \times 2 = 6$
 
 Sum: $3 + 2 = 5$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={8} distractors={[
@@ -187,7 +187,7 @@ Direct calculation: $2^5 = 32$
 
 $32 = 9 \times 3 + 5$, so $32 \pmod 9 = 5$.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={9} distractors={[
@@ -221,7 +221,7 @@ So $2016 \equiv 0 \pmod 6$, meaning $2^{2016}$ is at position 6 in the cycle.
 
 $2^6 \equiv 1 \pmod 9$, so $2^{2016} = (2^6)^{336} \equiv 1^{336} = 1 \pmod 9$.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={10} distractors={[
@@ -245,7 +245,7 @@ $$121 = 12 \times 10 + 1$$
 So:
 $$7^{121} = 7^{12 \times 10 + 1} = (7^{12})^{10} \cdot 7^1 \equiv 1^{10} \cdot 7 = 7 \pmod{13}$$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={11} distractors={[
@@ -267,7 +267,7 @@ Check: $340 = 10 \times 34 + 0$
 So:
 $$2^{340} = (2^{10})^{34} \equiv 1^{34} = 1 \pmod{11}$$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={12} distractors={[
@@ -291,7 +291,7 @@ Calculate $5^5 \pmod 7$:
 - $5^4 = (5^2)^2 \equiv 4^2 = 16 \equiv 2 \pmod 7$
 - $5^5 = 5^4 \cdot 5 \equiv 2 \cdot 5 = 10 \equiv 3 \pmod 7$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={13} distractors={[
@@ -312,7 +312,7 @@ $$5^{2003} \equiv 5^3 = 125 \pmod{11}$$
 
 $125 = 11 \times 11 + 4$, so $125 \equiv 4 \pmod{11}$.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={14} distractors={[
@@ -337,7 +337,7 @@ Calculate efficiently using repeated squaring:
 - $5^8 \equiv 1 \pmod{13}$
 - $5^{11} = 5^8 \cdot 5^2 \cdot 5^1 \equiv 1 \cdot (-1) \cdot 5 = -5 \equiv 8 \pmod{13}$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={15} distractors={[
@@ -384,7 +384,7 @@ So $-m \equiv 1 \pmod{13}$, giving $m \equiv -1 \equiv 12 \pmod{13}$.
 **Final answer:**
 $$x = 77(12) + 59 = 924 + 59 = 983$$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={16} distractors={[
@@ -397,7 +397,7 @@ $$x = 77(12) + 59 = 924 + 59 = 983$$
     **Soda Packing Problem**<br />
     Jesper has 44 boxes of soda in his truck. The cans of soda in each box are packed oddly so that there are 113 cans of soda in each box. Jesper plans to pack the sodas into cases of 12 cans to sell. After making as many complete cases as possible, how many sodas will Jesper have leftover?<br />
     Use modular arithmetic to solve the problem.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">$4$ cans leftover</Fragment>
   <Fragment slot="derivation">
 **Understanding the Problem**
@@ -452,7 +452,7 @@ Notice how we never had to compute $4972$ or do long division! By reducing each 
 
 **Final Answer: 4 cans leftover**
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={17} distractors={[
@@ -479,7 +479,7 @@ $\sqrt{119} \approx 10.9$, so we check primes: 2, 3, 5, 7.
 
 **Answer: Composite.** $119 = 7 \times 17$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={18} distractors={[
@@ -504,7 +504,7 @@ Numbers of the form $n! - 1$ are called **factorial primes** when they're prime.
 
 **Answer: Cannot determine in general.** Whether $n! - 1$ is prime depends on the specific value of $n$.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={19} distractors={[
@@ -533,7 +533,7 @@ $$2^{2000} + 1 = (2^{400} + 1)(2^{1600} - 2^{1200} + 2^{800} - 2^{400} + 1)$$
 
 Both factors are greater than 1, so the number is composite!
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={20} distractors={[
@@ -567,7 +567,7 @@ For $n > 1$, both factors are strictly greater than 1.
 
 **Answer: Always composite for $n > 1$**
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={21} distractors={[
@@ -579,10 +579,10 @@ For $n > 1$, both factors are strictly greater than 1.
   <Fragment slot="question">
     **Proof**<br />
     Show that if $2^{n} - 1$ is prime, then $n$ is prime.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     Proof by contrapositive: If $n$ is composite ($n = ab$ with $1 < a, b < n$), then $2^n - 1$ is composite because $2^a - 1$ divides $2^{ab} - 1$.
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Strategy: Proof by Contrapositive**
 
@@ -636,7 +636,7 @@ Counterexample: $n = 11$ is prime, but $2^{11} - 1 = 2047 = 23 \times 89$ (compo
 
 Primes of the form $2^p - 1$ (where $p$ is prime) are called **Mersenne primes**. Finding them is an active area of mathematical research!
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={22} distractors={[
@@ -663,7 +663,7 @@ We need to check all $\binom{4}{2} = 6$ pairs:
 
 All pairs have gcd = 1. **Answer: Yes, pairwise relatively prime** ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={23} distractors={[
@@ -689,7 +689,7 @@ Check pairs:
 
 We found pairs with gcd $\neq$ 1. **Answer: No, not pairwise relatively prime**
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={24} distractors={[
@@ -721,7 +721,7 @@ Since $\gcd = 31 \neq 1$, they are **not** relatively prime.
 
 This follows from the Euclidean algorithm property: $2^a - 1$ divides $2^{ka} - 1$ for any positive integer $k$, and the Euclidean algorithm on exponents mirrors the algorithm on the numbers themselves.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={25} distractors={[
@@ -737,13 +737,13 @@ This follows from the Euclidean algorithm property: $2^a - 1$ divides $2^{ka} - 
     (b) $\phi(p^{k})$ where $p$ is a prime number and $k$ is a positive integer<br />
     (c) $\phi(pq)$ where $p$ and $q$ are distinct prime numbers<br />
     (d*) $\phi(p_{1}^{a_{1}}p_{2}^{a_{2}}\dots p_{n}^{a_{n}})$ where $p_i$ are distinct prime numbers
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     (a) $\phi(4) = 2$, $\phi(10) = 4$, $\phi(13) = 12$<br />
     (b) $\phi(p^k) = p^k - p^{k-1} = p^{k-1}(p-1)$<br />
     (c) $\phi(pq) = (p-1)(q-1)$<br />
     (d) $\phi(p_1^{a_1} \cdots p_n^{a_n}) = \prod_{i=1}^{n} p_i^{a_i-1}(p_i - 1)$
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Definition Recap:** $\phi(n)$ counts integers from 1 to $n$ that are coprime to $n$ (i.e., share no common factors with $n$ except 1).
 
@@ -817,7 +817,7 @@ This follows from:
 
 Verify: Numbers coprime to 12: 1, 5, 7, 11. Count = 4 ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={26} distractors={[
@@ -846,7 +846,7 @@ $$\gcd = 3^7 \cdot 5^2 = 2187 \cdot 25 = 54675$$
 
 $$\text{lcm} = 3^9 \cdot 5^3 \cdot 7^3 \cdot 11^2$$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={27} distractors={[
@@ -873,7 +873,7 @@ $$\text{lcm} = 2^3 \cdot 5^4 = 8 \cdot 625 = 5000$$
 
 **Verify:** $\gcd \times \text{lcm} = 125 \times 5000 = 625000 = 1000 \times 625$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={28} distractors={[
@@ -896,7 +896,7 @@ $$\text{lcm} = 2^{12} \cdot 3^{13} \cdot 5^{17} \cdot 7^{21}$$
 
 Numbers with gcd = 1 are called **coprime** or **relatively prime**.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={29} distractors={[
@@ -918,7 +918,7 @@ $$\text{lcm}(1111, 0) = 0$$
 
 **Note:** Some definitions leave $\text{lcm}(n, 0)$ undefined, but conventionally it's 0.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={30} distractors={[
@@ -939,7 +939,7 @@ $\gcd = 6$
 
 *Prime Factorization:* $12 = 2^2 \cdot 3$, $18 = 2 \cdot 3^2$ → $\gcd = 2^1 \cdot 3^1 = 6$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={31} distractors={[
@@ -962,7 +962,7 @@ $\gcd = 6$
 
 *Verify:* $108 = 2^2 \cdot 3^3$, $30 = 2 \cdot 3 \cdot 5$ → $\gcd = 2 \cdot 3 = 6$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={32} distractors={[
@@ -984,7 +984,7 @@ $\gcd = 6$
 
 $\gcd = 3$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={33} distractors={[
@@ -1006,7 +1006,7 @@ $\gcd = 42$
 
 *Verify:* $210 = 2 \cdot 3 \cdot 5 \cdot 7$, $126 = 2 \cdot 3^2 \cdot 7$ → $\gcd = 2 \cdot 3 \cdot 7 = 42$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={34} distractors={[
@@ -1027,7 +1027,7 @@ $\gcd = 40$
 
 *Verify:* $1000 = 2^3 \cdot 5^3$, $5040 = 2^4 \cdot 3^2 \cdot 5 \cdot 7$ → $\gcd = 2^3 \cdot 5 = 40$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={35} distractors={[
@@ -1049,7 +1049,7 @@ $\gcd = 40$
 
 $\gcd = 3$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={36} distractors={[
@@ -1069,7 +1069,7 @@ $\gcd = 3$
 
 $\gcd = 15$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={37} distractors={[
@@ -1091,7 +1091,7 @@ $\gcd = 15$
 
 $\gcd = 3$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={38} distractors={[
@@ -1116,7 +1116,7 @@ $$1 = 5 \cdot (-2) + 11 \cdot 1$$
 
 **Verify:** $5(-2) + 11(1) = -10 + 11 = 1$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={39} distractors={[
@@ -1144,7 +1144,7 @@ $$1 = 21 \cdot 21 + 44 \cdot (-10)$$
 
 **Verify:** $21(21) + 44(-10) = 441 - 440 = 1$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={40} distractors={[
@@ -1167,7 +1167,7 @@ $$12 = 36 \cdot (-1) + 48 \cdot 1$$
 
 **Verify:** $36(-1) + 48(1) = -36 + 48 = 12$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={41} distractors={[
@@ -1201,7 +1201,7 @@ $$1 = 34 \cdot (-21) + 55 \cdot 13$$
 
 **Verify:** $34(-21) + 55(13) = -714 + 715 = 1$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={42} distractors={[
@@ -1232,17 +1232,17 @@ $$3 = 117 \cdot (-20) + 213 \cdot 11$$
 
 **Verify:** $117(-20) + 213(11) = -2340 + 2343 = 3$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={43}>
   <Fragment slot="question">
     **Caesar Cipher**<br />
     Encrypt the message HERE IS A MESSAGE using a Caesar cipher in which each letter is shifted three places to the right.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     KHUH LV D PHVVDJH
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **The Caesar Cipher**
 
@@ -1296,17 +1296,17 @@ $$D(y) = (y - 3) \pmod{26} = (y + 23) \pmod{26}$$
 
 The Caesar cipher is extremely weak! There are only 25 possible shifts to try (26 if you count no shift). Modern attackers could break it instantly by trying all possibilities ("brute force") or by analyzing letter frequencies.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={44}>
   <Fragment slot="question">
     **Programming Task**<br />
     Propose or write a computer program to find the multiplicative inverse of a number $a$ in $\mathbb{Z}_{n}$.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     Use the Extended Euclidean Algorithm. If $\gcd(a,n) = 1$, find $x$ such that $ax + ny = 1$, then $x \bmod n$ is the inverse.
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Algorithm: Extended Euclidean Algorithm**
 
@@ -1383,17 +1383,17 @@ Result: $\gcd = 1$, inverse $= 13 \bmod 30 = 13$
 
 The algorithm is remarkably efficient—it's essentially the same as computing the GCD!
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={45}>
   <Fragment slot="question">
     **Diophantine Equations**<br />
     If $a \cdot 133 - m \cdot 277 = 1$, does this guarantee that $a$ has an inverse mod $m$? If so, what is it? If not, why not?
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     No, this does not guarantee $a$ has an inverse mod $m$. The equation shows $\gcd(133, 277) = 1$, but we need $\gcd(a, m) = 1$ for $a$ to have an inverse mod $m$. The given equation tells us about the relationship between 133 and 277, not about $a$ and $m$ directly.
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Analyzing the Equation**
 
@@ -1452,19 +1452,19 @@ But the equation itself only guarantees the gcd of 133 and 277 is 1.
 
 **Answer:** The equation guarantees $\gcd(133, 277) = 1$, not necessarily $\gcd(a, m) = 1$. Whether $a$ has an inverse mod $m$ depends on the specific values of $a$ and $m$ that satisfy the equation.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={46}>
   <Fragment slot="question">
     **Inverses in Modular Rings**<br />
     Determine whether every nonzero element of $\mathbb{Z}_{n}$ has a multiplicative inverse for $n=10$ and $n=11$. How many elements $a \in \mathbb{Z}_{10}$ such that $a \cdot_{10} 2 = 1$?
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     $\mathbb{Z}_{10}$: Not every nonzero element has an inverse (only 1, 3, 7, 9 do).<br />
     $\mathbb{Z}_{11}$: Yes, every nonzero element has an inverse (since 11 is prime).<br />
     There are **0** elements $a$ such that $a \cdot_{10} 2 = 1$ (2 has no inverse mod 10).
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Key Theorem:** $a$ has a multiplicative inverse in $\mathbb{Z}_n$ if and only if $\gcd(a, n) = 1$.
 
@@ -1520,7 +1520,7 @@ Therefore, the equation $a \cdot 2 \equiv 1 \pmod{10}$ has **no solution**.
 
 **Intuition:** If $2a \equiv 1 \pmod{10}$, then $2a = 10k + 1$ for some integer $k$. But $2a$ is always even, and $10k + 1$ is always odd. Contradiction!
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={47} distractors={[
@@ -1557,7 +1557,7 @@ $$5^{-1} \equiv 9 \pmod{11}$$
 
 **Verify:** $5 \times 9 = 45 = 44 + 1 = 4(11) + 1 \equiv 1 \pmod{11}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={48} distractors={[
@@ -1586,7 +1586,7 @@ $$3^{-1} \equiv 7 \pmod{10}$$
 
 **Verify:** $3 \times 7 = 21 = 20 + 1 = 2(10) + 1 \equiv 1 \pmod{10}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={49} distractors={[
@@ -1605,7 +1605,7 @@ Since the GCD is not 1, **no inverse exists**.
 
 **Why?** For an inverse to exist, we need $2x \equiv 1 \pmod{10}$. But $2x$ is always even, while $1, 11, 21, 31, \ldots$ are all odd. No solution exists.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={50} distractors={[
@@ -1631,7 +1631,7 @@ $$x = 9$$
 
 **Verify:** $5 \times 9 = 45 = 44 + 1 \equiv 1 \pmod{11}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={51} distractors={[
@@ -1655,7 +1655,7 @@ $$x = 6$$
 
 **Verify:** $5 \cdot 6 = 30 = 22 + 8 = 2(11) + 8 \equiv 8 \pmod{11}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={52} distractors={[
@@ -1688,7 +1688,7 @@ $$16^{-1} \equiv 58 \pmod{103}$$
 
 **Verify:** $16 \cdot 58 = 928 = 103 \cdot 9 + 1 \equiv 1 \pmod{103}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={53} distractors={[
@@ -1721,14 +1721,14 @@ $$22^{-1} \equiv 24 \pmod{31}$$
 
 **Verify:** $22 \cdot 24 = 528 = 31 \cdot 17 + 1 = 527 + 1 \equiv 1 \pmod{31}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={54}>
   <Fragment slot="question">
     **Modular Division**<br />
     What is the value of the division $1$ by $4$ in $\mathbb{Z}_{9}$?
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">$1 \div 4 \equiv 7 \pmod 9$</Fragment>
   <Fragment slot="derivation">
 **Understanding Modular Division**
@@ -1768,14 +1768,14 @@ $$\boxed{\frac{1}{4} \equiv 7 \pmod 9}$$
 
 **Verify:** $4 \times 7 = 28 = 27 + 1 = 3(9) + 1 \equiv 1 \pmod 9$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={55}>
   <Fragment slot="question">
     **Large Number Multiplication**<br />
     By multiplying a number times $487 \in \mathbb{Z}_{30031}$ we obtain $13008$. If you know how to find such a number, do so. If not, explain why the problem seems difficult to do by hand.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">$x \equiv 16SEE DERIVATION \pmod{30031}$</Fragment>
   <Fragment slot="derivation">
 **Understanding the Problem**
@@ -1849,14 +1849,14 @@ Actually, this computation is quite tedious by hand, which is the point of the p
 
 **Why it's difficult by hand:** The large modulus (30031) and the multiple steps in the Extended Euclidean Algorithm lead to many arithmetic operations with 4-5 digit numbers, making manual calculation error-prone.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={56}>
   <Fragment slot="question">
     **Alice and Bob**<br />
     Knowing that Alice sent a message to Bob using multiplication mod $n=103$ with the common key $a=16$. Assume that Bob receives the message $m=21$. What is the original message that Alice sent Bob?
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">The original message is $x \equiv 21 \cdot 58 \equiv 1218 \equiv 88 \pmod{103}$</Fragment>
   <Fragment slot="derivation">
 **Understanding the Encryption Scheme**
@@ -1908,7 +1908,7 @@ Bob received 21, which matches!
 
 **The original message Alice sent was 85.**
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={57}>
@@ -1917,11 +1917,11 @@ Bob received 21, which matches!
     Suppose that the adversary got two numeric encrypted messages $y_{1}=4307$ and $y_{2}=7373$.<br />
     (a) Find the common private key $e$.<br />
     (b) Decrypt the message $10877$.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     (a) $e = 3066$<br />
     (b) Decrypted message: $7811$
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Turing's Cipher (Version 1)**
 
@@ -1973,7 +1973,7 @@ $$\boxed{\text{Decrypted message: } 7811}$$
 2. Known-plaintext attacks are trivial (one known pair reveals $e$)
 3. The key can be determined from statistical analysis of ciphertexts
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={58}>
@@ -1983,12 +1983,12 @@ $$\boxed{\text{Decrypted message: } 7811}$$
     (a) Find the non-trivial smallest valid private key.<br />
     (b) Encrypt the numeric message $x=17$.<br />
     (c) Decrypt the message $y=19$.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     (a) $e = 7$ (smallest coprime to 30 greater than 1)<br />
     (b) $y = 17 \cdot 7 \equiv 119 \equiv 29 \pmod{30}$<br />
     (c) $x = 19 \cdot 7^{-1} \equiv 19 \cdot 13 \equiv 7 \pmod{30}$
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Turing's Cipher (Version 2)**
 
@@ -2057,7 +2057,7 @@ $$\boxed{x = 7}$$
 
 **Verify:** $7 \times 7 = 49 = 30 + 19 \equiv 19 \pmod{30}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={59}>
@@ -2066,11 +2066,11 @@ $$\boxed{x = 7}$$
     Given modulus $n=63$. Suppose that the adversary knows both plaintext and ciphertext $x=55$ and $y=25$ respectively.<br />
     (a) Find the common private key $e$.<br />
     (b) Decrypt the numeric message $y=31$.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     (a) $e \equiv 25 \cdot 55^{-1} \equiv 25 \cdot 8 \equiv 200 \equiv 11 \pmod{63}$<br />
     (b) $x \equiv 31 \cdot 11^{-1} \equiv 31 \cdot 46 \equiv 52 \pmod{63}$
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Known-Plaintext Attack**
 
@@ -2153,14 +2153,14 @@ $$\boxed{x = 43}$$
 
 **Verify:** $52 \times 43 = 2236 = 63 \times 35 + 31 \equiv 31 \pmod{63}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={60}>
   <Fragment slot="question">
     **ISBN Validation**<br />
     Is 084-930149-X a valid ISBN-10?
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">Yes, it is a valid ISBN-10.</Fragment>
   <Fragment slot="derivation">
 **ISBN-10 Check Digit Algorithm**
@@ -2267,14 +2267,14 @@ $$\boxed{\text{Yes, it is a valid ISBN-10}}$$
 
 (The standard ISBN-10 checksum should sum to 0 mod 11 with appropriate weights.)
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={61}>
   <Fragment slot="question">
     **ISBN Check Digit**<br />
     The first nine digits of the ISBN-10 for the fifth edition of the book "Discrete Mathematics" are 007119881. What is its check digit?
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">The check digit is $5$.</Fragment>
   <Fragment slot="derivation">
 **ISBN-10 Check Digit Calculation**
@@ -2341,14 +2341,14 @@ $$\boxed{d_{10} = 4}$$
 
 **The check digit is 4.**
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={62}>
   <Fragment slot="question">
     **Transposition Cipher Encryption**<br />
     Encrypt the message GRIZZLY BEARS using blocks of five letters and the transposition cipher based on the permutation of $\lbrace 1, 2, 3, 4, 5 \rbrace$ with $\sigma(1)=3$, $\sigma(2)=5$, $\sigma(3)=1$, $\sigma(4)=2$, $\sigma(5)=4$.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">IZGRLYAEBRS</Fragment>
   <Fragment slot="derivation">
 **Transposition Cipher**
@@ -2449,14 +2449,14 @@ Or without spaces: **IZGZRBELAYXXRXS**
 
 (Note: If padding is stripped, the ciphertext may vary.)
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={63}>
   <Fragment slot="question">
     **Transposition Cipher Decryption**<br />
     Decrypt the message EABW EFRO ATMR ASIN which is the cipher text produced by encrypting a plaintext message using the transposition cipher with blocks of four letters and the permutation of $\lbrace 1, 2, 3, 4 \rbrace$ defined by $\sigma(1)=3$, $\sigma(2)=1$, $\sigma(3)=4$, $\sigma(4)=2$.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">BEWARE OF MARTIANS</Fragment>
   <Fragment slot="derivation">
 **Decryption Strategy**
@@ -2552,7 +2552,7 @@ BEWA + REOF + MART + IANS = BEWAREOFMARTIANS
 
 $$\boxed{\text{BEWARE OF MARTIANS}}$$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={64}>
@@ -2564,14 +2564,14 @@ $$\boxed{\text{BEWARE OF MARTIANS}}$$
     (c) Find the two non-trivial smallest valid public exponents $e_{1}$ and $e_{2}$ for the RSA with public modulus $n$.<br />
     (d) Encrypt numeric message $x=4$ given public exponent $e_{1}$ above.<br />
     (e) Decrypt numeric message $y=31$ given public exponent $e_{2}$ above.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     (a) $p = 3$, $q = 11$<br />
     (b) $\phi(33) = 20$<br />
     (c) $e_1 = 3$, $e_2 = 7$<br />
     (d) $y = 4^3 \equiv 31 \pmod{33}$<br />
     (e) $x \equiv 31^{d_2} \pmod{33}$ where $d_2 = 7^{-1} \pmod{20}$
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **RSA Overview**
 
@@ -2674,7 +2674,7 @@ $25 \cdot 25 = 625 \equiv 31 \pmod{33}$
 
 So $25^7 \equiv 31 \pmod{33}$ ✓
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={65}>
@@ -2682,7 +2682,7 @@ So $25^7 \equiv 31 \pmod{33}$ ✓
     **Dangerous Messages in RSA**<br />
     Suppose the RSA modulus $n=p \cdot q$ is the product of distinct 200-digit primes $p$ and $q$. A message $m \in \mathbb{Z}_{n}$ is called dangerous if $\gcd(m, n)=p$, because such an $m$ can be used to factor $n$ and so crack RSA. Circle the best estimate of the fraction of messages in $\mathbb{Z}_{n}$ that are dangerous:<br />
     $\frac{1}{200}$, $\frac{1}{400}$, $\frac{1}{200^{10}}$, $\frac{1}{10^{200}}$, $\frac{1}{400^{10}}$, $\frac{1}{10^{400}}$
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">$\frac{1}{10^{200}}$</Fragment>
   <Fragment slot="derivation">
 **Understanding Dangerous Messages**
@@ -2746,14 +2746,14 @@ Even if you tried $10^{100}$ messages (an impossibly large number), the probabil
 
 This is why RSA with sufficiently large primes is considered secure against this type of attack.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={66}>
   <Fragment slot="question">
     **Fast Exponentiation**<br />
     Implement the fast exponentiation for $x^{60}$.
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">$x^{60} = ((x^2)^2 \cdot x)^2)^2 \cdot ((x^2)^2 \cdot x)$ or equivalently using 8 multiplications via binary method.</Fragment>
   <Fragment slot="derivation">
 **Fast Exponentiation (Square-and-Multiply)**
@@ -2844,7 +2844,7 @@ $$x^{60} = \left(\left(\left(x^2 \cdot x\right)^2 \cdot x\right)^2 \cdot x\right
 Or more explicitly:
 $$x^{60} = \left(\left(x^3\right)^2 \cdot x\right)^2)^2)^2 = (x^7)^2)^2)^2 = (x^{15})^2)^2 = (x^{30})^2 = x^{60}$$
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 <WorksheetProblem number={67}>
@@ -2855,11 +2855,11 @@ $$x^{60} = \left(\left(x^3\right)^2 \cdot x\right)^2)^2)^2 = (x^7)^2)^2)^2 = (x^
     As Bob explains, their wiretapper will know $p, q, aq \pmod p$, and $bq \pmod p$, but will not know $a$ or $b$, so their key should be safe. In this scheme:<br />
     (a) Is the scheme safe? That is, can the wiretapper compute $abq \pmod p$? If so, how does she do it?<br />
     (b) Alice says "You know, the scheme sounds good, but would not it be more complicated for the wiretapper if I send you $q^a \pmod p$, you send me $q^b \pmod p$ and we use $q^{ab} \pmod p$ as our key." In this case, can you think of a way for the wiretapper to compute $q^{ab} \pmod p$? If so, how can you do it? If not, what is the stumbling block?
-  </Fragment>
+</Fragment>
   <Fragment slot="answer">
     (a) **NOT SAFE.** The wiretapper can compute $(aq)(bq)/q \equiv abq \pmod{p}$ by multiplying the intercepted values and dividing by $q$.<br />
     (b) **This is Diffie-Hellman.** The wiretapper cannot easily compute $q^{ab}$ from $q^a$ and $q^b$. The stumbling block is the **discrete logarithm problem**.
-  </Fragment>
+</Fragment>
   <Fragment slot="derivation">
 **Part (a): Is Bob's Original Scheme Safe?**
 
@@ -2935,7 +2935,7 @@ Invented by Whitfield Diffie and Martin Hellman in 1976, this protocol revolutio
 
 **Security:** For large primes $p$ (e.g., 2048+ bits) and proper choice of $q$, breaking Diffie-Hellman is believed to require solving the discrete logarithm problem, which has no known efficient algorithm.
 
-  </Fragment>
+</Fragment>
 </WorksheetProblem>
 
 </LiveWorksheet>
