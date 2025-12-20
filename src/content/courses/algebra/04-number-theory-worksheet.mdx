@@ -7,7 +7,6 @@ sectionOrder: 1
 isWorksheet: true
 ---
 
-import WorksheetProblem from "../../../components/WorksheetProblem.astro";
 import LiveWorksheet from "../../../components/LiveWorksheet.astro";
 
 <LiveWorksheet title="Number Theory" description="67 problems covering modular arithmetic, primes, GCD, and cryptography">
@@ -1392,65 +1391,45 @@ The algorithm is remarkably efficient—it's essentially the same as computing t
     If $a \cdot 133 - m \cdot 277 = 1$, does this guarantee that $a$ has an inverse mod $m$? If so, what is it? If not, why not?
 </Fragment>
   <Fragment slot="answer">
-    No, this does not guarantee $a$ has an inverse mod $m$. The equation shows $\gcd(133, 277) = 1$, but we need $\gcd(a, m) = 1$ for $a$ to have an inverse mod $m$. The given equation tells us about the relationship between 133 and 277, not about $a$ and $m$ directly.
+    Yes, this guarantees that $a$ has an inverse mod $m$. Since $133a - 277m = 1$, any common divisor of $a$ and $m$ must also divide 1, meaning $\gcd(a, m) = 1$. The inverse of $a$ mod $m$ is $133 \pmod m$.
 </Fragment>
   <Fragment slot="derivation">
 **Analyzing the Equation**
 
-We're given: $a \cdot 133 - m \cdot 277 = 1$
+We're given: $133a - 277m = 1$
 
-This can be rewritten as: $133a + 277(-m) = 1$
-
----
-
-**What Does This Tell Us?**
-
-By Bézout's Identity, integers $x, y$ satisfy $133x + 277y = 1$ if and only if $\gcd(133, 277) = 1$.
-
-Let's verify: 
-- $277 = 133 \cdot 2 + 11$
-- $133 = 11 \cdot 12 + 1$
-- $11 = 1 \cdot 11 + 0$
-
-So $\gcd(133, 277) = 1$ ✓
-
-The equation tells us that **133 and 277 are coprime**, and gives us specific values $a$ and $-m$ as Bézout coefficients.
+This equation relates four values: two constants (133 and 277) and two variables ($a$ and $m$).
 
 ---
 
 **Does $a$ Have an Inverse mod $m$?**
 
-For $a$ to have an inverse modulo $m$, we need $\gcd(a, m) = 1$.
+The fundamental condition for $a$ to have a multiplicative inverse modulo $m$ is that **$a$ and $m$ must be relatively prime**, i.e., $\gcd(a, m) = 1$.
 
-**The given equation does NOT guarantee this!**
+Look at the equation: $133a - 277m = 1$
 
-The equation only tells us:
-1. $\gcd(133, 277) = 1$
-2. $a \equiv 277^{-1} \pmod{133}$ (if we reduce mod 133)
-3. $m \equiv 133^{-1} \pmod{277}$ (sort of, with sign adjustment)
+If $d$ is a common divisor of $a$ and $m$, then $d$ must also divide the entire left-hand side: $133a - 277m$. Since the equation tells us this side equals 1, $d$ must divide 1.
+
+The only positive integer that divides 1 is 1 itself. Therefore, $\gcd(a, m)$ **must be 1**.
+
+**Conclusion:** Yes, $a$ is guaranteed to have an inverse modulo $m$.
 
 ---
 
-**Counterexample**
+**What is the Inverse?**
 
-From the Extended Euclidean Algorithm on $(133, 277)$:
-- $1 = 133 \cdot (-25) + 277 \cdot 12$
-- So $a = -25$ and $m = -12$ (or equivalently $a = 12$, $m = 25$ with the original sign)
+The definition of a multiplicative inverse $a^{-1} \pmod m$ is a number $x$ such that:
+$$ax \equiv 1 \pmod m$$
 
-Wait, let's check: $12 \cdot 133 - 25 \cdot 277 = 1596 - 6925 = -5329 \neq 1$
+Let's take our equation and reduce it modulo $m$:
+$$133a - 277m = 1$$
+$$133a \equiv 1 \pmod m$$
 
-Let me recalculate properly:
-$277 \cdot 12 - 133 \cdot 25 = 3324 - 3325 = -1$
+By definition, this means $133$ is the inverse of $a$ modulo $m$ (or more precisely, any number congruent to $133 \bmod m$).
 
-So: $133 \cdot 25 - 277 \cdot 12 = 1$
-
-Thus $a = 25$, $m = 12$.
-
-Now: $\gcd(25, 12) = 1$ ✓ (In this case, the inverse exists!)
-
-But the equation itself only guarantees the gcd of 133 and 277 is 1.
-
-**Answer:** The equation guarantees $\gcd(133, 277) = 1$, not necessarily $\gcd(a, m) = 1$. Whether $a$ has an inverse mod $m$ depends on the specific values of $a$ and $m$ that satisfy the equation.
+**Final Result:**
+- Does it guarantee an inverse? **Yes.**
+- What is the inverse? **$133 \pmod m$.**
 
 </Fragment>
 </WorksheetProblem>
@@ -2937,5 +2916,9 @@ Invented by Whitfield Diffie and Martin Hellman in 1976, this protocol revolutio
 
 </Fragment>
 </WorksheetProblem>
+
+### 📦 Applications & Final Drill
+
+
 
 </LiveWorksheet>

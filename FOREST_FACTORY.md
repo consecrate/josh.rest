@@ -55,6 +55,25 @@ const gdprPack: Pack = {
     'law-accountability-check'
   ]
 };
+
+const numberTheoryPack: Pack = {
+  id: 'number-theory-all',
+  name: 'Number Theory & Cryptography',
+  description: 'Primes, modular arithmetic, CRT, RSA, and historical ciphers',
+  generators: [
+    'number-theory-prime-check',
+    'number-theory-sophie-germain',
+    'number-theory-pairwise-coprime',
+    'number-theory-special-primes',
+    'number-theory-phi',
+    'number-theory-crt',
+    'crypto-caesar',
+    'crypto-rsa-small',
+    'crypto-theory-pool',
+    'apps-isbn-check',
+    'apps-applied-mod-pool'
+  ]
+};
 ```
 
 ---
